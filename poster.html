@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FocusFlow — everything it does, on one page</title>
+<style>
+:root{
+  --bg-a:#FBF8F3; --bg-b:#F6F1EA; --ink:#2b2b31; --mute:#7a7580; --rose:#a0596b;
+  --cream:linear-gradient(150deg,#FFFBEE,#FFF1D4);
+  --sky:linear-gradient(150deg,#EBF6FF,#CFE6FC);
+  --mint:linear-gradient(150deg,#EAF7F0,#D3EEDF);
+  --lav:linear-gradient(150deg,#F3EEFC,#E2D8F5);
+  --peach:linear-gradient(150deg,#FFEFE8,#FFD8C6);
+  --blush:linear-gradient(150deg,#FFF0F3,#FFDCE4);
+  color-scheme:light;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  background:linear-gradient(165deg,var(--bg-a) 0%,var(--bg-b) 50%,#FFFDF9 100%);
+  background-attachment:fixed; color:var(--ink);
+  font:16px/1.62 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  -webkit-font-smoothing:antialiased; padding-bottom:70px;
+}
+.wrap{max-width:1000px;margin:0 auto;padding:0 22px}
+
+/* ── hero ── */
+.hero{text-align:center;padding:70px 22px 30px;position:relative;overflow:hidden}
+.hero::before{
+  content:'';position:absolute;top:-140px;left:50%;transform:translateX(-50%);
+  width:620px;height:320px;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,138,91,.13),transparent 68%);pointer-events:none}
+.badge{display:inline-block;font-size:11px;font-weight:900;letter-spacing:2.2px;
+  text-transform:uppercase;color:var(--rose);background:#fbe9ec;
+  padding:6px 15px;border-radius:20px;margin-bottom:18px;position:relative}
+h1{font-size:clamp(36px,7vw,60px);font-weight:900;letter-spacing:-1.8px;line-height:1.04;
+  margin-bottom:16px;position:relative}
+h1 em{font-style:normal;background:linear-gradient(115deg,#FF6B6B,#FF8A5B,#FFB300);
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.hero .sub{color:var(--mute);font-size:17.5px;max-width:600px;margin:0 auto;position:relative}
+.pills{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:24px;position:relative}
+.pill{background:#fff;border:1px solid #eee5e0;border-radius:20px;padding:7px 15px;
+  font-size:12.5px;font-weight:800;color:#5d5763;box-shadow:0 2px 5px -3px rgba(0,0,0,.1)}
+
+/* ── section rule ── */
+.rule{display:flex;align-items:center;gap:15px;margin:62px 0 8px}
+.rule span{font-size:11.5px;font-weight:900;letter-spacing:2.2px;text-transform:uppercase;
+  color:var(--rose);white-space:nowrap}
+.rule::before,.rule::after{content:'';height:1px;background:#e9e0da;flex:1}
+.rule::before{max-width:22px}
+h2{font-size:clamp(24px,3.6vw,32px);font-weight:900;letter-spacing:-.7px;margin-bottom:10px}
+.lede{color:var(--mute);font-size:15.5px;max-width:660px;margin-bottom:26px}
+
+/* ── cards ── */
+.card{border-radius:22px;padding:22px 24px;
+  border:1px solid rgba(255,255,255,.95);
+  box-shadow:0 10px 28px -14px rgba(15,23,42,.15),0 2px 5px -2px rgba(15,23,42,.05)}
+.c-cream{background:var(--cream)}.c-sky{background:var(--sky)}
+.c-mint{background:var(--mint)}.c-lav{background:var(--lav)}
+.c-peach{background:var(--peach)}.c-blush{background:var(--blush)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:13px}
+
+/* ── the tabs strip ── */
+.tabs{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+.tab{background:#fff;border:1px solid #eee5e0;border-radius:20px;padding:20px;text-align:center}
+.tab .ic{font-size:32px;line-height:1;margin-bottom:9px}
+.tab h3{font-size:16px;font-weight:900;margin-bottom:5px}
+.tab p{font-size:13px;color:var(--mute);line-height:1.5}
+
+/* ── capability list ── */
+.caps{background:#fff;border:1px solid #eee5e0;border-radius:22px;padding:6px 22px 18px;margin-bottom:14px}
+.caps h3{font-size:13px;font-weight:900;letter-spacing:1.4px;text-transform:uppercase;
+  color:var(--rose);margin:20px 0 12px}
+.cap{display:flex;gap:12px;padding:9px 0;border-bottom:1px solid #f6f1ee;align-items:flex-start}
+.cap:last-child{border-bottom:none}
+.cap .e{flex:0 0 26px;font-size:17px;line-height:1.3;text-align:center}
+.cap .t{flex:1;font-size:14px}
+.cap .t b{font-weight:800;display:block;margin-bottom:1px}
+.cap .t span{color:var(--mute);font-size:13px;line-height:1.5}
+
+/* ── telegram flow ── */
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:13px;margin-bottom:14px}
+.step{background:#fff;border:1px solid #eee5e0;border-radius:20px;padding:20px;position:relative}
+.step .n{width:30px;height:30px;border-radius:11px;
+  background:linear-gradient(135deg,#FF8A5B,#FFB300);color:#fff;
+  font-weight:900;font-size:14px;display:flex;align-items:center;justify-content:center;margin-bottom:11px}
+.step h4{font-size:14.5px;font-weight:900;margin-bottom:5px}
+.step p{font-size:13px;color:var(--mute);line-height:1.55}
+
+.tg{background:#eef3f8;border-radius:18px;padding:16px;border:1px solid #dfe8f1}
+.tgh{font-size:10px;font-weight:900;letter-spacing:1.3px;text-transform:uppercase;
+  color:#7d93ab;margin-bottom:10px}
+.b{max-width:88%;padding:10px 13px;border-radius:15px;font-size:13px;line-height:1.5;margin-bottom:8px}
+.b.bot{background:#fff;border:1px solid #e3ebf3;border-bottom-left-radius:5px}
+.b.me{background:#d7ebff;margin-left:auto;border-bottom-right-radius:5px}
+.keys{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.key{background:#fff;border:1px solid #d6e2ee;border-radius:10px;padding:7px 11px;
+  font-size:11.5px;font-weight:800;color:#3b566f}
+.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px}
+
+/* ── rules ── */
+.rules{counter-reset:r}
+.rl{background:#fff;border:1px solid #eee5e0;border-radius:20px;padding:20px 22px;margin-bottom:12px;
+  display:flex;gap:16px;align-items:flex-start}
+.rl .num{counter-increment:r;flex:0 0 34px;height:34px;border-radius:12px;background:#fbe9ec;
+  color:var(--rose);font-weight:900;font-size:15px;display:flex;align-items:center;justify-content:center}
+.rl .num::before{content:counter(r)}
+.rl h4{font-size:16px;font-weight:900;margin-bottom:5px;letter-spacing:-.2px}
+.rl p{font-size:14px;color:#5d5763;line-height:1.6}
+.rl em{font-style:normal;color:var(--rose);font-weight:700}
+
+blockquote{border-left:3px solid #FF8A5B;padding:4px 0 4px 20px;margin:24px 0;
+  font-size:18px;font-weight:600;line-height:1.5;color:#3d3944}
+
+.stat{display:flex;gap:12px;flex-wrap:wrap;margin:8px 0 14px}
+.stat div{flex:1;min-width:130px;background:#fff;border:1px solid #eee5e0;border-radius:18px;padding:17px 19px}
+.stat b{display:block;font-size:27px;font-weight:900;letter-spacing:-1.1px;line-height:1;margin-bottom:3px}
+.stat span{font-size:12px;color:var(--mute);font-weight:600}
+
+.foot{text-align:center;margin-top:60px;padding-top:28px;border-top:1px solid #eee5e0;
+  color:var(--mute);font-size:14px}
+.foot b{color:var(--ink)}
+.foot a{color:var(--rose);font-weight:700}
+kbd{background:#f3efec;border:1px solid #e2dad4;border-radius:6px;padding:1px 7px;
+  font-size:12.5px;font-weight:700}
+
+@media print{
+  body{background:#fff;padding:0}
+  .rule{margin-top:34px;page-break-after:avoid}
+  .card,.caps,.rl,.step,.tab{break-inside:avoid;box-shadow:none}
+  .hero{padding-top:24px}
+}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="badge">Free · no account · works offline</div>
+  <h1>Everything FocusFlow does,<br><em>on one page</em></h1>
+  <p class="sub">A study app that knows what you're studying, what you've forgotten, and what you're avoiding — and a Telegram bot that follows you out of it. Built by a student, in one file.</p>
+  <div class="pills">
+    <span class="pill">⏱️ Focus timer</span>
+    <span class="pill">🔁 Spaced revision</span>
+    <span class="pill">🗓️ Real-life timetable</span>
+    <span class="pill">🤖 AI coach</span>
+    <span class="pill">✈️ Telegram bot</span>
+    <span class="pill">💪 Body &amp; mind</span>
+    <span class="pill">🔒 Your device only</span>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <div class="rule"><span>The whole idea</span></div>
+  <h2>You lose more time deciding than studying</h2>
+  <p class="lede">Four hours free, forty minutes gone choosing what to open. You study the chapter you like. You tick things you half-know. Three weeks later the first chapter has quietly evaporated and nothing told you.</p>
+  <blockquote>Every one of those is a memory problem, not a motivation problem. Software is very good at memory.</blockquote>
+
+  <div class="rule"><span>Four screens, that's all</span></div>
+  <div class="tabs">
+    <div class="tab"><div class="ic">⏱️</div><h3>Focus</h3><p>One button. It names the chapter and starts the clock.</p></div>
+    <div class="tab"><div class="ic">📅</div><h3>Plan</h3><p>Chapters, exams, timetable, weekly tests.</p></div>
+    <div class="tab"><div class="ic">🔥</div><h3>Progress</h3><p>Streaks, marks, sleep, training, the honest picture.</p></div>
+    <div class="tab"><div class="ic">🤖</div><h3>Coach</h3><p>Doubts, notes, mindmaps — answered from your real numbers.</p></div>
+  </div>
+
+  <div class="rule"><span>Everything it can do</span></div>
+  <h2>Thirty-odd things, grouped</h2>
+  <p class="lede">Nothing here needs a subscription. The ones marked 🔑 need a free AI key you paste in yourself; everything else works on a plane.</p>
+
+  <div class="caps">
+    <h3>⏱️ Getting the work done</h3>
+    <div class="cap"><div class="e">🎯</div><div class="t"><b>It picks the chapter</b><span>Weighs what's overdue, what you scored badly on, and what's closest to an exam.</span></div></div>
+    <div class="cap"><div class="e">⏱️</div><div class="t"><b>Focus timer with real breaks</b><span>25/5, 50/10, exam sprints, or your own. Hands-free mode runs the whole cycle.</span></div></div>
+    <div class="cap"><div class="e">🔁</div><div class="t"><b>Spaced revision, automatic</b><span>Gaps widen as a chapter sticks and snap shut when it doesn't. You never decide when.</span></div></div>
+    <div class="cap"><div class="e">📝</div><div class="t"><b>Today's queue and an every-day list</b><span>One changes daily; the other is the same short list with a streak on every line.</span></div></div>
+    <div class="cap"><div class="e">🫤</div><div class="t"><b>The honesty button</b><span>Marked something done that you hadn't? One tap resets it. No lecture.</span></div></div>
+    <div class="cap"><div class="e">🛡️</div><div class="t"><b>Focus guard</b><span>Notices when you switch tabs mid-session. Honest that it can't block sites — no web page can.</span></div></div>
+    <div class="cap"><div class="e">🎧</div><div class="t"><b>18 soundscapes</b><span>Rain, ocean, binaural focus tones. All synthesised, so they work offline.</span></div></div>
+    <div class="cap"><div class="e">🧘</div><div class="t"><b>Zen mode &amp; big clock</b><span>One number, nothing else, for when the screen itself is the distraction.</span></div></div>
+  </div>
+
+  <div class="caps">
+    <h3>📅 Planning around a real life</h3>
+    <div class="cap"><div class="e">🗓️</div><div class="t"><b>A timetable it builds for you</b><span>Answer a few questions; it interleaves subjects and slots revision in by itself.</span></div></div>
+    <div class="cap"><div class="e">🕳️</div><div class="t"><b>The gaps in your day</b><span>School, travel, meals, helping at home, prayer, a job, gym — planned around, not through.</span></div></div>
+    <div class="cap"><div class="e">🛋️</div><div class="t"><b>Your own settling time</b><span>Getting back isn't being ready. Thirty minutes for you, an hour for your brother — you set it.</span></div></div>
+    <div class="cap"><div class="e">📚</div><div class="t"><b>Backlog, bulk-pasted</b><span>Drop your whole syllabus in — one chapter per line — instead of typing forty-five rows.</span></div></div>
+    <div class="cap"><div class="e">🎯</div><div class="t"><b>Any goal, in plain words 🔑</b><span>"I want to be an army officer" → it finds the exam, the stages, the subjects, the eligibility.</span></div></div>
+    <div class="cap"><div class="e">🔍</div><div class="t"><b>Live syllabus check 🔑</b><span>Looks up your board's current syllabus and shows its sources. Never recites from memory.</span></div></div>
+    <div class="cap"><div class="e">📸</div><div class="t"><b>Photograph your paper timetable</b><span>It reads it and offers to import the slots.</span></div></div>
+    <div class="cap"><div class="e">📝</div><div class="t"><b>Weekly tests &amp; mock scores</b><span>Which chapters keep costing you marks, tracked over time.</span></div></div>
+    <div class="cap"><div class="e">⏳</div><div class="t"><b>Honest feasibility</b><span>If the plan doesn't fit the days left, it says so — and offers the nearest thing that does.</span></div></div>
+  </div>
+
+  <div class="caps">
+    <h3>🤖 Understanding it, not just covering it</h3>
+    <div class="cap"><div class="e">❓</div><div class="t"><b>Ask any doubt 🔑</b><span>Answered in your exam's vocabulary, from your syllabus. Keep it as a note in one tap.</span></div></div>
+    <div class="cap"><div class="e">⚖️</div><div class="t"><b>Two models, checked against each other 🔑</b><span>Where they disagree on a figure or a section number, you're shown both — marked.</span></div></div>
+    <div class="cap"><div class="e">🗺️</div><div class="t"><b>Mindmaps 🔑</b><span>Any chapter as a picture you can revise from. Downloadable.</span></div></div>
+    <div class="cap"><div class="e">📷</div><div class="t"><b>Handwritten notes, typed up 🔑</b><span>Photograph a page. Anything it couldn't read is flagged, not guessed.</span></div></div>
+    <div class="cap"><div class="e">🎥</div><div class="t"><b>Videos from your own teacher</b><span>It asks once who you follow, then searches their channel first.</span></div></div>
+    <div class="cap"><div class="e">📔</div><div class="t"><b>NotebookLM bridge</b><span>Packages your notes for it, then records the quiz score you got back.</span></div></div>
+    <div class="cap"><div class="e">🧪</div><div class="t"><b>Practice tests from your own notes 🔑</b><span>Only asks about what's actually in your material.</span></div></div>
+    <div class="cap"><div class="e">👥</div><div class="t"><b>A friend and a critic 🔑</b><span>Two voices on the same situation — one kind, one blunt. Both useful.</span></div></div>
+    <div class="cap"><div class="e">📄</div><div class="t"><b>Notes as PDF</b><span>Export anything, or send it to yourself on Telegram.</span></div></div>
+  </div>
+
+  <div class="caps">
+    <h3>💪 The person doing the studying</h3>
+    <div class="cap"><div class="e">😴</div><div class="t"><b>Sleep, meals and mood</b><span>Because a plan built on five hours of sleep isn't a plan.</span></div></div>
+    <div class="cap"><div class="e">🏋️</div><div class="t"><b>Training log</b><span>Gym, runs, sport, yoga. How it felt, not just how long.</span></div></div>
+    <div class="cap"><div class="e">📈</div><div class="t"><b>Lifts and personal bests</b><span>Weight × reps, with a proper estimate so 60×8 and 70×5 can be compared.</span></div></div>
+    <div class="cap"><div class="e">📏</div><div class="t"><b>Measurements &amp; progress photos</b><span>Truer than the scale. Photos never leave the device.</span></div></div>
+    <div class="cap"><div class="e">⚖️</div><div class="t"><b>Weight, without the poison</b><span>No calorie targets, no BMI, no verdict on a number. It only speaks up if something looks unexplained.</span></div></div>
+    <div class="cap"><div class="e">🍽️</div><div class="t"><b>A diet plan around what you actually eat 🔑</b><span>Veg, allergies, medical conditions — asked, never assumed.</span></div></div>
+    <div class="cap"><div class="e">🧘</div><div class="t"><b>Meditation and breathing</b><span>Plus a daily line of calligraphy worth reading.</span></div></div>
+    <div class="cap"><div class="e">🎁</div><div class="t"><b>A reward after a long session</b><span>A rest, a dare or a challenge — rotating, never repeating. None of them a scroll feed.</span></div></div>
+    <div class="cap"><div class="e">📅</div><div class="t"><b>The Sunday review</b><span>Counts what happened, including the sentence you'd rather not read.</span></div></div>
+  </div>
+
+  <div class="rule"><span>The other half</span></div>
+  <h2>✈️ It follows you to Telegram</h2>
+  <p class="lede">The app holds everything. The bot carries it to where you already are at eleven at night. Optional — but it's the difference between an app you remember to open and one that keeps up with you.</p>
+
+  <div class="steps">
+    <div class="step"><div class="n">1</div><h4>Open the app</h4><p>Tap ✈️ in the top bar, then <b>Connect</b>.</p></div>
+    <div class="step"><div class="n">2</div><h4>Tap the link</h4><p>It gives you a link and a six-letter code. The link opens Telegram already joined up.</p></div>
+    <div class="step"><div class="n">3</div><h4>Three questions</h4><p>Your name, your exam, your hours. Twenty seconds. It says your name back.</p></div>
+    <div class="step"><div class="n">4</div><h4>Check it worked</h4><p>Send <kbd>/help</kbd>. Six buttons appear. Tap <b>📊 My week</b> — it needs no AI, so if that works the plumbing is sound.</p></div>
+  </div>
+
+  <div class="grid">
+    <div>
+      <div class="tg">
+        <div class="tgh">Around 7am, every day</div>
+        <div class="b bot">📝 Unit test in 2 days — Depreciation still uncovered.<br><br>Good morning ☀️<br>You'd planned Accounting 6–8pm. How did yesterday actually go?</div>
+        <div class="keys"><span class="key">Nothing</span><span class="key">~30 min</span><span class="key">~1 hr</span><span class="key">2 hr+</span></div>
+        <div class="b me" style="margin-top:10px">~1 hr, felt shaky on BRS</div>
+        <div class="b bot">Here's what I understood:<br>☑ Bank Reconciliation · 60 min · shaky<br><br>Nothing changes in your app until you confirm.</div>
+      </div>
+    </div>
+    <div>
+      <div class="tg">
+        <div class="tgh">Tap 📊 My week — works with no AI at all</div>
+        <div class="b bot"><b>📊 Where you stand</b><br><br>
+        Today <span class="mono">▓▓▓▓▓▓▓▓░░ 79%</span><br>
+        <i>95 of 120 minutes</i> · 🔥 6-day streak<br><br>
+        📝 Unit test in 2 days<br>
+        🎯 CA Foundation in 47 days<br>
+        🔁 Revision due: Bank Reconciliation<br><br>
+        <span class="mono">▓▓▓▓▓░░░ 60%</span> Bank Reconciliation ⏰<br>
+        <span class="mono">▓▓░░░░░░ 20%</span> Depreciation</div>
+        <div class="keys">
+          <span class="key">🎯 What now</span><span class="key">✅ Check in</span>
+          <span class="key">📊 My week</span><span class="key">📝 Next test</span>
+          <span class="key">❓ Ask a doubt</span><span class="key">⚙️ More</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid3" style="margin-top:14px">
+    <div class="card c-sky"><b style="font-size:14.5px">🎙 Voice notes</b>
+      <p style="font-size:13px;color:#5d5763;margin-top:5px">Half of what you'd say at 11pm you'd never type. Send a voice note; it transcribes and replies.</p></div>
+    <div class="card c-mint"><b style="font-size:14.5px">🗣 Your language</b>
+      <p style="font-size:13px;color:#5d5763;margin-top:5px">English, हिन्दी, Hinglish, or both at once. It reads all of them.</p></div>
+    <div class="card c-peach"><b style="font-size:14.5px">👋 If you vanish</b>
+      <p style="font-size:13px;color:#5d5763;margin-top:5px">Three days quiet and it messages you. Kindly — shame is what made you stop.</p></div>
+  </div>
+
+  <div class="rule"><span>Getting the most out of it</span></div>
+  <h2>Six habits, and it runs itself</h2>
+
+  <div class="rules">
+    <div class="rl"><div class="num"></div><div>
+      <h4>Open the app once a day</h4>
+      <p>This is the big one. The bot only knows what the app last told it, and the app tells it when you open it. <em>Every vague answer it ever gives traces back to this.</em> It will admit when its information is stale rather than bluff.</p></div></div>
+    <div class="rl"><div class="num"></div><div>
+      <h4>Put every chapter in</h4>
+      <p>All of them. Paste the syllabus straight in — one per line, subject on its own line. <em>The app is only as clever as its list;</em> an empty backlog leaves it with nothing to suggest but a timer.</p></div></div>
+    <div class="rl"><div class="num"></div><div>
+      <h4>Record every score, especially the bad ones</h4>
+      <p>A 40% you hid is a chapter that never gets revisited. <em>Bad marks are the most useful data the app receives</em> — they're how it finds what's costing you.</p></div></div>
+    <div class="rl"><div class="num"></div><div>
+      <h4>Answer the morning check-in</h4>
+      <p>Four taps in bed. <em>It's the difference between a diary and a coach</em> — a diary records what happened; a coach changes what happens next.</p></div></div>
+    <div class="rl"><div class="num"></div><div>
+      <h4>Tell it about your gaps</h4>
+      <p>Coaching, travel, dinner, prayer, the hour you need to settle afterwards. <em>A plan that ignores your real day is one you fail before you start</em> — and then blame yourself for.</p></div></div>
+    <div class="rl"><div class="num"></div><div>
+      <h4>Press 💾 every couple of weeks</h4>
+      <p>Your data lives in this browser and nowhere else. <em>A browser clean-up would take all of it,</em> and there's no server holding a copy. Two seconds, and the app will nag you if you forget.</p></div></div>
+  </div>
+
+  <div class="rule"><span>What's under it</span></div>
+  <div class="stat">
+    <div><b>1</b><span>HTML file — no install, no store</span></div>
+    <div><b>0</b><span>accounts, passwords or logins</span></div>
+    <div><b>0</b><span>ads, trackers or data collection</span></div>
+    <div><b>₹0</b><span>to use, forever</span></div>
+  </div>
+  <p class="lede">Your chapters, marks, notes and photos stay in your browser. Nothing is uploaded. Every AI key is your own, pasted in by you, stored on your device — which is also why the backup button matters.</p>
+
+  <div class="rule"><span>Honestly</span></div>
+  <h2>Three things it won't do</h2>
+  <div class="grid">
+    <div class="card c-cream"><b style="font-size:15px">It won't study for you</b>
+      <p style="font-size:13.5px;color:#5d5763;margin-top:6px">It removes the deciding, the forgetting and the guessing. The sitting down is still entirely yours.</p></div>
+    <div class="card c-cream"><b style="font-size:15px">It won't always be right</b>
+      <p style="font-size:13.5px;color:#5d5763;margin-top:6px">That's why two models check each other, and why disagreements are shown rather than quietly resolved.</p></div>
+    <div class="card c-cream"><b style="font-size:15px">It won't hold your data</b>
+      <p style="font-size:13.5px;color:#5d5763;margin-top:6px">No cloud backup by default. That's the trade for nobody else ever having it.</p></div>
+  </div>
+
+  <div class="foot">
+    <p style="font-size:17px;margin-bottom:6px"><b>Open it. Answer five questions. Start a block.</b></p>
+    <p>That's the whole beginning. Everything else can wait until you want it.</p>
+    <p style="margin-top:14px">Want to see it in motion? <a href="howto.html">Ninety-second walkthrough →</a><br>
+    Curious why it's built this way? <a href="about.html">The reasoning →</a></p>
+    <p style="margin-top:16px;font-size:12.5px;color:#a39ca8">FocusFlow · free, offline-first, and yours</p>
+  </div>
+
+</div>
+</body>
+</html>

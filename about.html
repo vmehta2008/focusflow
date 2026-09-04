@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FocusFlow — what it is, and why it's built this way</title>
+<style>
+:root{
+  --bg-a:#FBF8F3; --bg-b:#F6F1EA; --ink:#2b2b31; --mute:#7a7580; --rose:#a0596b;
+  --cream:linear-gradient(150deg,#FFFBEE,#FFF1D4);
+  --sky:linear-gradient(150deg,#EBF6FF,#CFE6FC);
+  --mint:linear-gradient(150deg,#EAF7F0,#D3EEDF);
+  --lav:linear-gradient(150deg,#F3EEFC,#E2D8F5);
+  --peach:linear-gradient(150deg,#FFEFE8,#FFD8C6);
+  color-scheme:light;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  background:linear-gradient(160deg,var(--bg-a) 0%,var(--bg-b) 55%,#FFFDF9 100%);
+  background-attachment:fixed;color:var(--ink);
+  font:16px/1.65 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  padding:0 0 90px;-webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:860px;margin:0 auto;padding:0 20px}
+
+/* ── opening ── */
+.hero{text-align:center;padding:76px 20px 44px}
+.kicker{font-size:11px;font-weight:900;letter-spacing:2px;text-transform:uppercase;
+  color:var(--rose);margin-bottom:14px}
+h1{font-size:clamp(34px,6vw,52px);font-weight:900;letter-spacing:-1.4px;line-height:1.08;margin-bottom:16px}
+h1 em{font-style:normal;background:linear-gradient(120deg,#FF6B6B,#FF8A5B,#FFB300);
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{color:var(--mute);font-size:17px;max-width:560px;margin:0 auto}
+
+.rule{display:flex;align-items:center;gap:14px;margin:58px 0 26px}
+.rule span{font-size:11px;font-weight:900;letter-spacing:2px;text-transform:uppercase;color:var(--rose);white-space:nowrap}
+.rule::before,.rule::after{content:'';height:1px;background:#e7ded8;flex:1}
+.rule::before{max-width:26px}
+
+h2{font-size:clamp(23px,3.4vw,29px);font-weight:900;letter-spacing:-.6px;margin-bottom:10px}
+.lede{color:var(--mute);font-size:15.5px;margin-bottom:26px;max-width:640px}
+
+/* ── cards ── */
+.card{border-radius:22px;padding:24px 26px;margin-bottom:14px;
+  border:1px solid rgba(255,255,255,.95);
+  box-shadow:0 10px 30px -14px rgba(15,23,42,.16),0 2px 6px -2px rgba(15,23,42,.05)}
+.c-cream{background:var(--cream)}.c-sky{background:var(--sky)}
+.c-mint{background:var(--mint)}.c-lav{background:var(--lav)}.c-peach{background:var(--peach)}
+.card h3{font-size:17px;font-weight:900;letter-spacing:-.2px;margin-bottom:6px}
+.card p{font-size:14.5px;color:#5d5763}
+.card p+p{margin-top:9px}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(255px,1fr));gap:14px}
+
+/* ── the belief blocks ── */
+.belief{background:#fff;border:1px solid #efe8e4;border-radius:20px;padding:24px 26px;margin-bottom:14px;
+  box-shadow:0 2px 5px -2px rgba(15,23,42,.05)}
+.belief .no{font-size:11px;font-weight:900;letter-spacing:1.6px;text-transform:uppercase;color:#c3b6ad;margin-bottom:9px}
+.belief h3{font-size:19px;font-weight:900;letter-spacing:-.3px;margin-bottom:9px;line-height:1.3}
+.belief p{font-size:14.5px;color:#5d5763}
+.belief p+p{margin-top:10px}
+.belief .so{margin-top:14px;padding-top:14px;border-top:1px dashed #eee5e0;
+  font-size:13.5px;color:#7a7580}
+.belief .so b{color:var(--rose);font-weight:800}
+
+blockquote{border-left:3px solid #FF8A5B;padding:2px 0 2px 18px;margin:20px 0;
+  font-size:17px;font-weight:600;line-height:1.5;color:#3d3944}
+
+/* ── the compare table ── */
+.cmp{background:#fff;border:1px solid #efe8e4;border-radius:20px;overflow:hidden;margin-bottom:14px}
+.cmp .row{display:flex;gap:0;border-bottom:1px solid #f4eeea}
+.cmp .row:last-child{border-bottom:none}
+.cmp .row > div{padding:15px 18px;font-size:14px;flex:1}
+.cmp .row > div:first-child{flex:0 0 40%;font-weight:800;background:#fdfaf8;color:#4a444f}
+.cmp .most{color:#8d8792}
+.cmp .this{color:#2b2b31;font-weight:600}
+@media(max-width:600px){
+  .cmp .row{flex-direction:column}
+  .cmp .row > div:first-child{flex:none;padding-bottom:5px}
+  .cmp .row > div{padding-top:5px}
+  .cmp .most::before{content:'Most apps: ';font-weight:800;color:#b3adb8}
+  .cmp .this::before{content:'FocusFlow: ';font-weight:800;color:var(--rose)}
+}
+
+.stat{display:flex;gap:12px;flex-wrap:wrap;margin:22px 0}
+.stat div{flex:1;min-width:120px;background:#fff;border:1px solid #efe8e4;border-radius:16px;padding:16px 18px}
+.stat b{display:block;font-size:26px;font-weight:900;letter-spacing:-1px;line-height:1}
+.stat span{font-size:12px;color:var(--mute);font-weight:600}
+
+.flow{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:20px 0}
+.flow .box{background:#fff;border:1px solid #e7ded8;border-radius:14px;padding:11px 15px;font-size:13px;font-weight:700}
+.flow .ar{color:#c3b6ad;font-weight:900}
+
+.foot{text-align:center;color:var(--mute);font-size:13.5px;margin-top:56px;
+  padding-top:26px;border-top:1px solid #eee5e0}
+.foot b{color:var(--ink)}
+a{color:var(--rose)}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="kicker">FocusFlow</div>
+  <h1>A study app that<br><em>tells you the truth</em></h1>
+  <p>Most study apps are timers with a streak counter. This one knows what you're studying, what you've forgotten, how you slept, and what you're avoiding — and it says so plainly, even when that isn't what you want to hear.</p>
+</div>
+
+<div class="wrap">
+
+  <div class="rule"><span>The problem</span></div>
+  <h2>Nobody fails from lack of apps</h2>
+  <p class="lede">A student sits down with four hours and loses forty minutes deciding what to open. They study the chapter they like. They mark things done that they half-know. Three weeks later the first chapter has quietly evaporated, and nothing told them.</p>
+
+  <blockquote>Every one of those failures is a memory problem, not a motivation problem. Software is good at memory.</blockquote>
+
+  <div class="rule"><span>What it does</span></div>
+  <div class="grid">
+    <div class="card c-sky">
+      <h3>🎯 Decides for you</h3>
+      <p>One button. It weighs what's overdue for revision, what you scored badly on, and what's closest to an exam — then names one chapter.</p>
+      <p>Deciding burns the willpower you needed for the studying.</p>
+    </div>
+    <div class="card c-mint">
+      <h3>🔁 Remembers what you forgot</h3>
+      <p>Spaced repetition, running quietly. The gap widens as a chapter sticks and snaps shut when it doesn't.</p>
+      <p>You never think about when to revise. It just appears.</p>
+    </div>
+    <div class="card c-cream">
+      <h3>🕒 Plans around your actual life</h3>
+      <p>Gym at seven, home by eight, and half an hour before you can think straight. It schedules around all of it — including the settling-down.</p>
+      <p>A plan you can keep beats an impressive one you can't.</p>
+    </div>
+    <div class="card c-lav">
+      <h3>✈️ Follows you to Telegram</h3>
+      <p>Asks how you got on each morning. Answers doubts at midnight where you already are. Messages you if you disappear for three days.</p>
+      <p>The difference between an app you open and one that keeps up.</p>
+    </div>
+  </div>
+
+  <div class="rule"><span>Why it's different</span></div>
+  <div class="cmp">
+    <div class="row"><div>When it doesn't know</div><div class="most">Answers anyway</div><div class="this">Says which piece it's missing</div></div>
+    <div class="row"><div>When the AI is wrong</div><div class="most">You find out in the exam</div><div class="this">A second model checks it; disagreements are shown, not hidden</div></div>
+    <div class="row"><div>When something breaks</div><div class="most">Silence, or a spinner</div><div class="this">Tells you what broke, in plain words</div></div>
+    <div class="row"><div>Your data</div><div class="most">On their servers</div><div class="this">On your device. No account, no password</div></div>
+    <div class="row"><div>Marking a chapter done</div><div class="most">Take your word for it</div><div class="this">A "be honest" button that resets it, with no lecture</div></div>
+    <div class="row"><div>Your health</div><div class="most">Not their problem</div><div class="this">Sleep, meals, weight — and it speaks up if you're dropping fast</div></div>
+    <div class="row"><div>After a long session</div><div class="most">Another streak badge</div><div class="this">A rest, a dare or a challenge — none of them a scroll feed</div></div>
+  </div>
+
+  <div class="rule"><span>What it's made of</span></div>
+  <h2>One file</h2>
+  <p class="lede">The entire app is a single HTML page. No build step, no framework, no server holding your marks. Open it and it works, including on a plane.</p>
+
+  <div class="stat">
+    <div><b>1</b><span>file, ~880 KB</span></div>
+    <div><b>0</b><span>accounts or passwords</span></div>
+    <div><b>0</b><span>trackers or ads</span></div>
+    <div><b>~30</b><span>features, all offline-first</span></div>
+  </div>
+
+  <div class="flow">
+    <span class="box">📱 Your browser</span><span class="ar">→</span>
+    <span class="box">a small snapshot</span><span class="ar">→</span>
+    <span class="box">☁️ your own server</span><span class="ar">→</span>
+    <span class="box">✈️ Telegram</span>
+  </div>
+  <p class="lede" style="margin-top:-8px">The bot's password lives on a server you own, never in the public page. The app stays the source of truth. If the server vanished tomorrow, you'd lose the bot and nothing else.</p>
+
+  <div class="rule"><span>The rules it was built on</span></div>
+
+  <div class="belief">
+    <div class="no">One</div>
+    <h3>Silence is the worst thing software can do</h3>
+    <p>A bot that says nothing is indistinguishable from a broken one — because it <em>is</em> a broken one. Every message gets a reply, every failure names itself, and "I don't know" is a complete answer.</p>
+    <div class="so"><b>So:</b> tap anything, and something happens. Even when everything behind it is on fire.</div>
+  </div>
+
+  <div class="belief">
+    <div class="no">Two</div>
+    <h3>A confident wrong answer is worse than no answer</h3>
+    <p>Ask about a section number or a deadline and two different models answer independently. Where they agree, you get one clean answer. Where they disagree, you're shown <em>both</em>, marked — and told that's the line to trust least.</p>
+    <p>Anything about a syllabus or an exam date is looked up live, never recited from memory.</p>
+    <div class="so"><b>So:</b> you're never quietly handed a guess dressed as a fact.</div>
+  </div>
+
+  <div class="belief">
+    <div class="no">Three</div>
+    <h3>Flattery is not encouragement</h3>
+    <p>The weekly review counts what actually happened. If you did no revision at all, it says: <em>that's the pattern that feels productive in September and hurts in May.</em></p>
+    <p>There's a button for admitting you marked something done that you hadn't. It resets the chapter and says nothing else.</p>
+    <div class="so"><b>So:</b> the numbers stay worth looking at.</div>
+  </div>
+
+  <div class="belief">
+    <div class="no">Four</div>
+    <h3>A student is a person, not an output</h3>
+    <p>Sleep, meals, mood and weight sit beside the chapters, because a plan built on five hours of sleep isn't a plan. On Sundays it asks how you've been rather than what you've finished.</p>
+    <p>The weight tracker will never set a calorie target, show a BMI, or tell you a number is good or bad. If it sees weight dropping fast during exam season it says something kind and points you at a real person.</p>
+    <div class="so"><b>So:</b> nothing here can quietly make you unwell.</div>
+  </div>
+
+  <div class="belief">
+    <div class="no">Five</div>
+    <h3>Use the better tool, don't imitate it</h3>
+    <p>NotebookLM writes better quizzes than this app does — it's free and it reads PDFs. So instead of competing, one button packages your notes for it, and another logs the score you got.</p>
+    <p>Your teacher explains a chapter better than any model. So it asks who you follow, then looks at their channel first.</p>
+    <div class="so"><b>So:</b> it makes the things you already use work together.</div>
+  </div>
+
+  <div class="belief">
+    <div class="no">Six</div>
+    <h3>Your data is yours, with all that implies</h3>
+    <p>Nothing is uploaded. There's no account to make, no password to forget, nobody holding your marks. Every AI key is your own, stored on your device only.</p>
+    <p>Which cuts both ways, honestly: a browser clean-up would take everything. That's why there's a backup button, and why the app nags you about it.</p>
+    <div class="so"><b>So:</b> nobody can sell it, leak it, or lock you out of it — including us.</div>
+  </div>
+
+  <div class="rule"><span>Who it's for</span></div>
+  <h2>Anyone with a syllabus and not enough time</h2>
+  <p class="lede">It ships knowing CA, JEE, NEET, UPSC, school boards and more. But if your goal isn't in the list, you type it in plain words — <em>"I want to be an army officer"</em> — and it goes and finds which exam that is, who conducts it, what the stages are, and what's actually on the paper.</p>
+
+  <div class="grid">
+    <div class="card c-peach">
+      <h3>🗣 It speaks your language</h3>
+      <p>English, हिन्दी, Hinglish, or both at once. Voice notes work too — half of what you'd say at eleven at night you'd never type.</p>
+    </div>
+    <div class="card c-mint">
+      <h3>👨‍👩‍👧 More than one of you</h3>
+      <p>Separate profiles on one device, each with their own data. Siblings don't share a backlog.</p>
+    </div>
+  </div>
+
+  <div class="rule"><span>The honest part</span></div>
+  <h2>What it won't do</h2>
+  <div class="grid">
+    <div class="card c-cream">
+      <h3>It won't study for you</h3>
+      <p>It removes the deciding, the forgetting and the guessing. The sitting down is still entirely yours.</p>
+    </div>
+    <div class="card c-cream">
+      <h3>It won't always be right</h3>
+      <p>That's why two models check each other and why it shows you where they disagreed instead of picking one.</p>
+    </div>
+    <div class="card c-cream">
+      <h3>It won't hold your data for you</h3>
+      <p>There's no cloud backup by default. Press 💾 every couple of weeks — that part is genuinely on you.</p>
+    </div>
+  </div>
+
+  <div class="foot">
+    <p><b>FocusFlow</b> — built by a student, for students, in one file.</p>
+    <p style="margin-top:8px">Free, no ads, no account. Want to know how to use it? <a href="howto.html">There's a ninety-second walkthrough</a>.</p>
+  </div>
+
+</div>
+</body>
+</html>

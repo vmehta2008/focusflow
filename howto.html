@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FocusFlow — how to actually use it</title>
+<style>
+:root{
+  --bg-a:#FBF8F3; --bg-b:#F6F1EA; --ink:#2b2b31; --mute:#7a7580;
+  --cream:linear-gradient(150deg,#FFFBEE,#FFF1D4);
+  --sky:linear-gradient(150deg,#EBF6FF,#CFE6FC);
+  --mint:linear-gradient(150deg,#EAF7F0,#D3EEDF);
+  --lav:linear-gradient(150deg,#F3EEFC,#E2D8F5);
+  --peach:linear-gradient(150deg,#FFEFE8,#FFD8C6);
+  color-scheme:light;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  background:linear-gradient(160deg,var(--bg-a) 0%,var(--bg-b) 60%,#FFFDF9 100%);
+  background-attachment:fixed; color:var(--ink);
+  font:16px/1.6 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  padding:0 0 80px;
+}
+.wrap{max-width:820px;margin:0 auto;padding:0 18px}
+
+/* ── the player ── */
+header{text-align:center;padding:38px 18px 22px}
+h1{font-size:30px;font-weight:900;letter-spacing:-.6px;margin-bottom:6px}
+.sub{color:var(--mute);font-size:14.5px;max-width:520px;margin:0 auto}
+
+.stage{
+  position:relative; border-radius:26px; overflow:hidden;
+  border:1px solid rgba(255,255,255,.95);
+  box-shadow:0 18px 50px -20px rgba(15,23,42,.28),0 2px 8px -2px rgba(15,23,42,.06);
+  background:#fff; min-height:430px; margin:24px 0 14px;
+}
+.scene{
+  position:absolute; inset:0; padding:30px 32px;
+  opacity:0; transform:translateY(14px); pointer-events:none;
+  transition:opacity .55s ease, transform .55s cubic-bezier(.4,0,.2,1);
+  display:flex; flex-direction:column; overflow-y:auto;
+}
+.scene.on{opacity:1;transform:none;pointer-events:auto}
+.chip{display:inline-block;font-size:10px;font-weight:900;letter-spacing:1.4px;
+      text-transform:uppercase;color:#a0596b;background:#fbe9ec;
+      padding:4px 11px;border-radius:8px;margin-bottom:12px;align-self:flex-start}
+.scene h2{font-size:23px;font-weight:900;letter-spacing:-.3px;margin-bottom:7px}
+.scene .lede{color:var(--mute);font-size:14.5px;margin-bottom:18px;max-width:600px}
+
+.bar{display:flex;gap:5px;padding:0 4px;margin-bottom:8px}
+.seg{flex:1;height:4px;border-radius:3px;background:#e8e0da;overflow:hidden;cursor:pointer}
+.seg i{display:block;height:100%;width:0;background:linear-gradient(90deg,#FF8A5B,#FFB300);border-radius:3px}
+.seg.done i{width:100%}
+.seg.now i{animation:fill var(--dur,9s) linear forwards}
+@keyframes fill{to{width:100%}}
+.controls{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;margin-bottom:34px}
+button.ctl{
+  border:1px solid #e6ded8;background:#fff;color:#5b5560;font-weight:800;font-size:12.5px;
+  padding:9px 16px;border-radius:12px;cursor:pointer;transition:.15s;
+}
+button.ctl:hover{border-color:#f0a98c;color:#a0596b}
+button.ctl.pri{background:linear-gradient(135deg,#FF8A5B,#FFB300);color:#fff;border:none}
+.count{font-size:12px;color:var(--mute);font-weight:700;min-width:52px;text-align:center}
+
+/* ── phone mock ── */
+.split{display:flex;gap:26px;flex-wrap:wrap;align-items:flex-start}
+.col{flex:1;min-width:230px}
+.phone{
+  width:250px;border-radius:26px;border:9px solid #23202a;background:#fff;
+  padding:12px 11px;box-shadow:0 14px 34px -14px rgba(0,0,0,.4);flex:0 0 auto;
+}
+.phone .top{font-size:10px;color:#9a94a0;text-align:center;margin-bottom:8px;font-weight:700}
+.card{border-radius:15px;padding:12px 13px;margin-bottom:9px;font-size:12.5px;line-height:1.5}
+.c-cream{background:var(--cream)} .c-sky{background:var(--sky)}
+.c-mint{background:var(--mint)} .c-lav{background:var(--lav)} .c-peach{background:var(--peach)}
+.eyebrow{font-size:9px;font-weight:900;letter-spacing:1.3px;text-transform:uppercase;color:#98919c;margin-bottom:3px}
+.big{font-size:16px;font-weight:800;letter-spacing:-.2px}
+.dial{width:118px;height:118px;border-radius:50%;margin:6px auto 8px;
+  background:conic-gradient(#FF8A5B 0turn .62turn,#e9e2ef .62turn 1turn);
+  display:flex;align-items:center;justify-content:center;position:relative}
+.dial::after{content:'';position:absolute;inset:11px;border-radius:50%;background:#fff}
+.dial span{position:relative;z-index:1;font-size:23px;font-weight:900;letter-spacing:-1px}
+
+/* ── telegram mock ── */
+.tg{background:#eef3f8;border-radius:16px;padding:13px;border:1px solid #dfe8f1}
+.tgh{font-size:10px;font-weight:900;letter-spacing:1.2px;text-transform:uppercase;color:#7d93ab;margin-bottom:9px}
+.b{max-width:87%;padding:9px 12px;border-radius:14px;font-size:12.5px;line-height:1.5;margin-bottom:7px}
+.b.bot{background:#fff;border:1px solid #e3ebf3;border-bottom-left-radius:5px}
+.b.me{background:#d7ebff;margin-left:auto;border-bottom-right-radius:5px}
+.keys{display:flex;gap:5px;flex-wrap:wrap;margin-top:9px}
+.key{background:#fff;border:1px solid #d6e2ee;border-radius:9px;padding:6px 9px;font-size:11px;font-weight:800;color:#3b566f}
+.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11.5px}
+
+.pt{display:flex;gap:11px;margin-bottom:11px;align-items:flex-start}
+.pt .n{flex:0 0 25px;height:25px;border-radius:8px;background:#fbe9ec;color:#a0596b;
+  font-weight:900;font-size:12px;display:flex;align-items:center;justify-content:center}
+.pt .tx{flex:1;font-size:13.5px;line-height:1.55}
+.pt b{font-weight:800}
+.note{font-size:12px;color:var(--mute);font-style:italic;margin-top:auto;padding-top:14px}
+.warn{background:#fff8e8;border:1px solid #f2e0b8;border-radius:12px;padding:11px 13px;font-size:12.5px;color:#7a5e22;margin-top:10px}
+h3.sec{font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:1.3px;color:#a0596b;margin:40px 0 12px}
+.plain{background:#fff;border:1px solid #eee7e4;border-radius:16px;padding:17px 19px;margin-bottom:11px;font-size:14px}
+.plain b{font-weight:800}
+kbd{background:#f3efec;border:1px solid #e2dad4;border-radius:6px;padding:1px 6px;font-size:12px;font-weight:700}
+@media(max-width:640px){.phone{width:100%;max-width:250px;margin:0 auto}.stage{min-height:560px}.scene{padding:22px 20px}}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>FocusFlow, properly</h1>
+  <p class="sub">Nine scenes, about ninety seconds. Everything you need to get the most out of it — no setup, no jargon.</p>
+</header>
+
+<div class="wrap">
+  <div class="bar" id="bar"></div>
+
+  <div class="stage" id="stage">
+
+    <!-- 1 -->
+    <div class="scene on" data-dur="8">
+      <span class="chip">The idea</span>
+      <h2>Two halves of one thing</h2>
+      <p class="lede">The app holds everything. The bot carries it to where you already are at eleven at night.</p>
+      <div class="split">
+        <div class="col">
+          <div class="card c-cream"><div class="eyebrow">📱 The app</div>
+            <div class="big">Everything lives here</div>
+            <div style="color:#7a7580;margin-top:5px">Your chapters, hours, notes, marks. Nothing leaves your device unless you say so.</div>
+          </div>
+          <div class="card c-sky"><div class="eyebrow">✈️ The bot</div>
+            <div class="big">Keeps up with you</div>
+            <div style="color:#7a7580;margin-top:5px">Asks each morning. Answers doubts at midnight. Messages you if you go quiet.</div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="warn"><b>The one rule worth knowing.</b><br>
+          The bot only knows what the app last told it — and the app tells it when you open it. Open the app once a day and the bot stays sharp. It will say so out loud if its information is stale, rather than bluffing.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2 -->
+    <div class="scene" data-dur="9">
+      <span class="chip">First run · 2 minutes</span>
+      <h2>Five questions, once</h2>
+      <p class="lede">It opens by itself the first time. Be honest on the hours — a plan built on a fantasy falls over in week two.</p>
+      <div class="pt"><div class="n">1</div><div class="tx"><b>Which exam, and when.</b> CA Foundation, JEE, boards, or type your own. It sets sensible subjects and session lengths from this.</div></div>
+      <div class="pt"><div class="n">2</div><div class="tx"><b>When you can actually study.</b> Days and a time window. It builds a starter week — subjects interleaved, revision already slotted in.</div></div>
+      <div class="pt"><div class="n">3</div><div class="tx"><b>What it built</b>, explained in plain words.</div></div>
+      <div class="pt"><div class="n">4</div><div class="tx"><b>Your chapters.</b> Three is enough to start. Paste your whole syllabus if you have it — one per line, subject on its own line.</div></div>
+      <div class="pt"><div class="n">5</div><div class="tx"><b>Telegram.</b> Offered, never forced.</div></div>
+      <div class="warn">Without chapters the app is only a timer. This is the step people skip and then wonder why it feels empty.</div>
+    </div>
+
+    <!-- 3 -->
+    <div class="scene" data-dur="9">
+      <span class="chip">Every day</span>
+      <h2>Press one button</h2>
+      <p class="lede">The Focus tab picks the chapter for you. Deciding what to study burns the willpower you needed for studying it.</p>
+      <div class="split">
+        <div class="phone">
+          <div class="top">FocusFlow</div>
+          <div class="card c-sky"><div class="eyebrow">🎯 Right now</div>
+            <div class="big">Bank Reconciliation</div>
+            <div style="color:#7a7580;margin-top:4px">Revision overdue by 2 days — this one first.</div>
+          </div>
+          <div class="card c-mint" style="text-align:center">
+            <div class="dial"><span>32:14</span></div>
+            <div style="font-size:11px;color:#7a7580">18 min done · 62% of the way<br>then a 5-minute break</div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="pt"><div class="n">◆</div><div class="tx">It weighs what's <b>overdue for revision</b>, what you scored badly on, and what's closest to an exam.</div></div>
+          <div class="pt"><div class="n">◆</div><div class="tx">Studied away from the timer? Log it by hand. An honest record beats a flattering one.</div></div>
+          <div class="pt"><div class="n">◆</div><div class="tx">Marked something done that you hadn't? Press <b>🫤 Be honest</b>. It resets that chapter with no lecture.</div></div>
+          <div class="note">Revision is scheduled by spaced repetition — the gaps widen as a chapter sticks. You never have to think about when.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4 -->
+    <div class="scene" data-dur="10">
+      <span class="chip">Telegram · the morning</span>
+      <h2>Four taps, in bed</h2>
+      <p class="lede">A check-in you can answer half-asleep gets answered every day. A blank prompt gets answered twice.</p>
+      <div class="split">
+        <div class="col">
+          <div class="tg">
+            <div class="tgh">Around 7am</div>
+            <div class="b bot">📝 Unit test in 2 days — Depreciation still uncovered.<br><br>Good morning ☀️<br>You'd planned Accounting 6–8pm. How did yesterday actually go?</div>
+            <div class="keys"><span class="key">Nothing</span><span class="key">~30 min</span><span class="key">~1 hr</span><span class="key">2 hr+</span></div>
+            <div class="b me" style="margin-top:9px">~1 hr</div>
+            <div class="b bot">Which topics? Tap all that apply.</div>
+            <div class="keys"><span class="key">☑ Bank Reconciliation</span><span class="key">Depreciation</span><span class="key">✓ Done</span></div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="pt"><div class="n">◆</div><div class="tx">Or just type it: <i>"did half of BRS, felt shaky"</i>. It reads plain English, Hindi and Hinglish.</div></div>
+          <div class="pt"><div class="n">◆</div><div class="tx">🎙 <b>Voice notes work too</b> — half of what you'd say at 11pm you'd never type.</div></div>
+          <div class="pt"><div class="n">◆</div><div class="tx">It shows you what it understood and waits for <b>✔️ That's right</b>. Nothing changes in your app until you confirm.</div></div>
+          <div class="warn">On Sundays it asks about sleep and eating too. A principal who only ever asks about marks isn't one.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5 -->
+    <div class="scene" data-dur="9">
+      <span class="chip">Telegram · six buttons</span>
+      <h2>Nothing to memorise</h2>
+      <p class="lede">They sit at the bottom of the chat permanently. There is never a moment of "what do I type here".</p>
+      <div class="split">
+        <div class="col">
+          <div class="tg">
+            <div class="tgh">Tap 📊 My week</div>
+            <div class="b bot"><b>📊 Where you stand</b><br><br>
+            Today <span class="mono">▓▓▓▓▓▓▓▓░░ 79%</span><br>
+            <i>95 of 120 minutes</i><br>🔥 6-day streak<br><br>
+            📝 Next test: Unit test in 2 days<br>
+            🎯 CA Foundation in 47 days — that's close now<br>
+            🔁 Revision due: Bank Reconciliation<br><br>
+            <span class="mono">▓▓▓▓▓░░░ 60%</span> Bank Reconciliation ⏰<br>
+            <span class="mono">▓▓░░░░░░ 20%</span> Depreciation<br>
+            <span class="mono">░░░░░░░░ 0%</span> Indian Contract Act</div>
+            <div class="keys">
+              <span class="key">🎯 What now</span><span class="key">✅ Check in</span>
+              <span class="key">📊 My week</span><span class="key">📝 Next test</span>
+              <span class="key">❓ Ask a doubt</span><span class="key">⚙️ More</span>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="pt"><div class="n">🎯</div><div class="tx"><b>What now</b> — a concrete plan for the next two hours, from your real numbers.</div></div>
+          <div class="pt"><div class="n">📊</div><div class="tx"><b>My week</b> — needs no AI at all. It works when everything else is misconfigured, which makes it the honest first thing to test.</div></div>
+          <div class="pt"><div class="n">❓</div><div class="tx"><b>Ask a doubt</b> — and 💾 files the answer into your notes rather than letting it scroll away.</div></div>
+          <div class="note">If something breaks, it says what broke. It never goes silent — silence is indistinguishable from being broken.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6 -->
+    <div class="scene" data-dur="9">
+      <span class="chip">Doubts</span>
+      <h2>Ask, keep, picture it, watch it</h2>
+      <p class="lede">A doubt you asked and never wrote down is a doubt you'll have again in three weeks.</p>
+      <div class="split">
+        <div class="col">
+          <div class="card c-mint">
+            <div class="eyebrow">📓 Notes</div>
+            <div style="font-size:12.5px;margin-bottom:8px"><i>"explain bank reconciliation simply"</i></div>
+            <div style="font-size:12px;color:#57606b;line-height:1.55">A BRS explains why your cash book and the bank's statement disagree…</div>
+            <div class="keys" style="margin-top:9px">
+              <span class="key">💾 Keep as a note</span><span class="key">🗺 Map it</span><span class="key">🎥 Watch it explained</span>
+            </div>
+            <div style="font-size:10px;color:#98919c;margin-top:8px">⚖️ Answered by Claude and Gemini, then reconciled</div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="pt"><div class="n">🧠</div><div class="tx"><b>Two models, checked against each other.</b> Where they disagree on a figure or a section number you're shown both, marked — not one picked quietly for you.</div></div>
+          <div class="pt"><div class="n">🎥</div><div class="tx"><b>Videos from your own teacher.</b> It asks once who you follow, then looks at their channel first — same words, same order as the class you already paid for.</div></div>
+          <div class="pt"><div class="n">📷</div><div class="tx"><b>Photograph handwritten notes</b> and it types them up, flagging anything it couldn't read rather than guessing.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7 -->
+    <div class="scene" data-dur="9">
+      <span class="chip">Testing yourself</span>
+      <h2>NotebookLM makes it. This remembers it.</h2>
+      <p class="lede">NotebookLM writes a better quiz than this app does — free, and it reads PDFs. So it isn't a competition.</p>
+      <div class="pt"><div class="n">1</div><div class="tx"><b>📔 Send my notes to NotebookLM</b> bundles your notes and chapter list into one clean file. Upload it there as a source, press Quiz.</div></div>
+      <div class="pt"><div class="n">2</div><div class="tx"><b>Come back and log the score.</b> Thirty seconds. Subject, chapter, what you got wrong.</div></div>
+      <div class="pt"><div class="n">3</div><div class="tx">It joins your mocks and class tests — and <b>that</b> is what tells you Depreciation has cost you marks three times this month.</div></div>
+      <div class="warn"><b>Why bother.</b> NotebookLM can't remember you across quizzes. FocusFlow can't write as good a quiz. Each does the half it's actually good at.</div>
+      <div class="note">There's a built-in test generator too, for when you're offline or can't be bothered switching apps.</div>
+    </div>
+
+    <!-- 8 -->
+    <div class="scene" data-dur="9">
+      <span class="chip">Not only grind</span>
+      <h2>The parts that aren't studying</h2>
+      <p class="lede">An app that only ever asks for more is one you come to resent.</p>
+      <div class="split">
+        <div class="col">
+          <div class="card c-lav" style="text-align:center">
+            <div style="font-size:34px">🎁</div>
+            <div class="big" style="margin:4px 0">You've earned five minutes</div>
+            <div style="font-size:11.5px;color:#7a7580">🚶 Walk to the end of the street and back<br><i style="font-size:11px">Moving legs move blood to the head.</i></div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="pt"><div class="n">🎁</div><div class="tx">After 40+ minutes, or once you hit your goal — <b>not</b> after every short block, which would make it noise.</div></div>
+          <div class="pt"><div class="n">🧠</div><div class="tx">Or a one-minute memory game. Nothing here has a feed or an infinite level: a five-minute break that becomes forty is worse than none.</div></div>
+          <div class="pt"><div class="n">🧘</div><div class="tx">Meditation, 18 soundscapes, sleep and meals tracking, a diet plan built around what you actually eat.</div></div>
+          <div class="pt"><div class="n">📅</div><div class="tx">On Sundays, an honest week in review — including the sentence you don't want to read.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 9 -->
+    <div class="scene" data-dur="11">
+      <span class="chip">Do these five things</span>
+      <h2>The whole thing, honestly</h2>
+      <p class="lede">If you only take five instructions from this, take these.</p>
+      <div class="pt"><div class="n">1</div><div class="tx"><b>Open the app once a day.</b> That's what keeps the bot current. Everything vague it ever says traces back to this.</div></div>
+      <div class="pt"><div class="n">2</div><div class="tx"><b>Put your chapters in.</b> All of them. Paste the syllabus. The app is only as clever as its list.</div></div>
+      <div class="pt"><div class="n">3</div><div class="tx"><b>Record every test score</b>, including the bad ones. Especially the bad ones — that's the only way it can find your weak chapters.</div></div>
+      <div class="pt"><div class="n">4</div><div class="tx"><b>Answer the morning check-in.</b> Four taps. It's the difference between a diary and a coach.</div></div>
+      <div class="pt"><div class="n">5</div><div class="tx"><b>Press 💾 in the top bar every couple of weeks.</b> Your data lives in this browser only. A browser clean-up would take all of it.</div></div>
+      <div class="warn">Nothing here is uploaded anywhere. No account, no password, no server holding your marks. That's deliberate — and it's also why the backup is on you.</div>
+    </div>
+
+  </div>
+
+  <div class="controls">
+    <button class="ctl" id="prev">← Back</button>
+    <button class="ctl pri" id="play">⏸ Pause</button>
+    <button class="ctl" id="next">Next →</button>
+    <span class="count" id="count">1 / 9</span>
+  </div>
+
+  <h3 class="sec">Getting the Telegram bot</h3>
+  <div class="plain"><b>Ask whoever sent you this.</b> The bot needs a one-off setup that only has to be done once for everybody — they'll send you a link. Tap it, answer three questions, and you're in.</div>
+  <div class="plain"><b>Then check it.</b> Message the bot <kbd>/help</kbd>. Six buttons should appear at the bottom of the chat. Tap <b>📊 My week</b> — that one works even if everything else is misconfigured, so it's the honest first test.</div>
+  <div class="plain"><b>You don't have to.</b> Every part of the app works without it. The bot is the difference between an app you remember to open and one that keeps up with you — but it's an addition, not a requirement.</div>
+
+  <h3 class="sec">If something looks wrong</h3>
+  <div class="plain"><b>The bot sounds generic.</b> It hasn't had fresh data. Open the app once — that's the whole fix. Ask it and it'll tell you how old its information is.</div>
+  <div class="plain"><b>The bot mentions an AI key.</b> That's the server, not you. Tell whoever set it up. 📊 My week still works without it.</div>
+  <div class="plain"><b>An answer looks wrong.</b> Every answer is checked by a second model. Look for the ⚠ line — that's where the two disagreed, and it's the line to trust least.</div>
+  <div class="plain"><b>Everything vanished.</b> Restore from your last 💾 backup. If you never made one, it's gone — nothing is stored on a server. So make one now, honestly.</div>
+
+  <h3 class="sec">Three honest limits</h3>
+  <div class="plain"><b>It doesn't study for you.</b> It removes the deciding, the forgetting and the guessing. The sitting down is still yours.</div>
+  <div class="plain"><b>The AI can be wrong.</b> That's why two models check each other and why disagreements are shown rather than hidden. Treat a section number or a date as a lead, not a fact.</div>
+  <div class="plain"><b>Your data is only on your device.</b> No account, no password, nobody holding your marks. That's the point — and it's why the 💾 button matters.</div>
+</div>
+
+<script>
+const scenes = [...document.querySelectorAll('.scene')];
+const bar = document.getElementById('bar');
+const countEl = document.getElementById('count');
+let i = 0, playing = true, timer = null;
+
+scenes.forEach((s, n) => {
+  const seg = document.createElement('div');
+  seg.className = 'seg';
+  seg.innerHTML = '<i></i>';
+  seg.onclick = () => { go(n); pause(); };
+  bar.appendChild(seg);
+});
+const segs = [...bar.children];
+
+function paint(){
+  scenes.forEach((s, n) => s.classList.toggle('on', n === i));
+  segs.forEach((s, n) => {
+    s.className = 'seg' + (n < i ? ' done' : n === i && playing ? ' now' : n < i ? ' done' : '');
+    if (n === i && playing){
+      s.style.setProperty('--dur', (scenes[i].dataset.dur || 9) + 's');
+      const el = s.querySelector('i');
+      el.style.animation = 'none'; void el.offsetWidth;
+      el.style.animation = '';
+    } else if (n === i){
+      s.querySelector('i').style.width = '100%';
+    }
+  });
+  countEl.textContent = (i + 1) + ' / ' + scenes.length;
+  document.getElementById('stage').scrollTop = 0;
+}
+function schedule(){
+  clearTimeout(timer);
+  if (!playing) return;
+  timer = setTimeout(() => { i = (i + 1) % scenes.length; paint(); schedule(); },
+                     (+(scenes[i].dataset.dur || 9)) * 1000);
+}
+function go(n){ i = (n + scenes.length) % scenes.length; paint(); schedule(); }
+function pause(){ playing = false; clearTimeout(timer);
+  document.getElementById('play').textContent = '▶ Play'; paint(); }
+function play(){ playing = true;
+  document.getElementById('play').textContent = '⏸ Pause'; paint(); schedule(); }
+
+document.getElementById('next').onclick = () => { go(i + 1); if (!playing) pause(); };
+document.getElementById('prev').onclick = () => { go(i - 1); if (!playing) pause(); };
+document.getElementById('play').onclick = () => playing ? pause() : play();
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight'){ go(i + 1); if (!playing) pause(); }
+  if (e.key === 'ArrowLeft'){ go(i - 1); if (!playing) pause(); }
+  if (e.key === ' '){ e.preventDefault(); playing ? pause() : play(); }
+});
+paint(); schedule();
+</script>
+</body>
+</html>

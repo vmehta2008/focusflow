@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FocusFlow — Project Report</title>
+<style>
+:root{
+  --bg-a:#FBF8F3; --bg-b:#F6F1EA; --ink:#2b2b31; --mute:#7a7580; --rose:#a0596b;
+  --cream:linear-gradient(150deg,#FFFBEE,#FFF1D4);
+  --sky:linear-gradient(150deg,#EBF6FF,#CFE6FC);
+  --mint:linear-gradient(150deg,#EAF7F0,#D3EEDF);
+  --lav:linear-gradient(150deg,#F3EEFC,#E2D8F5);
+  --peach:linear-gradient(150deg,#FFEFE8,#FFD8C6);
+  color-scheme:light;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  background:linear-gradient(165deg,var(--bg-a) 0%,var(--bg-b) 50%,#FFFDF9 100%);
+  background-attachment:fixed;color:var(--ink);
+  font:16px/1.65 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  -webkit-font-smoothing:antialiased;padding-bottom:80px;
+}
+.wrap{max-width:920px;margin:0 auto;padding:0 24px}
+
+/* cover */
+.cover{text-align:center;padding:76px 24px 34px;position:relative;overflow:hidden}
+.cover::before{content:'';position:absolute;top:-150px;left:50%;transform:translateX(-50%);
+  width:600px;height:300px;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,138,91,.12),transparent 70%);pointer-events:none}
+.kick{display:inline-block;font-size:11px;font-weight:900;letter-spacing:2.4px;text-transform:uppercase;
+  color:var(--rose);background:#fbe9ec;padding:6px 16px;border-radius:20px;margin-bottom:18px;position:relative}
+h1{font-size:clamp(34px,6.5vw,54px);font-weight:900;letter-spacing:-1.6px;line-height:1.06;
+  margin-bottom:14px;position:relative}
+h1 em{font-style:normal;background:linear-gradient(115deg,#FF6B6B,#FF8A5B,#FFB300);
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.cover .by{color:var(--mute);font-size:15.5px;position:relative;margin-top:6px}
+.cover .by b{color:var(--ink)}
+
+.rule{display:flex;align-items:center;gap:15px;margin:60px 0 10px}
+.rule span{font-size:11.5px;font-weight:900;letter-spacing:2.2px;text-transform:uppercase;
+  color:var(--rose);white-space:nowrap}
+.rule::before,.rule::after{content:'';height:1px;background:#e9e0da;flex:1}
+.rule::before{max-width:20px}
+h2{font-size:clamp(23px,3.5vw,30px);font-weight:900;letter-spacing:-.7px;margin-bottom:10px}
+h3{font-size:17px;font-weight:900;margin:26px 0 9px;letter-spacing:-.2px}
+p{margin-bottom:12px}
+.lede{color:var(--mute);font-size:15.5px;max-width:680px;margin-bottom:24px}
+
+.card{border-radius:22px;padding:22px 24px;border:1px solid rgba(255,255,255,.95);
+  box-shadow:0 10px 26px -14px rgba(15,23,42,.15),0 2px 5px -2px rgba(15,23,42,.05)}
+.c-cream{background:var(--cream)}.c-sky{background:var(--sky)}
+.c-mint{background:var(--mint)}.c-lav{background:var(--lav)}.c-peach{background:var(--peach)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
+
+/* metrics */
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin:10px 0 20px}
+.m{background:#fff;border:1px solid #eee5e0;border-radius:18px;padding:18px 20px}
+.m b{display:block;font-size:30px;font-weight:900;letter-spacing:-1.3px;line-height:1;margin-bottom:4px;
+  background:linear-gradient(115deg,#FF6B6B,#FF8A5B,#FFB300);
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.m span{font-size:12px;color:var(--mute);font-weight:600;line-height:1.4;display:block}
+
+/* tables */
+table{width:100%;border-collapse:collapse;font-size:14px;background:#fff;
+  border:1px solid #eee5e0;border-radius:18px;overflow:hidden;margin-bottom:14px}
+th{background:#fdfaf8;text-align:left;padding:12px 15px;font-size:11px;font-weight:900;
+  letter-spacing:1.2px;text-transform:uppercase;color:var(--rose);border-bottom:1px solid #f2ebe7}
+td{padding:12px 15px;border-bottom:1px solid #f6f1ee;vertical-align:top}
+tr:last-child td{border-bottom:none}
+td.n{font-weight:800;white-space:nowrap}
+td.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;color:#5d5763}
+
+/* timeline */
+.ph{background:#fff;border:1px solid #eee5e0;border-radius:20px;padding:20px 22px;margin-bottom:12px;
+  display:flex;gap:16px;align-items:flex-start}
+.ph .tag{flex:0 0 78px;font-size:10.5px;font-weight:900;letter-spacing:1px;text-transform:uppercase;
+  color:var(--rose);background:#fbe9ec;border-radius:9px;padding:6px 8px;text-align:center;line-height:1.35}
+.ph h4{font-size:15.5px;font-weight:900;margin-bottom:5px}
+.ph p{font-size:13.5px;color:#5d5763;line-height:1.6;margin:0}
+.ph .said{font-size:13px;color:var(--rose);font-style:italic;margin-top:7px;
+  border-left:2px solid #f3d9df;padding-left:11px}
+
+/* bug entries */
+.bug{background:#fff;border:1px solid #eee5e0;border-radius:18px;padding:17px 20px;margin-bottom:11px}
+.bug .h{display:flex;gap:9px;align-items:baseline;flex-wrap:wrap;margin-bottom:5px}
+.bug .sev{font-size:9.5px;font-weight:900;letter-spacing:1px;text-transform:uppercase;
+  padding:3px 8px;border-radius:7px;white-space:nowrap}
+.sev.crit{background:#fdecec;color:#b03a3a}
+.sev.harm{background:#fff4e5;color:#9a6212}
+.sev.ux{background:#eef4fb;color:#3a6ea8}
+.bug b{font-size:14.5px;font-weight:800}
+.bug p{font-size:13.5px;color:#5d5763;margin:0;line-height:1.6}
+.bug .fix{font-size:13px;color:#4b7a5e;margin-top:6px}
+.bug .fix::before{content:'→ ';font-weight:900}
+
+blockquote{border-left:3px solid #FF8A5B;padding:4px 0 4px 20px;margin:22px 0;
+  font-size:17.5px;font-weight:600;line-height:1.5;color:#3d3944}
+ul{margin:0 0 14px 20px}li{margin-bottom:7px;font-size:14.5px}
+.foot{text-align:center;margin-top:56px;padding-top:26px;border-top:1px solid #eee5e0;
+  color:var(--mute);font-size:13.5px}
+kbd{background:#f3efec;border:1px solid #e2dad4;border-radius:6px;padding:1px 7px;font-size:12.5px;font-weight:700}
+@media print{body{background:#fff}.card,.ph,.bug,.m,table{break-inside:avoid;box-shadow:none}
+  .rule{margin-top:32px;page-break-after:avoid}}
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <div class="kick">Project Report · September 2026</div>
+  <h1>FocusFlow<br><em>Building a study app in 33 days</em></h1>
+  <p class="by">A single-file study companion with a Telegram bot, built by <b>Vaani Mehta</b> (17)<br>
+  with an AI pair-programmer — starting from no coding background at all.</p>
+</div>
+
+<div class="wrap">
+
+  <div class="rule"><span>At a glance</span></div>
+  <div class="metrics">
+    <div class="m"><b>33</b><span>days, 2 Aug – 3 Sep 2026</span></div>
+    <div class="m"><b>14,609</b><span>lines in the app</span></div>
+    <div class="m"><b>364</b><span>functions</span></div>
+    <div class="m"><b>35</b><span>features shipped</span></div>
+    <div class="m"><b>266</b><span>automated checks</span></div>
+    <div class="m"><b>14</b><span>test suites</span></div>
+    <div class="m"><b>0</b><span>lines written by hand by the author</span></div>
+    <div class="m"><b>₹0</b><span>total cost to build and host</span></div>
+  </div>
+
+  <div class="rule"><span>1 · The goal</span></div>
+  <h2>What this was actually for</h2>
+  <p class="lede">Not a portfolio piece. A tool for a specific problem, for specific people — the author, their family, and the CA Foundation students around them.</p>
+
+  <div class="grid">
+    <div class="card c-cream">
+      <h3 style="margin-top:0">The problem</h3>
+      <p style="font-size:14px;margin:0">A student sits down with four hours and loses forty minutes deciding what to open. They study the chapter they enjoy. They tick things they half-know. Three weeks later the first chapter has evaporated and nothing tells them.</p>
+    </div>
+    <div class="card c-sky">
+      <h3 style="margin-top:0">The insight</h3>
+      <p style="font-size:14px;margin:0">Every one of those failures is a <b>memory</b> problem, not a motivation problem. Software is excellent at memory and terrible at motivation — so the app was built to do the first and stay out of the second.</p>
+    </div>
+  </div>
+
+  <h3>The five goals, set at the start and held to</h3>
+  <table>
+    <tr><th style="width:34%">Goal</th><th>How it shows up in the finished thing</th></tr>
+    <tr><td class="n">🎯 Remove the deciding</td><td>One button on the Focus tab names the chapter, weighing overdue revision, weak test scores and exam proximity.</td></tr>
+    <tr><td class="n">🔁 Remove the forgetting</td><td>Spaced repetition runs silently. The student never chooses when to revise.</td></tr>
+    <tr><td class="n">🤝 Meet the student where they are</td><td>A Telegram bot, because a 17-year-old opens Telegram forty times a day and a study app twice.</td></tr>
+    <tr><td class="n">💙 Treat the user as a person</td><td>Sleep, meals, training, mood and body sit beside the chapters — a plan built on five hours of sleep is not a plan.</td></tr>
+    <tr><td class="n">🔒 Own the data completely</td><td>No account, no server, no company holding anyone's marks. The trade is accepted openly: backups are the user's job.</td></tr>
+  </table>
+
+  <div class="rule"><span>2 · How it was built</span></div>
+  <h2>Thirty-three days, in five phases</h2>
+  <p class="lede">The author wrote no code. The author described what was wanted, in plain words, and corrected what came back — which turned out to be the harder and more important half of the job.</p>
+
+  <div class="ph"><div class="tag">Days<br>1–7</div><div>
+    <h4>Foundations</h4>
+    <p>Focus timer, backlog, streaks, exam countdown, soundscapes, multiple profiles on one device. The shape of the app settled here and barely moved afterwards.</p>
+  </div></div>
+
+  <div class="ph"><div class="tag">Days<br>8–16</div><div>
+    <h4>The coach and the plan</h4>
+    <p>AI provider setup, the timetable interview, honest feasibility maths, syllabus verification against official sources, doubts, notes and mindmaps.</p>
+    <p class="said">“THAT IS TOO MUCH DATA AT A TIME TO ME SINCE I AM NOT MUCH AWARE TECHNICALLY”</p>
+    <p style="margin-top:7px">That single message changed the working method permanently: one instruction at a time, plain language, no jargon.</p>
+  </div></div>
+
+  <div class="ph"><div class="tag">Days<br>17–24</div><div>
+    <h4>Telegram, health, and the design fight</h4>
+    <p>The Cloudflare worker, the Principal persona, health tracking, weekly tests. Also the longest argument of the project — an unrequested "professional SaaS redesign" that had to be reverted in full.</p>
+    <p class="said">“why r u messing my file pls i was appreciated for my ui designing”</p>
+  </div></div>
+
+  <div class="ph"><div class="tag">Days<br>25–31</div><div>
+    <h4>Honesty and rebuilding</h4>
+    <p>Weekly review, bulk backlog import, practice tests, YouTube suggestions from the student's own teacher, and a complete rewrite of the Telegram bot after the author reported it felt broken.</p>
+    <p class="said">“telgram sort kr and improve it… either i get confused or i get improper answer and i think its not working well”</p>
+  </div></div>
+
+  <div class="ph"><div class="tag">Days<br>32–33</div><div>
+    <h4>The real world intrudes</h4>
+    <p>Claude added for conceptual work, the NotebookLM bridge, gaps in the day, training and lifts, the every-day checklist, and three documentation pages. Most of this phase came from the author noticing things the developer had assumed.</p>
+    <p class="said">“not everyone goes to gym… it takes me 30 min to settle down, my brother takes 1 hr… the gaps are real”</p>
+  </div></div>
+
+  <div class="rule"><span>3 · The method</span></div>
+  <h2>Prompt, build, break, correct</h2>
+  <p class="lede">The interesting finding of this project is not the app. It is that the most valuable contribution from a non-programmer was <b>domain correction</b> — catching where the software had quietly assumed a life nobody actually lives.</p>
+
+  <blockquote>Every one of the corrections below produced a better product than the original specification would have.</blockquote>
+
+  <table>
+    <tr><th style="width:38%">What the author said</th><th>What it changed</th></tr>
+    <tr><td class="mono">"it took me 30 min to settle down, my brother takes 1 hr"</td>
+        <td>Settle time became a <b>question asked once</b> instead of a hardcoded guess per activity. My values (gym 30, travel 15) were invented; the point was that they're personal.</td></tr>
+    <tr><td class="mono">"not everyone goes to gym"</td>
+        <td>The whole feature was reframed from "commitments" to <b>gaps</b> — twelve shapes including helping at home, prayer, a family shop, rest.</td></tr>
+    <tr><td class="mono">"i lost 7 kg through diet in exam and festive season"</td>
+        <td>Exposed a badly designed alert that flagged a <b>declared, deliberate plan</b> as a symptom. Rewritten to stay quiet when a goal is set and the pace is sane.</td></tr>
+    <tr><td class="mono">"i think a person can go to gym and workout… physical body reads a psychological impact"</td>
+        <td>Training, lifts, personal bests and measurements were added — a whole half of wellbeing that over-caution had left out.</td></tr>
+    <tr><td class="mono">"WILL PREFER NOTEBOOK LM FOR QUIZ ANYDAY"</td>
+        <td>Stopped competing with a better free tool. Built a <b>bridge</b> instead: export notes to it, log the score back.</td></tr>
+    <tr><td class="mono">"CANT WE ADD CLAUDE FOR THE CONCEPTUAL KNOWLEDGE"</td>
+        <td>Model routing by task. Also uncovered a real bug where the same model would have been asked twice and called a second opinion.</td></tr>
+  </table>
+
+  <div class="rule"><span>4 · Correctness</span></div>
+  <h2>266 automated checks, and what they caught</h2>
+  <p class="lede">Every feature ships with a test suite that boots the real app in a simulated browser and drives it. Not "does it load" — does every button do something, does every Telegram tap lead somewhere, does it fail honestly.</p>
+
+  <table>
+    <tr><th>Suite</th><th style="width:16%">Checks</th><th>What it proves</th></tr>
+    <tr><td class="n">audit</td><td>10</td><td>Every button wired · every reference real · no duplicate IDs · every popup opens and closes</td></tr>
+    <tr><td class="n">tw-nasty</td><td>30</td><td>Double-taps, week-old buttons, one-emoji messages, 5,000-character pastes, unlinking mid-conversation</td></tr>
+    <tr><td class="n">tbody</td><td>28</td><td>Weight, training, lifts, measurements, and the safety wording at every age</td></tr>
+    <tr><td class="n">tdaily</td><td>23</td><td>The every-day list: overnight reset, streak counting, the eight-item cap</td></tr>
+    <tr><td class="n">ttg-app · tnlm · tob</td><td>66</td><td>Telegram panel, NotebookLM bridge, first-run onboarding</td></tr>
+    <tr><td class="n">tgoal · tlife · twt</td><td>60</td><td>Plain-words goals, gaps in the day, weight safety</td></tr>
+    <tr><td class="n">others</td><td>49</td><td>Model routing, rewards, walkthrough page, the bot conversation end to end</td></tr>
+  </table>
+
+  <h3>The bugs worth naming</h3>
+
+  <div class="bug"><div class="h"><span class="sev crit">Critical</span><b>Five Telegram commands crashed with no data</b></div>
+    <p>Reading the snapshot without a guard threw an error the moment a student connected the bot before ever opening the app. A thrown webhook returns a 500; Telegram shows the user nothing. <b>This was the cause of "the bot feels broken."</b></p>
+    <div class="fix">Every read guarded, plus a catch-all that answers with a plain-language apology and returns 200 so Telegram stops retrying.</div></div>
+
+  <div class="bug"><div class="h"><span class="sev crit">Critical</span><b>Three different failures gave one misleading message</b></div>
+    <p>A missing API key, an exhausted quota and a stale snapshot all said "open the app and ask again." Users opened the app, asked again, got the same thing, and concluded it was junk.</p>
+    <div class="fix">Each failure now names itself — including the exact command to fix a missing key.</div></div>
+
+  <div class="bug"><div class="h"><span class="sev harm">Harm</span><b>The weight alert flagged a deliberate plan</b></div>
+    <p>Any loss over 1 kg a week triggered a concern message, including for someone following a goal they had set and told the app about. Concern that ignores what you said is just nagging.</p>
+    <div class="fix">Silent for declared, steady loss. Speaks only when steep or unexplained — and can be dismissed.</div></div>
+
+  <div class="bug"><div class="h"><span class="sev harm">Harm</span><b>Onboarding filed subject names as chapters</b></div>
+    <p>The chapters box pre-filled with subject names and rows of dots. Anyone pressing Add without editing got three junk entries on day one, from a box that looked helpful.</p>
+    <div class="fix">Placeholder instead of a value — nothing can be submitted by accident.</div></div>
+
+  <div class="bug"><div class="h"><span class="sev ux">Design</span><b>A lighter final set reported going backwards</b></div>
+    <p>Lift progress compared your latest set to your first, so one deliberate deload set read as regression. Wrong and discouraging.</p>
+    <div class="fix">Measures the ceiling — how much your best has climbed — and notes a deload separately.</div></div>
+
+  <div class="bug"><div class="h"><span class="sev ux">Design</span><b>Addressed in a group, the bot said nothing at all</b></div>
+    <p>Silence in a group chat is indistinguishable from being broken.</p>
+    <div class="fix">An explicit command always gets a reply, with no study data leaked and a pointer to a private chat.</div></div>
+
+  <div class="bug"><div class="h"><span class="sev ux">Design</span><b>A chapter title with an asterisk killed the whole message</b></div>
+    <p>Telegram rejects a message whose Markdown doesn't parse. The reply never arrived — silence again.</p>
+    <div class="fix">Formatting failures resend as plain text. Ugly beats invisible.</div></div>
+
+  <div class="rule"><span>5 · Design</span></div>
+  <h2>The interface, and one hard lesson</h2>
+
+  <div class="grid" style="margin-bottom:16px">
+    <div class="card c-cream"><b>Palette</b><p style="font-size:13.5px;margin:6px 0 0">Six pastel card tints — cream, sky, mint, lavender, peach, blush — on a warm off-white gradient. Coral-to-amber for anything the user should press.</p></div>
+    <div class="card c-mint"><b>Time of day</b><p style="font-size:13.5px;margin:6px 0 0">The background shifts through the day. Night mode collapses the gradients to one flat shade so it doesn't glare at 1am.</p></div>
+    <div class="card c-lav"><b>Language</b><p style="font-size:13.5px;margin:6px 0 0">Sentences, not labels. "Nothing scheduled until 20:00" instead of "settle buffer: 60".</p></div>
+  </div>
+
+  <p><b>The lesson.</b> Midway through, an unrequested redesign was applied — flat SaaS surfaces, tighter spacing, muted colour. It was, by conventional standards, more professional. The author rejected it outright and it was reverted in full.</p>
+  <blockquote>“no i dont like it i am good with mine only… bring back my old ui design”</blockquote>
+  <p>That was the right call. The pastel scheme is the reason the people it was built for will actually open it. A study app used by a tired seventeen-year-old at eleven at night is not a dashboard, and optimising it like one was a failure of judgement, not of craft. <b>Every design decision after that point was checked against the person, not the convention.</b></p>
+
+  <div class="rule"><span>6 · Technical</span></div>
+  <h2>Architecture and setup</h2>
+
+  <h3>What it's made of</h3>
+  <table>
+    <tr><th>Piece</th><th style="width:18%">Size</th><th>Role</th></tr>
+    <tr><td class="n">index.html</td><td>945 KB<br><span style="font-weight:400;color:#8d8792">14,609 lines</span></td><td>The entire app. Markup, styles and logic in one file — no build step, no framework, no dependencies to rot.</td></tr>
+    <tr><td class="n">sw.js</td><td>3 KB</td><td>Service worker. Caches the app so it opens with no internet at all.</td></tr>
+    <tr><td class="n">worker.js</td><td>84 KB<br><span style="font-weight:400;color:#8d8792">1,718 lines</span></td><td>Cloudflare Worker. Holds the bot token and AI key so they never touch the public page.</td></tr>
+    <tr><td class="n">3 doc pages</td><td>63 KB</td><td>Walkthrough, reasoning, and the one-page infographic.</td></tr>
+  </table>
+
+  <h3>Where data lives</h3>
+  <ul>
+    <li><b>localStorage</b> — everything, keyed per profile, so siblings on one device never mix.</li>
+    <li><b>IndexedDB</b> — photos and voice notes, which are too large for localStorage.</li>
+    <li><b>Cloudflare KV</b> — a small snapshot only, so the bot can answer when the browser is closed. Names, emails, photos and voice notes are never sent.</li>
+    <li><b>Nowhere else.</b> No analytics, no telemetry, no account.</li>
+  </ul>
+
+  <h3>Setup time, measured honestly</h3>
+  <table>
+    <tr><th>Step</th><th style="width:18%">Time</th><th style="width:16%">Cost</th><th>Needed?</th></tr>
+    <tr><td class="n">Open the app</td><td>0 seconds</td><td>Free</td><td>It's a web page. No install, no store, no account.</td></tr>
+    <tr><td class="n">First-run setup</td><td>~2 minutes</td><td>Free</td><td>Five questions: exam, availability, chapters.</td></tr>
+    <tr><td class="n">AI answers</td><td>~3 minutes</td><td>Free tier</td><td>Optional. Paste a Google Gemini key.</td></tr>
+    <tr><td class="n">Better explanations</td><td>~3 minutes</td><td>≈$5 prepaid</td><td>Optional. An Anthropic key as the second model.</td></tr>
+    <tr><td class="n">Telegram bot</td><td>~15 minutes<br><span style="font-weight:400;color:#8d8792">once, ever</span></td><td>Free</td><td>Optional. A bot from BotFather and a Cloudflare Worker. Done once for everybody — other users just tap a link.</td></tr>
+  </table>
+  <p style="font-size:14px;color:#5d5763">A student who is handed the link and doesn't want AI is studying <b>two minutes</b> after opening it. Everything beyond that is opt-in.</p>
+
+  <h3>Running cost</h3>
+  <p style="font-size:14.5px">Hosting: free (GitHub Pages). Bot server: free (Cloudflare's free tier — measured usage is roughly <b>0.2%</b> of the daily limit). AI: whatever the user's own key costs, on their own account. <b>The project has no running cost to its author, and no way to acquire one.</b></p>
+
+  <div class="rule"><span>7 · Honest assessment</span></div>
+  <h2>What's proven, and what isn't</h2>
+  <div class="grid">
+    <div class="card c-mint">
+      <h3 style="margin-top:0">✅ Proven</h3>
+      <ul style="margin-bottom:0">
+        <li>266 automated checks passing</li>
+        <li>Every button reaches a handler</li>
+        <li>The bot never goes silent, across 30 hostile cases</li>
+        <li>Clean boot with no data at all</li>
+        <li>A wrong token can't write anyone's data</li>
+      </ul>
+    </div>
+    <div class="card c-peach">
+      <h3 style="margin-top:0">⚠️ Not yet proven</h3>
+      <ul style="margin-bottom:0">
+        <li>The bot against <b>real</b> Telegram servers</li>
+        <li>Real AI providers, real keys, real quotas</li>
+        <li>Anyone other than the author using it daily</li>
+        <li>The current build is <b>not yet deployed</b> — the live site still runs an older version</li>
+      </ul>
+    </div>
+  </div>
+  <p style="margin-top:16px;font-size:14.5px">Simulated tests prove the logic is sound. They do not prove the plumbing is connected. The remaining work is deployment and one real conversation with the bot.</p>
+
+  <div class="rule"><span>8 · What was learned</span></div>
+  <h2>Four things, plainly</h2>
+  <div class="grid">
+    <div class="card c-sky"><b>Knowing the user beats knowing the tools</b>
+      <p style="font-size:13.5px;margin:6px 0 0">The best decisions in this project came from someone who couldn't read the code but knew exactly what a student's evening looks like.</p></div>
+    <div class="card c-cream"><b>Silence is the worst failure mode</b>
+      <p style="font-size:13.5px;margin:6px 0 0">Software that says nothing is indistinguishable from software that is broken. Most of the Telegram rewrite was about never being quiet.</p></div>
+    <div class="card c-lav"><b>Conventional isn't the same as correct</b>
+      <p style="font-size:13.5px;margin:6px 0 0">The "more professional" redesign was the wrong answer for the actual people. Taste that fits your user beats taste that fits a trend.</p></div>
+    <div class="card c-mint"><b>Use the better tool, don't imitate it</b>
+      <p style="font-size:13.5px;margin:6px 0 0">NotebookLM writes better quizzes. The right move was to build a bridge to it, not a worse version of it.</p></div>
+  </div>
+
+  <div class="foot">
+    <p><b>FocusFlow</b> · 2 August – 3 September 2026 · one file, no account, no cost</p>
+    <p style="margin-top:8px">Companion documents: <b>poster.html</b> (one-page overview) · <b>howto.html</b> (walkthrough) · <b>about.html</b> (design reasoning)</p>
+  </div>
+
+</div>
+</body>
+</html>
