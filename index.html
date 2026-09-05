@@ -40,6 +40,222 @@
   .theme-minty    { --bg-a:#EFFCF3; --bg-b:#D8F5E3; }
   .theme-night    { --bg-a:#EEF0F6; --bg-b:#E2E6F0; }
 
+
+
+
+
+  /* ── ✍️ the handwriting desk ──────────────────────────────
+     The toggle inside the reader dresses up a note you already
+     have. This is the other thing entirely: a place to WRITE
+     one — type or paste, choose the hand, watch it appear on
+     paper, then save or print it. It lives beside the mindmap
+     because it is the same kind of tool: something that turns
+     what you know into a page you can hold. */
+  #hw-desk { background: linear-gradient(160deg,#F3EDE3,#E9E0D2); }
+  body.t-night #hw-desk { background: linear-gradient(160deg,#1C1915,#16130F); }
+
+  .hd-sheet {
+    --hw-line: 2.15em;
+    background-color:#FBF7EE; color: var(--hw-ink,#1F3FA8);
+    box-shadow: 0 24px 60px -24px rgba(60,40,20,.45), 0 2px 8px -3px rgba(60,40,20,.18);
+    border-radius: 3px; position: relative; overflow: hidden;
+  }
+  body.t-night .hd-sheet { background-color:#221E18; }
+  .hd-sheet.pp-ruled {
+    background-image: linear-gradient(to bottom, transparent 0 calc(var(--hw-line) - 1px),
+      rgba(120,140,190,.30) calc(var(--hw-line) - 1px) var(--hw-line));
+    background-size: 100% var(--hw-line);
+  }
+  .hd-sheet.pp-grid {
+    background-image:
+      linear-gradient(to bottom, transparent 0 calc(var(--hw-line) - 1px), rgba(120,140,190,.22) calc(var(--hw-line) - 1px) var(--hw-line)),
+      linear-gradient(to right,  transparent 0 calc(var(--hw-line) - 1px), rgba(120,140,190,.22) calc(var(--hw-line) - 1px) var(--hw-line));
+    background-size: 100% var(--hw-line), var(--hw-line) 100%;
+  }
+  .hd-sheet.pp-plain { background-image: none; }
+  .hd-sheet.has-margin::before {
+    content:''; position:absolute; top:0; bottom:0; left:3.1rem; width:1.5px;
+    background: rgba(214,90,90,.45);
+  }
+  .hd-sheet.has-margin .hd-ink { padding-left: 1.9rem; }
+  .hd-ink { font-family: var(--hw-face, cursive);
+            font-size: calc(var(--hd-size, 18px) * var(--hw-scale, 1.15));
+            line-height: 2.15em; letter-spacing:.012em; word-spacing:.12em; }
+  .hd-ink .hw { display:inline-block; white-space:pre; }
+  .hd-head { font-family: var(--hw-face, cursive);
+             font-size: calc(var(--hd-size, 18px) * var(--hw-scale, 1.15) * 1.45);
+             line-height:1.6; text-decoration: underline;
+             text-underline-offset:.22em; text-decoration-thickness:1px;
+             text-decoration-color: rgba(214,90,90,.5); }
+
+  /* printing: the page, and nothing else in the building */
+  @media print {
+    body.hd-printing > *:not(#hw-desk) { display:none !important; }
+    body.hd-printing #hw-desk { position:static !important; background:none !important; padding:0 !important; }
+    body.hd-printing #hd-side, body.hd-printing #hd-bar { display:none !important; }
+    body.hd-printing .hd-sheet { box-shadow:none !important; border-radius:0 !important; width:100% !important; }
+    body.hd-printing #hd-stage { padding:0 !important; overflow:visible !important; display:block !important; }
+  }
+
+  /* ── ✍️ typed notes, in your own hand ─────────────────────
+     Two honest reasons, not one gimmick. Handwriting is read
+     more slowly, and slower reading is what revision is. And a
+     typed note is not something you can hand to a friend before
+     an exam — a page of writing is.
+
+     The wobble matters: real handwriting is never on the line
+     and never the same size twice. Every word gets its own tiny
+     rotation, lift and weight, seeded off the note's own text
+     so the same note always comes out in the same hand rather
+     than reshuffling every time you blink. */
+  .hw-page {
+    background:
+      linear-gradient(to bottom, transparent 0 calc(var(--hw-line) - 1px),
+                      var(--hw-rule) calc(var(--hw-line) - 1px) var(--hw-line));
+    background-size: 100% var(--hw-line);
+    --hw-line: 2.15em; --hw-rule: rgba(120,140,190,.30);
+    padding-left: 2.6rem; position: relative;
+  }
+  .hw-page::before {
+    content:''; position:absolute; top:0; bottom:0; left:1.4rem; width:1.5px;
+    background: rgba(214,90,90,.45);
+  }
+  .hw-text {
+    font-family: var(--hw-face, cursive);
+    font-size: calc(var(--nz-size, 18px) * var(--hw-scale, 1.15));
+    line-height: 2.15em; color: var(--hw-ink, #1F3FA8);
+    letter-spacing: .012em; word-spacing: .12em;
+  }
+  .hw-text .hw { display:inline-block; white-space:pre; }
+  .hw-title {
+    font-family: var(--hw-face, cursive); color: var(--hw-ink, #1F3FA8);
+    font-size: calc(var(--nz-size, 18px) * var(--hw-scale, 1.15) * 1.5);
+    line-height:1.5; text-decoration: underline; text-underline-offset: .22em;
+    text-decoration-thickness: 1px; text-decoration-color: rgba(214,90,90,.5);
+  }
+  body.t-night .hw-page { --hw-rule: rgba(190,205,240,.14); }
+  body.t-night .hw-page::before { background: rgba(230,120,120,.3); }
+  .hw-pick { padding:.35rem .7rem; border-radius:.6rem; font-size:11px; font-weight:800; }
+  .hw-pick.on { background:rgba(0,0,0,.08); }
+
+  /* ── 🏋️ the gym, between sets ─────────────────────────────
+     A rest between sets is not dead time — it is the set. Ninety
+     seconds is the difference between training and just moving
+     weight about, and nothing in the app was counting it. So
+     logging a set now takes the screen: heat, weight in huge
+     type, and a clock that tells you when to go again. */
+  #gym-rest { background: radial-gradient(120% 100% at 50% 30%, #3A1410 0%, #220C0A 55%, #120605 100%);
+              font-family: ui-sans-serif, system-ui, -apple-system, sans-serif; }
+  #gym-rest .gr-num { font-variant-numeric: tabular-nums; letter-spacing:-.03em; }
+  #gym-rest .gr-heat { position:absolute; inset:0; pointer-events:none;
+    background: repeating-linear-gradient(-58deg, transparent 0 30px, rgba(255,120,60,.045) 30px 34px); }
+  #gr-bar { transition: width .5s linear; }
+  .gr-go { animation: gr-go 1.1s ease-in-out infinite; }
+  @keyframes gr-go { 0%,100% { opacity:1; transform:scale(1) } 50% { opacity:.55; transform:scale(1.04) } }
+
+  /* ── 📓 a note, on its own ────────────────────────────────
+     Revising from your own notes inside a busy app is the worst
+     way to read them. This is the other extreme: one note, warm
+     paper, a serif, wide margins, and arrows to walk the pile. */
+  #note-zen { background:#FBF6EC; color:#2A2622; }
+  body.t-night #note-zen { background:#1A1713; color:#E9E2D8; }
+  #nz-body, #nz-title {
+    font-family:'Iowan Old Style','Palatino Linotype',Palatino,Georgia,serif;
+    font-size: var(--nz-size, 18px); line-height:1.85; }
+  #nz-title { font-size: calc(var(--nz-size, 18px) * 1.6); line-height:1.25; letter-spacing:-.01em; }
+  #note-zen .nz-rule { background: repeating-linear-gradient(to bottom,
+      transparent 0 calc(var(--nz-size,18px) * 1.85 - 1px),
+      rgba(120,100,70,.09) calc(var(--nz-size,18px) * 1.85 - 1px) calc(var(--nz-size,18px) * 1.85)); }
+  body.t-night #note-zen .nz-rule { background: repeating-linear-gradient(to bottom,
+      transparent 0 calc(var(--nz-size,18px) * 1.85 - 1px),
+      rgba(255,240,215,.06) calc(var(--nz-size,18px) * 1.85 - 1px) calc(var(--nz-size,18px) * 1.85)); }
+  @media (prefers-reduced-motion: reduce) { .gr-go { animation:none } }
+
+  /* ── The vibe layer ───────────────────────────────────────
+     Every page in the app looked the same, so every page felt
+     the same — and sitting down to meditate felt exactly like
+     sitting down to log a maths test. This fixes that without
+     touching a single card: one wash behind the page, one
+     typeface for the page's own title, per page.
+
+     Two variables do all of it. --vibe-a and --vibe-b are the
+     wash; --vibe-face is the title face. Nothing else moves. */
+  body::before {
+    content:''; position:fixed; inset:-10%; z-index:-1; pointer-events:none;
+    background:
+      radial-gradient(60% 55% at 18% 12%, var(--vibe-a, transparent), transparent 70%),
+      radial-gradient(55% 50% at 84% 78%, var(--vibe-b, transparent), transparent 72%);
+    opacity:0; transition: opacity .8s ease, background 1.2s ease;
+    animation: vibe-drift 42s ease-in-out infinite alternate;
+  }
+  body[data-vibe]::before { opacity:1; }
+  @keyframes vibe-drift {
+    from { transform: translate3d(0,0,0) scale(1); }
+    to   { transform: translate3d(1.5%,-1.5%,0) scale(1.06); }
+  }
+  @media (prefers-reduced-motion: reduce) { body::before { animation:none; } }
+
+  /* One more thing you feel rather than notice: a texture.
+     Ruled lines behind the pages you write on, a diagonal
+     grain behind the ones you sweat on, nothing at all behind
+     the one where you sit still. All at 4% — it should read as
+     paper, never as a pattern. */
+  body::after {
+    content:''; position:fixed; inset:0; z-index:-1; pointer-events:none;
+    background: var(--vibe-grain, none); opacity:.5;
+  }
+  body[data-vibe="study"] { --vibe-grain: repeating-linear-gradient(
+      to bottom, transparent 0 33px, rgba(90,110,140,.05) 33px 34px); }
+  body[data-vibe="strong"] { --vibe-grain: repeating-linear-gradient(
+      -58deg, transparent 0 26px, rgba(200,80,40,.045) 26px 29px); }
+  body[data-vibe="sharp"] { --vibe-grain:
+      repeating-linear-gradient(to bottom, transparent 0 40px, rgba(70,110,160,.035) 40px 41px),
+      repeating-linear-gradient(to right,  transparent 0 40px, rgba(70,110,160,.035) 40px 41px); }
+  body.t-night::after { opacity:.3; }
+
+  /* the page's own title takes the vibe's face; body copy,
+     buttons, numbers and every card stay in the app font */
+  .tab-panel h3 {
+    font-family: var(--vibe-face, inherit);
+    letter-spacing: var(--vibe-track, normal);
+    text-transform: var(--vibe-case, none);
+  }
+
+  /* 🧘 mind — quiet, slow, indigo air; the title in a serif */
+  body[data-vibe="calm"] { --vibe-a:rgba(129,110,201,.20); --vibe-b:rgba(122,160,204,.17);
+    --vibe-face:'Iowan Old Style','Palatino Linotype',Palatino,Georgia,serif; --vibe-track:.01em; }
+  /* 💪 health & the body file — heat, effort, a shout of a title */
+  body[data-vibe="strong"] { --vibe-a:rgba(240,120,60,.20); --vibe-b:rgba(214,64,64,.16);
+    --vibe-face:ui-sans-serif,system-ui,'Helvetica Neue',sans-serif;
+    --vibe-track:.10em; --vibe-case:uppercase; }
+  /* 📓 notes, backlog, syllabus — desk-lamp warmth, paper */
+  body[data-vibe="study"] { --vibe-a:rgba(196,164,96,.17); --vibe-b:rgba(120,140,110,.13);
+    --vibe-face:'Iowan Old Style',Georgia,'Times New Roman',serif; --vibe-track:.005em; }
+  /* ⏱ focus — the working page, warm and awake */
+  body[data-vibe="work"] { --vibe-a:rgba(255,140,100,.19); --vibe-b:rgba(255,190,80,.16); }
+  /* 📅 exams & tests — cool, clear, no drama */
+  body[data-vibe="sharp"] { --vibe-a:rgba(90,140,205,.17); --vibe-b:rgba(120,190,205,.14);
+    --vibe-track:.02em; }
+  /* 🗓 timetable & progress — green, orderly */
+  body[data-vibe="plan"] { --vibe-a:rgba(90,180,140,.17); --vibe-b:rgba(130,190,220,.13); }
+  /* 🤝 coach, groups, co-curriculars — people, warmth */
+  body[data-vibe="together"] { --vibe-a:rgba(240,150,170,.18); --vibe-b:rgba(255,190,150,.15); }
+  body.t-night::before { opacity:.55; }
+
+  /* ── meditation, full screen ──────────────────────────────
+     The little circle in the corner of a busy page is not a
+     meditation. This is: everything else gone, and the breath
+     growing slowly larger the longer you stay. */
+  #med-zen { background: radial-gradient(120% 100% at 50% 42%, #241F35 0%, #14121D 55%, #0B0A11 100%); }
+  #med-zen .mz-stage { transform: scale(var(--mz-zoom, 1)); transition: transform 2.4s cubic-bezier(.22,.61,.36,1); }
+  #mz-ring { transition: transform 4s ease-in-out, box-shadow 4s ease-in-out; }
+  .mz-halo { position:absolute; border-radius:9999px; border:1px solid rgba(255,255,255,.10);
+             animation: mz-pulse 9s ease-in-out infinite; }
+  @keyframes mz-pulse { 0%,100% { transform:scale(1); opacity:.35 } 50% { transform:scale(1.12); opacity:.12 } }
+  @media (prefers-reduced-motion: reduce) {
+    .mz-halo { animation:none } #med-zen .mz-stage, #mz-ring { transition:none }
+  }
+
   .pastel-card { border-radius: 1.5rem; border:1px solid rgba(255,255,255,.85);
                  box-shadow: 0 10px 30px -12px rgba(15,23,42,.18), 0 2px 6px -2px rgba(15,23,42,.06);
                  backdrop-filter: blur(6px); transition: transform .18s ease, box-shadow .18s ease; }
@@ -595,6 +811,7 @@
           <div class="flex gap-1 p-1 rounded-xl bg-white/70 border border-slate-200">
             <button id="q-tab-once" class="q-tab px-3 py-1.5 rounded-lg text-[11px] font-extrabold">📝 Today</button>
             <button id="q-tab-daily" class="q-tab px-3 py-1.5 rounded-lg text-[11px] font-extrabold">🔁 Every day</button>
+            <button id="q-tab-check" class="q-tab px-3 py-1.5 rounded-lg text-[11px] font-extrabold">✅ Check-in</button>
           </div>
           <span class="text-xs font-semibold px-2.5 py-1 rounded-lg bg-slate-100 text-slate-600">
             <span id="task-completed-count">0</span>/<span id="task-total-count">0</span> Done</span>
@@ -620,6 +837,30 @@
           <div id="daily-starters" class="flex flex-wrap gap-1.5 mb-3"></div>
           <ul id="daily-list" class="space-y-2.5 max-h-64 overflow-y-auto pr-1"></ul>
           <p id="daily-summary" class="text-[11px] font-bold text-slate-500 mt-3"></p>
+        </div>
+
+        <!-- ═══ THE DAILY CHECK-IN ═══════════════════════════
+             Built from the timetable, so it asks about the day
+             you actually said you'd have. A "no" is not a
+             telling-off — it is the app noticing an hour just
+             came free and telling you what to do with it. -->
+        <div id="q-check" class="hidden">
+          <p class="text-[11px] text-slate-500 leading-relaxed mb-3">A minute at the end of the day. Nothing here is a
+            telling-off — when something didn't happen, that time came back, and the point is to spend it before it disappears.</p>
+
+          <div id="ci-wake-set" class="hidden p-3 rounded-xl bg-white/85 border border-slate-200 mb-3">
+            <label class="text-[10px] font-black uppercase tracking-wider text-slate-500">What time do you mean to be up?</label>
+            <div class="flex gap-2 mt-1.5">
+              <input type="time" id="ci-wake-time" value="06:30"
+                     class="flex-1 px-3 py-2 rounded-xl border border-slate-200 text-xs font-semibold bg-white focus:outline-none">
+              <button id="ci-wake-save" class="px-4 py-2 rounded-xl bg-white border border-emerald-300 text-emerald-800 text-[11px] font-extrabold">Save</button>
+            </div>
+            <p class="text-[10px] text-slate-400 mt-1">Asked once. Change it any time from here.</p>
+          </div>
+
+          <ul id="ci-list" class="space-y-2.5 max-h-[26rem] overflow-y-auto pr-1"></ul>
+          <p id="ci-summary" class="text-[11px] font-bold text-slate-500 mt-3"></p>
+          <button id="ci-wake-edit" class="text-[10px] font-bold text-slate-400 hover:text-slate-600 mt-1">change wake-up time</button>
         </div>
       </div>
     </div>
@@ -1100,6 +1341,43 @@
     </div>
   </div>
 
+  <!-- ═══ YOUR DATA ═══════════════════════════════════════
+       Everything in this app lives in this browser and nowhere
+       else. That is the promise — no account, no server, no
+       one reading it. It is also the risk, and the risk is
+       worth stating plainly rather than burying. -->
+  <div class="pastel-card card-peach p-6 mb-6">
+    <h4 class="text-sm font-extrabold text-slate-800 mb-1">💾 Your data — read this once</h4>
+    <p class="text-xs text-slate-600 leading-relaxed mb-3">Every note, streak, mark and photo is stored in this browser
+      on this device. Nothing is on a server, which is why nobody can read it. It also means <strong>if this browser's data
+      is cleared, it is gone</strong> — and I cannot get it back for you.</p>
+    <div id="ff-risk" class="hidden p-3 rounded-xl bg-rose-50 border border-rose-200 text-[11px] font-semibold text-rose-800 leading-relaxed mb-3"></div>
+    <div class="flex flex-wrap gap-2">
+      <button id="ff-export" class="px-4 py-2.5 rounded-xl btn-coral text-xs font-extrabold">⬇️ Save a backup file</button>
+      <button id="ff-import" class="px-4 py-2.5 rounded-xl bg-white border border-slate-200 text-slate-700 text-xs font-extrabold">⬆️ Restore from a backup</button>
+      <input type="file" id="ff-file" accept="application/json,.json" class="hidden">
+    </div>
+    <p id="ff-backup-when" class="text-[11px] font-bold text-slate-500 mt-2.5"></p>
+    <div id="ff-restore" class="hidden mt-3 p-3 rounded-xl bg-amber-50 border border-amber-200">
+      <p id="ff-restore-what" class="text-[11px] font-bold text-amber-900 leading-relaxed mb-2"></p>
+      <div class="flex gap-2">
+        <button id="ff-restore-go" class="px-4 py-2 rounded-xl bg-amber-600 text-white text-[11px] font-extrabold">Replace everything with this</button>
+        <button id="ff-restore-no" class="px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-600 text-[11px] font-bold">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ THE WEEK, FOR SOMEONE ELSE ═══════════════════════ -->
+  <div class="pastel-card card-sky p-6 mb-6">
+    <h4 class="text-sm font-extrabold text-slate-800 mb-1">📋 Your week, on one page</h4>
+    <p class="text-xs text-slate-600 leading-relaxed mb-3">Hours, streak, attendance, what's covered and what is behind —
+      as one picture you can send to a parent or a teacher. It shows the real numbers, including the bad ones. Nothing
+      else from the app goes with it: not your notes, not your doubts, not your health file.</p>
+    <div class="flex flex-wrap gap-2">
+      <button id="wk-open" class="px-4 py-2.5 rounded-xl bg-white border border-sky-300 text-sky-800 text-xs font-extrabold">📋 Make this week's page</button>
+    </div>
+  </div>
+
   <div class="grid grid-cols-1 lg:grid-cols-12 gap-7 mb-7">
 
     <!-- Inputs -->
@@ -1264,6 +1542,7 @@
           <button id="btn-note-photo" class="px-3.5 py-2 rounded-xl bg-white border border-sky-300 text-sky-800 text-xs font-extrabold hover:bg-sky-50">📷 Upload my handwritten notes</button>
           <input type="file" id="note-photo-input" accept="image/*" class="hidden">
           <button id="btn-mindmap" class="px-3.5 py-2 rounded-xl bg-white border border-emerald-300 text-emerald-800 text-xs font-extrabold hover:bg-emerald-50">🗺 Make a mindmap</button>
+          <button id="btn-hand-desk" class="px-3.5 py-2 rounded-xl bg-white border border-violet-300 text-violet-800 text-xs font-extrabold hover:bg-violet-50">✍️ Handwriting desk</button>
           <button id="btn-yt" class="px-3.5 py-2 rounded-xl bg-white border border-rose-300 text-rose-800 text-xs font-extrabold hover:bg-rose-50">🎥 Find a video for this</button>
           <button id="btn-note-new" class="px-3.5 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 text-xs font-bold hover:border-emerald-300">✍️ Write a note</button>
         </div>
@@ -2048,6 +2327,241 @@
   <div class="flex items-center gap-4 mb-4">
     <button id="zoomed-start-pause-btn" class="btn-coral px-10 py-4 rounded-2xl text-lg font-black shadow-xl">Start Focus</button>
     <button id="zoomed-reset-btn" class="px-8 py-4 rounded-2xl bg-slate-100 text-slate-800 font-bold border border-slate-300 text-base shadow-sm">Reset</button>
+  </div>
+</div>
+
+<!-- ══════════════════ ADD TO HOME SCREEN ══════════════════ -->
+<div id="a2hs" class="hidden fixed left-3 right-3 bottom-3 z-40 pastel-card card-cream p-4 shadow-2xl max-w-lg mx-auto">
+  <div class="flex items-start gap-3">
+    <span class="text-2xl shrink-0">📲</span>
+    <div class="min-w-0">
+      <p class="text-xs font-extrabold text-slate-800 mb-1">Put FocusFlow on your Home Screen</p>
+      <p id="a2hs-why" class="text-[11px] text-slate-600 leading-relaxed"></p>
+    </div>
+  </div>
+  <div class="flex gap-2 mt-3 justify-end">
+    <button id="a2hs-later" class="px-3.5 py-2 rounded-xl bg-white border border-slate-200 text-slate-600 text-[11px] font-bold">Later</button>
+    <button id="a2hs-go" class="px-4 py-2 rounded-xl btn-amber text-[11px] font-extrabold">Show me how</button>
+  </div>
+</div>
+
+<!-- ══════════════════ THE WEEK, ON ONE PAGE ══════════════════ -->
+<div id="wk-sheet" class="fixed inset-0 z-50 flex-col hidden" style="background:linear-gradient(160deg,#F2F4F8,#E7EBF2)">
+  <div class="shrink-0 flex items-center justify-between gap-2 px-4 md:px-6 py-3 border-b border-black/10">
+    <div class="min-w-0">
+      <div class="text-sm font-extrabold text-slate-800 truncate">This week, on one page</div>
+      <div class="text-[10px] font-bold text-slate-500 truncate">The real numbers — send it as it is</div>
+    </div>
+    <div class="flex items-center gap-1.5 shrink-0 flex-wrap justify-end">
+      <button id="wk-tg"    class="px-3.5 py-2 rounded-xl bg-white border border-sky-300 text-sky-800 text-[11px] font-extrabold">✈️ Send on Telegram</button>
+      <button id="wk-save"  class="px-3.5 py-2 rounded-xl btn-coral text-[11px] font-extrabold">📷 Save picture</button>
+      <button id="wk-close" class="px-3.5 py-2 rounded-xl bg-black/5 hover:bg-black/10 text-[11px] font-extrabold text-slate-700">✕ Close</button>
+    </div>
+  </div>
+  <div class="flex-1 min-h-0 overflow-y-auto p-4 md:p-8">
+    <div id="wk-paper" class="mx-auto w-full max-w-3xl rounded-2xl overflow-hidden shadow-2xl"></div>
+    <p id="wk-msg" class="text-center text-[11px] font-bold text-slate-500 mt-3"></p>
+  </div>
+</div>
+
+<!-- ══════════════════ THE HANDWRITING DESK ══════════════════ -->
+<div id="hw-desk" class="fixed inset-0 z-50 flex-col hidden">
+  <div id="hd-bar" class="shrink-0 flex items-center justify-between gap-2 px-4 md:px-6 py-3 border-b border-black/10">
+    <div class="flex items-center gap-2 min-w-0">
+      <span class="text-lg">✍️</span>
+      <div class="min-w-0">
+        <div class="text-sm font-extrabold text-slate-800 truncate">Handwriting desk</div>
+        <div class="text-[10px] font-bold text-slate-500 truncate">Type it or pick a note — it comes out written</div>
+      </div>
+    </div>
+    <div class="flex items-center gap-1.5 shrink-0">
+      <button id="hd-print" class="px-3.5 py-2 rounded-xl bg-white border border-slate-200 text-[11px] font-extrabold text-slate-700">🖨 Print</button>
+      <button id="hd-save"  class="px-3.5 py-2 rounded-xl btn-coral text-[11px] font-extrabold">📷 Save picture</button>
+      <button id="hd-close" class="px-3.5 py-2 rounded-xl bg-black/5 hover:bg-black/10 text-[11px] font-extrabold text-slate-700">✕ Close</button>
+    </div>
+  </div>
+
+  <div class="flex-1 min-h-0 flex flex-col lg:flex-row">
+    <!-- what to write -->
+    <div id="hd-side" class="lg:w-[22rem] shrink-0 overflow-y-auto p-4 md:p-5 border-b lg:border-b-0 lg:border-r border-black/10 space-y-4">
+      <div>
+        <label class="text-[10px] font-black uppercase tracking-widest text-slate-500">Start from</label>
+        <select id="hd-src" class="w-full mt-1 px-3 py-2 rounded-xl border border-slate-200 text-xs font-semibold bg-white focus:outline-none"></select>
+      </div>
+      <div>
+        <label class="text-[10px] font-black uppercase tracking-widest text-slate-500">Heading</label>
+        <input id="hd-title" maxlength="70" placeholder="e.g. Bank reconciliation"
+               class="w-full mt-1 px-3 py-2 rounded-xl border border-slate-200 text-xs font-semibold bg-white focus:outline-none">
+      </div>
+      <div>
+        <label class="text-[10px] font-black uppercase tracking-widest text-slate-500">What it says</label>
+        <textarea id="hd-text" rows="9" placeholder="Type or paste anything here and watch it appear on the paper."
+                  class="w-full mt-1 px-3 py-2 rounded-xl border border-slate-200 text-xs leading-relaxed bg-white focus:outline-none resize-y"></textarea>
+        <div class="flex items-center justify-between mt-1">
+          <span id="hd-count" class="text-[10px] font-bold text-slate-400"></span>
+          <button id="hd-clear" class="text-[10px] font-bold text-slate-400 hover:text-rose-500">clear</button>
+        </div>
+      </div>
+
+      <div class="pt-1 border-t border-black/5 space-y-3">
+        <div>
+          <label class="text-[10px] font-black uppercase tracking-widest text-slate-500">Hand</label>
+          <div id="hd-faces" class="flex flex-wrap gap-1.5 mt-1"></div>
+        </div>
+        <div>
+          <label class="text-[10px] font-black uppercase tracking-widest text-slate-500">Neatness</label>
+          <div id="hd-neats" class="flex flex-wrap gap-1.5 mt-1"></div>
+        </div>
+        <div>
+          <label class="text-[10px] font-black uppercase tracking-widest text-slate-500">Ink</label>
+          <div id="hd-inks" class="flex flex-wrap gap-1.5 mt-1"></div>
+        </div>
+        <div>
+          <label class="text-[10px] font-black uppercase tracking-widest text-slate-500">Paper</label>
+          <div id="hd-papers" class="flex flex-wrap gap-1.5 mt-1"></div>
+        </div>
+        <div class="flex items-center justify-between gap-2">
+          <label class="text-[10px] font-black uppercase tracking-widest text-slate-500">Size</label>
+          <div class="flex gap-1.5">
+            <button id="hd-smaller" class="hw-pick bg-white border border-slate-200">A−</button>
+            <button id="hd-bigger"  class="hw-pick bg-white border border-slate-200">A+</button>
+          </div>
+        </div>
+        <label class="flex items-center gap-2 text-[11px] font-bold text-slate-600">
+          <input type="checkbox" id="hd-margin" class="w-3.5 h-3.5 accent-rose-500"> Red margin line
+        </label>
+        <button id="hd-keep" class="w-full px-3 py-2.5 rounded-xl bg-white border border-emerald-300 text-emerald-800 text-[11px] font-extrabold">💾 Keep this as a note too</button>
+      </div>
+    </div>
+
+    <!-- the page -->
+    <div id="hd-stage" class="flex-1 min-h-0 overflow-y-auto p-4 md:p-8 flex justify-center items-start">
+      <div id="hd-paper" class="hd-sheet w-full max-w-2xl p-8 md:p-12 min-h-[26rem]">
+        <div id="hd-head" class="hd-head mb-5"></div>
+        <div id="hd-body" class="hd-ink whitespace-pre-wrap"></div>
+        <div id="hd-foot" class="mt-10 text-[10px] font-bold opacity-30"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ BETWEEN SETS ══════════════════ -->
+<div id="gym-rest" class="fixed inset-0 z-50 flex-col items-center justify-between p-6 md:p-10 text-white hidden">
+  <div class="gr-heat"></div>
+  <div class="w-full flex items-center justify-between max-w-3xl relative">
+    <div class="text-[11px] font-black tracking-[.28em] uppercase text-orange-300/70">Logged</div>
+    <button id="gr-close" class="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white/75 text-xs font-bold">Done for now</button>
+  </div>
+
+  <div class="relative flex flex-col items-center justify-center my-auto w-full max-w-2xl text-center">
+    <div id="gr-pb" class="hidden mb-3 px-4 py-1.5 rounded-full bg-orange-500/20 border border-orange-400/40
+         text-orange-200 text-[11px] font-black tracking-[.22em] uppercase">🎉 Personal best</div>
+    <div id="gr-name" class="text-sm font-black tracking-[.3em] uppercase text-white/45 mb-2">BENCH PRESS</div>
+    <div id="gr-set" class="gr-num text-5xl md:text-7xl font-black text-white mb-1">45<span class="text-2xl md:text-3xl text-white/50"> kg</span> × 8</div>
+    <div id="gr-total" class="text-[11px] font-bold text-white/35 tracking-wide mb-8"></div>
+
+    <div class="w-full max-w-sm">
+      <div class="text-[11px] font-black tracking-[.3em] uppercase text-orange-300/60 mb-1">Rest</div>
+      <div id="gr-time" class="gr-num text-6xl md:text-7xl font-black text-white/90">1:30</div>
+      <div class="h-1.5 w-full rounded-full bg-white/10 mt-4 overflow-hidden">
+        <div id="gr-bar" class="h-full rounded-full bg-gradient-to-r from-orange-500 to-amber-400" style="width:100%"></div>
+      </div>
+      <div class="flex gap-1.5 justify-center mt-4 flex-wrap">
+        <button data-rest="60"  class="gr-len px-3 py-1.5 rounded-lg text-[11px] font-extrabold">60s</button>
+        <button data-rest="90"  class="gr-len px-3 py-1.5 rounded-lg text-[11px] font-extrabold">90s</button>
+        <button data-rest="120" class="gr-len px-3 py-1.5 rounded-lg text-[11px] font-extrabold">2 min</button>
+        <button data-rest="180" class="gr-len px-3 py-1.5 rounded-lg text-[11px] font-extrabold">3 min</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="relative w-full max-w-sm flex flex-col gap-2.5">
+    <button id="gr-again" class="px-6 py-3.5 rounded-2xl bg-gradient-to-r from-orange-500 to-amber-500 text-white
+            font-black text-sm tracking-[.12em] uppercase shadow-lg shadow-orange-900/40">Same again</button>
+    <button id="gr-next" class="px-6 py-3 rounded-2xl bg-white/10 text-white/75 font-bold text-xs">Different set</button>
+    <p class="text-[10px] text-white/25 text-center font-semibold">The rest keeps counting even if you put the phone down.</p>
+  </div>
+</div>
+
+<!-- ══════════════════ A NOTE, ON ITS OWN ══════════════════ -->
+<div id="note-zen" class="fixed inset-0 z-50 flex-col hidden">
+  <div class="shrink-0 flex items-center justify-between gap-2 px-4 md:px-8 py-3 border-b border-black/5">
+    <div class="flex items-center gap-1.5">
+      <button id="nz-prev" class="px-3 py-2 rounded-xl hover:bg-black/5 text-sm font-bold opacity-60">←</button>
+      <span id="nz-pos" class="text-[11px] font-bold opacity-40 tabular-nums">1 / 1</span>
+      <button id="nz-next" class="px-3 py-2 rounded-xl hover:bg-black/5 text-sm font-bold opacity-60">→</button>
+    </div>
+    <div class="flex items-center gap-1.5">
+      <button id="nz-smaller" class="px-3 py-2 rounded-xl hover:bg-black/5 text-xs font-bold opacity-60">A−</button>
+      <button id="nz-bigger"  class="px-3 py-2 rounded-xl hover:bg-black/5 text-base font-bold opacity-60">A+</button>
+      <button id="nz-hand"    class="px-3.5 py-2 rounded-xl hover:bg-black/5 text-[11px] font-extrabold opacity-70">✍️ Handwrite</button>
+      <button id="nz-desk"    class="px-3.5 py-2 rounded-xl hover:bg-black/5 text-[11px] font-extrabold opacity-70">🖊 Desk</button>
+      <button id="nz-edit"    class="px-3.5 py-2 rounded-xl hover:bg-black/5 text-[11px] font-extrabold opacity-70">Edit</button>
+      <button id="nz-close"   class="px-3.5 py-2 rounded-xl bg-black/5 hover:bg-black/10 text-[11px] font-extrabold">✕ Close</button>
+    </div>
+  </div>
+  <!-- the pen tray, only out when you're writing -->
+  <div id="nz-tray" class="hidden shrink-0 flex items-center justify-center gap-3 flex-wrap px-4 py-2.5 border-b border-black/5">
+    <div class="flex items-center gap-1">
+      <span class="text-[10px] font-black uppercase tracking-widest opacity-30 mr-1">Hand</span>
+      <div id="nz-faces" class="flex gap-1"></div>
+    </div>
+    <div class="flex items-center gap-1">
+      <span class="text-[10px] font-black uppercase tracking-widest opacity-30 mr-1">Ink</span>
+      <div id="nz-inks" class="flex gap-1"></div>
+    </div>
+    <button id="nz-img" class="px-3.5 py-1.5 rounded-lg bg-black/5 hover:bg-black/10 text-[11px] font-extrabold">📷 Save as picture</button>
+  </div>
+
+  <div class="flex-1 overflow-y-auto">
+    <div class="nz-rule mx-auto max-w-2xl px-6 md:px-10 py-10 md:py-16 min-h-full">
+      <div id="nz-meta" class="text-[10px] font-black tracking-[.22em] uppercase opacity-35 mb-4"></div>
+      <h1 id="nz-title" class="font-bold mb-6"></h1>
+      <div id="nz-body" class="whitespace-pre-wrap opacity-85"></div>
+      <div id="nz-end" class="mt-14 text-center text-[11px] font-bold opacity-25">· · ·</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ MEDITATION, FULL SCREEN ══════════════════ -->
+<div id="med-zen" class="fixed inset-0 z-50 flex-col items-center justify-between p-6 md:p-10 text-white hidden">
+  <div class="w-full flex items-center justify-between max-w-4xl">
+    <div class="flex items-center gap-3"><span class="text-xl">🧘</span>
+      <span class="text-sm font-bold text-white/70 tracking-widest uppercase" id="mz-label">Sitting</span></div>
+    <button id="mz-exit" class="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white/80 text-xs font-bold">End</button>
+  </div>
+
+  <div class="mz-stage flex flex-col items-center justify-center my-auto w-full">
+    <div class="relative flex items-center justify-center" style="width:min(78vw,26rem);height:min(78vw,26rem)">
+      <div class="mz-halo inset-0"></div>
+      <div class="mz-halo inset-8" style="animation-delay:-3s"></div>
+      <div id="mz-ring" class="w-40 h-40 md:w-52 md:h-52 rounded-full flex items-center justify-center
+           text-sm font-black tracking-[.3em] uppercase text-white/80"
+           style="background:radial-gradient(circle,rgba(255,255,255,.10),transparent 72%);
+                  border:1px solid rgba(255,255,255,.28)">Ready</div>
+    </div>
+    <div id="mz-time" class="mt-8 text-5xl md:text-6xl font-black font-mono text-white/90">0:00</div>
+    <div id="mz-quote" class="mt-5 text-sm md:text-base italic text-white/45 text-center max-w-md leading-relaxed px-4"></div>
+  </div>
+
+  <div class="text-[11px] text-white/30 font-semibold tracking-wide text-center max-w-sm">
+    Four in · hold · six out. The long breath out is the part that does the work.
+  </div>
+
+  <!-- the guard: leaving in a hurry is usually the thing you came here to stop -->
+  <div id="mz-guard" class="hidden absolute inset-0 bg-slate-950/80 backdrop-blur-xl flex items-center justify-center p-6">
+    <div class="max-w-sm w-full text-center">
+      <div class="text-4xl mb-4">🤲</div>
+      <h3 class="text-xl font-black mb-2 text-white/90">Hold on.</h3>
+      <p class="text-sm text-white/60 leading-relaxed mb-6" id="mz-guard-text">
+        Are you calm before you decide? You have <span id="mz-guard-left">a few minutes</span> left.
+        Take one breath, then choose — whichever you pick is fine.
+      </p>
+      <div class="flex flex-col gap-2.5">
+        <button id="mz-stay" class="px-6 py-3 rounded-2xl bg-white/90 text-slate-900 font-extrabold text-sm">Stay with it</button>
+        <button id="mz-leave" class="px-6 py-3 rounded-2xl bg-white/10 text-white/70 font-bold text-xs">I'm calm — end the sit</button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -3257,7 +3771,7 @@ let activeId = localStorage.getItem(AKEY);
 if (!profiles.some(p => p.id === activeId)) activeId = null;
 /* Which build is this? We genuinely could not tell once, and
    it cost an hour of chasing a bug that had already been fixed. */
-const BUILD = { v: '2026.09.03g', name: 'gaps · every-day list · training · any goal' };
+const BUILD = { v: '2026.09.05g', name: 'the check-in · backup · the week on one page' };
 /* kept for the console, off the screen */
 setTimeout(() => console.info('FocusFlow build', BUILD.v, '—', BUILD.name), 0);
 
@@ -3270,7 +3784,11 @@ const DEFAULTS = {
   subjects:[], exams:[], activeExam:null, timetable:[],
   customFocus:25, customBreak:10, bestStreak:0, totalSessions:0,
   coachSubjects:[], coachDays:[1,2,3,4,5], commitments:[], settleDefault:20,
-  daily:[], dailyDone:{}, queueTab:'once',
+  daily:[], dailyDone:{}, queueTab:'once', noteZenSize:18,
+  checkin:{}, wakeTime:'', ciWakeEdit:false,
+  lastBackup:0, lastWeekSent:0, a2hsDone:false,
+  handOn:false, handFace:'neat', handInk:'blue', handWarned:false,
+  hwDesk:{ title:'', text:'', face:'neat', ink:'blue', paper:'ruled', neat:'tidy', size:18, margin:true, srcId:'' },
   breakShort:5, breakLong:15, longEvery:4, autoBreak:false, autoFocus:false,
   soundFocus:'alarm', soundBreak:'school', alertVolume:0.9, repeatAlarm:true, cycle:0,
   session:null, track:'other', level:null, attemptMonth:null, targetYear:null, telegram:null,
@@ -3409,7 +3927,8 @@ const RENDERERS = {
   progress: () => renderProgress(),
   exam:     () => { renderExams(); renderRecommendation(); renderTimeline(); },
   timetable:() => { renderTimetable(); renderPhotos(); },
-  coach:    () => { renderCoachInputs(); wireMics(); },
+  coach:    () => { renderCoachInputs(); wireMics();
+                    if (typeof ffBackupLine === 'function'){ ffBackupLine(); ffRisk(); } },
   notes:    () => { renderNotes(); renderNoteStyle(); wireMics(); },
   health:   () => renderHealth(),
   mind:     () => renderMind(),
@@ -3425,7 +3944,19 @@ let currentTab = 'focus';
    of duplicate ids, which is how the voice recorder broke. */
 const NOTE_PAGES = { notes:'all' };
 
+/* which page feels like what */
+const VIBES = {
+  mind:'calm', health:'strong', healthfile:'strong',
+  notes:'study', backlog:'study', syllabus:'study',
+  focus:'work', exam:'sharp', tests:'sharp',
+  timetable:'plan', progress:'plan',
+  coach:'together', groups:'together', cocur:'together'
+};
 function showPage(id){
+  /* Leaving the page mid-sit is the exact moment worth pausing
+     on, so it asks — once — and takes either answer. */
+  try { if (medTimer && id !== 'mind' && medGuard()) return; } catch(e){}
+  document.body.dataset.vibe = VIBES[id] || 'work';
   const asNote = NOTE_PAGES[id];
   if (asNote){ noteCol = asNote; notesShown = 40; }
   const panelId = asNote ? 'notes' : id;
@@ -3864,8 +4395,29 @@ $('#celebrate-break').onclick = () => {
   setMode(b.kind, b.mins); start();
 };
 
+/* Declared here, where it is read. It used to be created only
+   inside the voice recorder, so on a fresh load this line threw
+   and took every keyboard shortcut down with it. */
+let recEscape = null;
+
+/* Is one of the full-screen modes up? While a sit, a rest or a
+   note has the screen, the study-timer shortcuts have no
+   business firing behind it. */
+function fullScreenMode(){
+  return ['#note-zen','#gym-rest','#med-zen','#hw-desk'].find(sel => {
+    const el = document.querySelector(sel);
+    return el && !el.classList.contains('hidden');
+  }) || null;
+}
+
 document.addEventListener('keydown', e => {
   if (['INPUT','TEXTAREA','SELECT'].includes(e.target.tagName)) return;
+  if (e.target && e.target.isContentEditable) return;
+  if (!e.key) return;
+
+  /* those screens handle their own keys — see nzClose, medGuard */
+  if (fullScreenMode()) return;
+
   if (e.code === 'Space'){ e.preventDefault(); toggle(); }
   if (e.key.toLowerCase() === 'r') reset();
   if (e.key.toLowerCase() === 'z') openModal('#zen-overlay');
@@ -4280,6 +4832,603 @@ function dailyStreak(id){
   return n;
 }
 
+
+
+/* ═══════════════════════════════════════════════════════════
+   💾 BACKUP, AND WHY IT IS NOT OPTIONAL
+   Every promise this app makes about privacy comes from the
+   same fact: the data never leaves the device. The cost of
+   that promise is that there is no copy anywhere. Clear the
+   browser, lose the phone, and months of work are gone, and
+   there is no support desk that can help.
+
+   Worse, on an iPhone it can happen without anyone doing
+   anything: Safari clears a website's stored data after about
+   seven days of not opening it. A site added to the Home
+   Screen is exempt. So the honest thing is to say so, make a
+   backup one tap, and nag gently if it has been a while.
+   ═══════════════════════════════════════════════════════════ */
+const FF_PREFIX = 'focusflow_';
+
+function ffKeys(){
+  const out = [];
+  for (let i = 0; i < localStorage.length; i++){
+    const k = localStorage.key(i);
+    if (k && k.indexOf(FF_PREFIX) === 0) out.push(k);
+  }
+  return out;
+}
+/* every photo and voice note lives in IndexedDB, not
+   localStorage — a backup without them is not a backup */
+async function ffBlobs(){
+  try {
+    const db = await idb();
+    return await new Promise((res) => {
+      const t = db.transaction('blobs', 'readonly');
+      const st = t.objectStore('blobs');
+      const out = {};
+      const kq = st.getAllKeys(), vq = st.getAll();
+      t.oncomplete = async () => {
+        const keys = kq.result || [], vals = vq.result || [];
+        for (let i = 0; i < keys.length; i++){
+          const v = vals[i];
+          try {
+            if (v instanceof Blob){
+              out[keys[i]] = { blob: true, type: v.type || '', b64: await blobToB64(v) };
+            } else if (typeof v === 'string'){
+              out[keys[i]] = { blob: false, str: v };
+            }
+          } catch(e){}
+        }
+        res(out);
+      };
+      t.onerror = () => res({});
+    });
+  } catch(e){ return {}; }
+}
+function blobToB64(b){
+  return new Promise((res, rej) => {
+    const r = new FileReader();
+    r.onload = () => res(String(r.result).split(',')[1] || '');
+    r.onerror = rej;
+    r.readAsDataURL(b);
+  });
+}
+function b64ToBlob(b64, type){
+  const bin = atob(b64), arr = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+  return new Blob([arr], { type: type || 'application/octet-stream' });
+}
+
+async function ffExport(){
+  try {
+    const store = {};
+    ffKeys().forEach(k => store[k] = localStorage.getItem(k));
+    const blobs = await ffBlobs();
+    const pack = { app:'FocusFlow', format:1, build: BUILD.v, at: Date.now(),
+                   profiles: (profiles||[]).map(p => p.name), store, blobs };
+    const json = JSON.stringify(pack);
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([json], { type:'application/json' }));
+    a.download = `focusflow-backup-${new Date().toISOString().slice(0,10)}.json`;
+    a.click();
+    setTimeout(() => { try { URL.revokeObjectURL(a.href); } catch(e){} }, 2000);
+    S.lastBackup = Date.now(); save(); ffBackupLine();
+    flashMsg(`Backup saved — ${Math.round(json.length/1024)} KB. Put it somewhere that is not this phone.`);
+  } catch(e){
+    flashMsg('Could not build the backup: ' + (e.message||'').slice(0,50));
+  }
+}
+
+let ffPending = null;
+function ffLoadFile(file){
+  const r = new FileReader();
+  r.onload = () => {
+    try {
+      const pack = JSON.parse(String(r.result));
+      if (!pack || pack.app !== 'FocusFlow' || !pack.store) throw new Error('not a FocusFlow backup');
+      ffPending = pack;
+      let notes = 0, days = 0;
+      Object.keys(pack.store).forEach(k => {
+        if (k.indexOf('focusflow_data_') !== 0) return;
+        try { const d = JSON.parse(pack.store[k]);
+              notes += (d.notes||[]).length; days += Object.keys(d.log||{}).length; } catch(e){}
+      });
+      $('#ff-restore-what').textContent =
+        `That file was made on ${new Date(pack.at).toLocaleDateString()} and holds ${
+         (pack.profiles||[]).length} profile${(pack.profiles||[]).length===1?'':'s'} (${(pack.profiles||[]).join(', ') || '—'}), ` +
+        `${notes} note${notes===1?'':'s'}, ${days} day${days===1?'':'s'} of study and ${
+         Object.keys(pack.blobs||{}).length} picture${Object.keys(pack.blobs||{}).length===1?'':'s'}. ` +
+        `Restoring REPLACES everything currently in this browser. There is no undo.`;
+      $('#ff-restore').classList.remove('hidden');
+    } catch(e){
+      ffPending = null;
+      $('#ff-restore').classList.add('hidden');
+      flashMsg("That file isn't a FocusFlow backup.");
+    }
+  };
+  r.onerror = () => flashMsg("Couldn't read that file.");
+  r.readAsText(file);
+}
+
+async function ffRestore(){
+  if (!ffPending) return;
+  try {
+    ffKeys().forEach(k => localStorage.removeItem(k));
+    Object.keys(ffPending.store).forEach(k => localStorage.setItem(k, ffPending.store[k]));
+    const blobs = ffPending.blobs || {};
+    for (const k of Object.keys(blobs)){
+      const v = blobs[k];
+      try { await blobPut(k, v.blob ? b64ToBlob(v.b64, v.type) : v.str); } catch(e){}
+    }
+    flashMsg('Restored. Reopening…');
+    setTimeout(() => location.reload(), 700);
+  } catch(e){
+    flashMsg('Restore failed: ' + (e.message||'').slice(0,50));
+  }
+}
+
+function ffBackupLine(){
+  const el = $('#ff-backup-when'); if (!el) return;
+  const t = S.lastBackup;
+  if (!t){ el.textContent = 'You have never made a backup.'; el.className = 'text-[11px] font-bold text-rose-600 mt-2.5'; return; }
+  const days = Math.floor((Date.now() - t) / 86400000);
+  el.textContent = days === 0 ? 'Backed up today.'
+    : days === 1 ? 'Last backup: yesterday.'
+    : `Last backup: ${days} days ago.` + (days > 14 ? ' Worth doing another.' : '');
+  el.className = 'text-[11px] font-bold mt-2.5 ' + (days > 14 ? 'text-amber-700' : 'text-slate-500');
+}
+
+/* ── is this device actually at risk ───────────────────────
+   Not a guess dressed up as a fact: it checks whether the
+   browser has promised to keep the data, and whether the app
+   is running from the Home Screen.                          */
+const isIOS = () => /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+                    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+const standalone = () => {
+  try { return !!(window.matchMedia && window.matchMedia('(display-mode: standalone)').matches)
+               || navigator.standalone === true; } catch(e){ return false; }
+};
+async function ffRisk(){
+  const box = $('#ff-risk'); if (!box) return;
+  let persisted = null;
+  try { if (navigator.storage && navigator.storage.persisted) persisted = await navigator.storage.persisted(); } catch(e){}
+  if (isIOS() && !standalone()){
+    box.innerHTML = `⚠️ <strong>On an iPhone, Safari deletes a website's saved data after about seven days of not opening it.</strong>
+      Add FocusFlow to your Home Screen — Share button, then “Add to Home Screen” — and that stops. Take a backup either way.`;
+    box.classList.remove('hidden');
+  } else if (persisted === false && !standalone()){
+    box.innerHTML = `⚠️ This browser has not promised to keep the data — if it runs short of space it may clear it.
+      Installing FocusFlow (or adding it to the Home Screen) makes it permanent. Take a backup either way.`;
+    box.classList.remove('hidden');
+  } else {
+    box.classList.add('hidden');
+  }
+  try { if (navigator.storage && navigator.storage.persist && persisted === false) navigator.storage.persist(); } catch(e){}
+}
+
+/* ── the gentle nudge ─────────────────────────────────────── */
+let a2hsEvent = null;
+function a2hsShow(){
+  const el = $('#a2hs'); if (!el) return;
+  if (standalone() || S.a2hsDone) return;
+  /* not on the first minute of the first day — earn it first */
+  const daysUsed = Object.keys(S.log || {}).length;
+  if (daysUsed < 2 && !S.a2hsForce) return;
+  $('#a2hs-why').innerHTML = isIOS()
+    ? `On iPhone, Safari clears a website's saved data after about a week of not opening it. From the Home Screen it never does — and your notes and streak stay safe.`
+    : `It opens like a real app, works offline, and the browser stops treating your data as something it can clear when space runs low.`;
+  el.classList.remove('hidden');
+}
+function a2hsHow(){
+  const el = $('#a2hs');
+  if (a2hsEvent){
+    a2hsEvent.prompt();
+    a2hsEvent.userChoice.finally(() => { a2hsEvent = null; S.a2hsDone = true; save(); el.classList.add('hidden'); });
+    return;
+  }
+  $('#a2hs-why').innerHTML = isIOS()
+    ? `1. Tap the <strong>Share</strong> button at the bottom of Safari (the square with the arrow).<br>
+       2. Scroll down and tap <strong>Add to Home Screen</strong>.<br>
+       3. Tap <strong>Add</strong>. That icon is now the app — open it from there from now on.`
+    : `Open your browser's menu (⋮ or ⋯) and choose <strong>Install app</strong> or <strong>Add to Home screen</strong>.`;
+  $('#a2hs-go').textContent = 'Done';
+  $('#a2hs-go').onclick = () => { S.a2hsDone = true; save(); $('#a2hs').classList.add('hidden'); };
+}
+
+/* ═══════════════════════════════════════════════════════════
+   📋 THE WEEK, ON ONE PAGE
+   For the conversation that starts "so how is the studying
+   going". Answering that from memory goes badly for everyone;
+   answering it with the actual seven days goes better, even
+   when the seven days were poor — especially then, because a
+   bad week on paper is a thing you can both look at, rather
+   than an argument about effort.
+
+   So it shows the real numbers, including the ones that are
+   not flattering, and it deliberately carries nothing else:
+   no notes, no doubts, no health file, nothing private. It is
+   built as an SVG and turned into a picture, which is why it
+   comes out identical whether it is saved or sent.
+   ═══════════════════════════════════════════════════════════ */
+function weekData(){
+  const mins = [6,5,4,3,2,1,0].map(i => S.log[dayKey(i)] || 0);
+  const total = mins.reduce((a,b)=>a+b,0);
+  const active = mins.filter(m => m > 0).length;
+  const goal = S.dailyGoal || 120;
+  const hit = mins.filter(m => m >= goal).length;
+
+  const open = (S.backlog || []).filter(b => !b.done);
+  const all  = (S.backlog || []).length;
+  const doneN = all - open.length;
+  const leftH = open.reduce((a,b) => a + (typeof remainingMins === 'function' ? remainingMins(b) : 0), 0) / 60;
+
+  const exams = (S.exams || []).filter(e => new Date(e.dt) > Date.now())
+    .sort((a,b) => new Date(a.dt) - new Date(b.dt));
+  const nextExam = exams[0]
+    ? { name: exams[0].name, days: Math.ceil((new Date(exams[0].dt) - Date.now())/86400000) } : null;
+
+  const marks = (S.classTests || []).filter(t => t.score != null).slice(-3)
+    .map(t => `${t.name} ${t.score}${t.outOf ? '/' + t.outOf : ''}`);
+
+  let kept = 0, missed = 0, off = 0; const focus = [];
+  Object.values(S.checkin || {}).forEach(day => Object.values(day).forEach(v => {
+    if (v.a === 'yes') kept++; else if (v.a === 'no') missed++; else if (v.a === 'off') off++;
+    if (v.focus) focus.push(v.focus);
+  }));
+  const conc = focus.length ? (focus.reduce((a,b)=>a+b,0)/focus.length) : null;
+
+  /* the honest two lists — computed, so this page works with
+     no key, no internet and no model */
+  const good = [], watch = [];
+  /* Someone who installed the app an hour ago has not had a bad
+     week — they have had no week. Telling a new user their first
+     page reads "0 of 7 days" is how a tool loses somebody on day
+     one. Nothing is judged until there is something to judge. */
+  const started = total > 0 || all > 0 || Object.keys(S.checkin || {}).length > 0;
+  if (active >= 6) good.push(`Studied on ${active} of the last 7 days`);
+  else if (started && active <= 3) watch.push(`Only ${active} of the last 7 days had any study`);
+  if (hit >= 4) good.push(`Hit the ${Math.round(goal/60*10)/10}h daily target ${hit} times`);
+  else if (hit === 0 && total > 0) watch.push(`The daily target was not reached on any day`);
+  if (!started) watch.push(`Nothing logged yet — this page fills in from the first study session`);
+  if (streak() >= 5) good.push(`${streak()}-day streak running`);
+  if (conc != null && conc >= 4) good.push(`Concentration in classes averaging ${conc.toFixed(1)} out of 5`);
+  if (conc != null && conc <= 2.5) watch.push(`Attending classes but only absorbing ${conc.toFixed(1)}/5 — the issue is not attendance`);
+  if (missed >= 3) watch.push(`${missed} planned things were missed this week`);
+  if (nextExam && leftH > nextExam.days * 3)
+    watch.push(`${leftH.toFixed(0)}h of work left with ${nextExam.days} days to ${nextExam.name}`);
+  if (doneN > 0) good.push(`${doneN} of ${all} topics finished`);
+  if (!good.length) good.push('Nothing to report yet — this fills in as the week is logged');
+  if (!watch.length) watch.push('Nothing standing out as a problem this week');
+
+  return { mins, total, active, goal, hit, all, doneN, leftH, nextExam, marks,
+           kept, missed, off, conc, good, watch };
+}
+
+function weekSVG(){
+  const d = weekData();
+  const name = (me().name || 'Student');
+  const course = currentCourse().label;
+  const days = ['M','T','W','T','F','S','S'];
+  const dow = new Date().getDay();
+  const order = [6,5,4,3,2,1,0].map(i => (dow - i + 7) % 7);
+  const peak = Math.max(60, ...d.mins);
+  const W = 900, H = 1280;
+  const bars = d.mins.map((m, i) => {
+    const bh = Math.round((m / peak) * 150);
+    const x = 70 + i * 108;
+    return `<rect x="${x}" y="${430 - bh}" width="66" height="${Math.max(3, bh)}" rx="8" fill="${
+      m >= d.goal ? '#2E9E6B' : m > 0 ? '#F0A83C' : '#D8D5D0'}"/>
+      <text x="${x+33}" y="${452}" text-anchor="middle" font-size="17" font-weight="700" fill="#7A756F">${days[order[i]]}</text>
+      <text x="${x+33}" y="${418 - bh}" text-anchor="middle" font-size="15" font-weight="800" fill="#5C5852">${m ? Math.round(m/6)/10 + 'h' : ''}</text>`;
+  }).join('');
+  const list = (items, x, y, colour) => items.slice(0,4).map((t,i) =>
+    `<text x="${x}" y="${y + i*32}" font-size="18" font-weight="600" fill="${colour}">${esc('• ' + t).slice(0,74)}</text>`).join('');
+  const stat = (x, y, big, small) =>
+    `<text x="${x}" y="${y}" font-size="46" font-weight="800" fill="#2C2925">${esc(big)}</text>
+     <text x="${x}" y="${y+26}" font-size="15" font-weight="700" fill="#8A857E" letter-spacing="1.2">${esc(small.toUpperCase())}</text>`;
+
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}">
+  <rect width="${W}" height="${H}" fill="#FFFDFA"/>
+  <rect width="${W}" height="128" fill="#F7EFE6"/>
+  <text x="52" y="58" font-size="30" font-weight="800" fill="#2C2925">${esc(name)} — the last 7 days</text>
+  <text x="52" y="90" font-size="18" font-weight="600" fill="#8A857E">${esc(course)} · ${
+    new Date(Date.now()-6*864e5).toLocaleDateString()} to ${new Date().toLocaleDateString()}</text>
+  <text x="${W-52}" y="90" text-anchor="end" font-size="15" font-weight="700" fill="#B0AAA3">FocusFlow</text>
+
+  ${stat(70, 210, (d.total/60).toFixed(1) + 'h', 'studied')}
+  ${stat(300, 210, d.active + '/7', 'days active')}
+  ${stat(530, 210, String(streak()), 'day streak')}
+  ${stat(740, 210, d.hit + '/7', 'target met')}
+
+  <text x="70" y="290" font-size="17" font-weight="800" fill="#8A857E" letter-spacing="1.5">EACH DAY · TARGET ${Math.round(d.goal/6)/10}H</text>
+  <line x1="70" y1="${430 - Math.round((d.goal/peak)*150)}" x2="${W-70}" y2="${430 - Math.round((d.goal/peak)*150)}"
+        stroke="#2E9E6B" stroke-width="1.5" stroke-dasharray="5 5" opacity=".55"/>
+  ${bars}
+
+  <line x1="52" y1="500" x2="${W-52}" y2="500" stroke="#EAE5DE" stroke-width="2"/>
+
+  <text x="70" y="546" font-size="17" font-weight="800" fill="#8A857E" letter-spacing="1.5">SYLLABUS</text>
+  <text x="70" y="586" font-size="22" font-weight="700" fill="#2C2925">${d.doneN} of ${d.all} topics finished${
+    d.all ? ` · ${d.leftH.toFixed(0)}h of work still to do` : ' · nothing added yet'}</text>
+  ${d.nextExam ? `<text x="70" y="622" font-size="22" font-weight="700" fill="#2C2925">Next exam: ${
+    esc(d.nextExam.name)} in ${d.nextExam.days} day${d.nextExam.days===1?'':'s'}</text>` : ''}
+  ${d.marks.length ? `<text x="70" y="${d.nextExam?658:622}" font-size="20" font-weight="600" fill="#5C5852">Recent marks: ${
+    esc(d.marks.join(' · '))}</text>` : ''}
+
+  <line x1="52" y1="700" x2="${W-52}" y2="700" stroke="#EAE5DE" stroke-width="2"/>
+
+  <text x="70" y="746" font-size="17" font-weight="800" fill="#8A857E" letter-spacing="1.5">SHOWING UP</text>
+  <text x="70" y="786" font-size="22" font-weight="700" fill="#2C2925">${
+    d.kept + d.missed + d.off === 0 ? 'No check-ins filled in this week'
+    : `${d.kept} kept · ${d.missed} missed · ${d.off} cancelled on them`}</text>
+  ${d.conc != null ? `<text x="70" y="822" font-size="20" font-weight="600" fill="#5C5852">Concentration in classes attended: ${
+    d.conc.toFixed(1)} out of 5</text>` : ''}
+
+  <rect x="52" y="866" width="${W-104}" height="176" rx="18" fill="#EFF7F1"/>
+  <text x="76" y="902" font-size="17" font-weight="800" fill="#2E7D52" letter-spacing="1.5">GOING WELL</text>
+  ${list(d.good, 76, 936, '#2C4A3A')}
+
+  <rect x="52" y="1062" width="${W-104}" height="176" rx="18" fill="#FDF3EC"/>
+  <text x="76" y="1098" font-size="17" font-weight="800" fill="#B26B2E" letter-spacing="1.5">NEEDS ATTENTION</text>
+  ${list(d.watch, 76, 1132, '#5C4230')}
+
+  <text x="52" y="${H-18}" font-size="14" font-weight="600" fill="#B0AAA3">Made ${
+    new Date().toLocaleString()} · numbers straight from the app, nothing rounded up</text>
+</svg>`;
+}
+
+function wkOpen(){
+  const el = $('#wk-sheet'); if (!el) return;
+  $('#wk-paper').innerHTML = weekSVG().replace(/width="900" height="1280"/, 'width="100%"');
+  $('#wk-msg').textContent = '';
+  $('#wk-tg').classList.toggle('hidden', !tgOn());
+  el.classList.remove('hidden'); el.classList.add('flex');
+  document.body.style.overflow = 'hidden';
+}
+function wkClose(){
+  const el = $('#wk-sheet'); if (!el) return;
+  el.classList.add('hidden'); el.classList.remove('flex');
+  document.body.style.overflow = '';
+}
+async function wkPNG(){ return await svgToPNG(weekSVG(), 1080, 1536); }
+
+async function wkSave(){
+  $('#wk-msg').textContent = 'Drawing it…';
+  try {
+    const b64 = await wkPNG();
+    const a = document.createElement('a');
+    a.href = 'data:image/png;base64,' + b64;
+    a.download = `focusflow-week-${new Date().toISOString().slice(0,10)}.png`;
+    a.click();
+    $('#wk-msg').textContent = 'Saved as a picture.';
+  } catch(e){ $('#wk-msg').textContent = 'Could not make the picture: ' + (e.message||'').slice(0,40); }
+}
+async function wkSend(){
+  if (!tgOn()){ $('#wk-msg').textContent = 'Connect Telegram first — the ✈️ button in the top bar.'; return; }
+  $('#wk-msg').textContent = 'Sending…';
+  try {
+    const b64 = await wkPNG();
+    const d = weekData();
+    await tgCall('/doc', { method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ uid: tgCfg.uid, token: tgCfg.token, kind:'photo',
+        filename:'week.png', mime:'image/png', b64,
+        caption: `📋 ${me().name ? me().name + "'s" : 'This'} week — ${(d.total/60).toFixed(1)}h across ${d.active}/7 days, ${streak()}-day streak.` }) });
+    S.lastWeekSent = Date.now(); save();
+    $('#wk-msg').textContent = 'Sent to Telegram. Forward it to whoever needs it.';
+  } catch(e){
+    $('#wk-msg').textContent = 'Telegram would not take it: ' + (e.message||'').slice(0,50);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ✅ THE DAILY CHECK-IN
+   The timetable already knows what today was supposed to hold:
+   school from eight, coaching at four, the gym at seven, and
+   the hour it takes to settle afterwards. So at the end of the
+   day the app can ask about the actual day rather than a
+   generic one — did you get up when you meant to, was there a
+   class, did you attend it, how much of it landed, did you get
+   to the gym.
+
+   The important half is what happens on a "no". A class that
+   got cancelled is not a failure, it is two hours that just
+   came free, and the difference between a good week and a
+   wasted one is whether anybody notices in time. So every no
+   comes back with the actual next thing — pulled from the
+   backlog, the nearest test, whatever the app already knows is
+   most urgent — and a button that starts it.
+
+   Nothing here scolds. It cannot: a student who feels judged
+   by a checklist stops filling it in, and then the app knows
+   nothing about their real week.
+   ═══════════════════════════════════════════════════════════ */
+const CI_FOCUS = [
+  { v:1, label:'Barely there' }, { v:2, label:'Half in it' },
+  { v:3, label:'Mostly fine' },  { v:4, label:'Properly on it' }, { v:5, label:'Fully locked in' }
+];
+/* which commitments are worth asking about at all — nobody
+   needs to be asked whether they had lunch */
+const CI_ASK = ['school','coaching','gym','work','travel','other'];
+const CI_ATTEND = ['school','coaching','work'];      // these get a concentration question
+
+const ciDay = () => (S.checkin = S.checkin || {}, S.checkin[todayKey()] = S.checkin[todayKey()] || {});
+const ciWake = () => S.wakeTime || '';
+
+/* today's rows, from the timetable */
+function ciRows(){
+  const dow = new Date().getDay();
+  const rows = [];
+  if (ciWake())
+    rows.push({ id:'wake', emoji:'⏰', label:`Up by ${ciWake()}`, kind:'wake', when:ciWake() });
+  (S.commitments || [])
+    .filter(c => (c.days || []).includes(dow) && CI_ASK.includes(c.kind))
+    .sort((a,b) => (a.start||'').localeCompare(b.start||''))
+    .forEach(c => rows.push({ id:c.id, emoji:c.emoji, label:c.label, kind:c.kind,
+                              when:`${c.start}–${c.end}`, mins: ciMins(c) }));
+  return rows;
+}
+function ciMins(c){
+  try {
+    const [ah,am] = (c.start||'0:0').split(':').map(Number), [bh,bm] = (c.end||'0:0').split(':').map(Number);
+    return Math.max(0, (bh*60+bm) - (ah*60+am));
+  } catch(e){ return 60; }
+}
+
+/* ── what to do with the time that just came back ───────────
+   Not a pep talk. The actual next thing, from the app's own
+   data, in the size of the hole that opened up.             */
+function ciRescue(row, answer){
+  const freed = row.kind === 'wake' ? 0 : (row.mins || 60);
+  let next = null;
+  try { next = typeof whatsNext === 'function' ? whatsNext() : null; } catch(e){}
+  const open = (S.backlog || []).filter(b => !b.done);
+  const weakest = open.slice().sort((a,b) =>
+    (typeof remainingMins === 'function' ? remainingMins(b) - remainingMins(a) : 0))[0];
+
+  if (row.kind === 'wake'){
+    return { line:'A late start is a late start — it is not the day. Move everything down an hour and keep the plan.',
+             pick: next ? next.goal : (weakest ? `${weakest.subject}: ${weakest.topic}` : null),
+             mins: Math.min(S.customFocus || 45, 40) };
+  }
+  if (row.kind === 'gym'){
+    return { line:`That is ${freed} minutes back. Twenty of them on your feet still counts — then use the rest.`,
+             pick: next ? next.goal : (weakest ? `${weakest.subject}: ${weakest.topic}` : null),
+             mins: Math.max(25, Math.min(freed - 20, 50)) };
+  }
+  const blocks = Math.max(1, Math.round(freed / 50));
+  return {
+    line: answer === 'off'
+      ? `Cancelled is not lost — that is ${Math.floor(freed/60)}h ${freed%60}m nobody has claimed yet. Claim it now, before the evening does.`
+      : `${Math.floor(freed/60)}h ${freed%60}m that did not go where it was meant to. Put some of it back.`,
+    pick: next ? next.goal : (weakest ? `${weakest.subject}: ${weakest.topic}` : null),
+    mins: Math.min(S.customFocus || 45, 50), blocks
+  };
+}
+
+function ciAnswer(id, val){
+  const day = ciDay();
+  day[id] = { ...(day[id] || {}), a: val, at: Date.now() };
+  save(); renderCheckin();
+}
+function ciFocusSet(id, v){
+  const day = ciDay();
+  day[id] = { ...(day[id] || {}), focus: v };
+  save(); renderCheckin();
+}
+
+function renderCheckin(){
+  const ul = $('#ci-list'); if (!ul) return;
+  $('#ci-wake-set').classList.toggle('hidden', !!ciWake() && !S.ciWakeEdit);
+  if (!ciWake()) S.ciWakeEdit = true;
+
+  const rows = ciRows(), day = ciDay();
+  ul.innerHTML = '';
+
+  if (!rows.length){
+    ul.innerHTML = `<li class="text-[11px] text-slate-400 italic py-2 leading-relaxed">Nothing to check yet. Add what your day actually
+      holds — school, coaching, the gym, travel — under <strong>Timetable → Real life</strong>, and set a wake-up time above.
+      Then this asks about your day rather than a made-up one.</li>`;
+    $('#ci-summary').textContent = '';
+    return;
+  }
+
+  rows.forEach(r => {
+    const st = day[r.id] || {};
+    const li = document.createElement('li');
+    li.className = 'p-3 rounded-xl bg-white/90 border border-slate-200/70';
+    const btn = (v, label, cls) =>
+      `<button data-ci="${esc(r.id)}" data-v="${v}" class="ci-a px-2.5 py-1.5 rounded-lg text-[10px] font-extrabold border ${
+        st.a === v ? cls : 'bg-white border-slate-200 text-slate-500'}">${label}</button>`;
+
+    li.innerHTML =
+      `<div class="flex items-center gap-2 flex-wrap">
+         <span class="text-base">${r.emoji || '•'}</span>
+         <div class="min-w-0 flex-1">
+           <div class="text-xs font-extrabold text-slate-800">${esc(r.label)}</div>
+           <div class="text-[10px] font-bold text-slate-400">${esc(r.when || '')}</div>
+         </div>
+         <div class="flex gap-1 shrink-0">
+           ${btn('yes','Yes','bg-emerald-600 border-emerald-600 text-white')}
+           ${btn('no','No','bg-rose-500 border-rose-500 text-white')}
+           ${r.kind === 'wake' ? '' : btn('off','Didn\'t happen','bg-slate-700 border-slate-700 text-white')}
+         </div>
+       </div>`;
+
+    /* attended — so the real question is how much of it landed */
+    if (st.a === 'yes' && CI_ATTEND.includes(r.kind)){
+      const wrap = document.createElement('div');
+      wrap.className = 'mt-2.5 pt-2.5 border-t border-slate-100';
+      wrap.innerHTML =
+        `<div class="text-[10px] font-black uppercase tracking-wider text-slate-400 mb-1.5">How much of it actually landed?</div>
+         <div class="flex gap-1 flex-wrap">${CI_FOCUS.map(f =>
+           `<button data-cif="${esc(r.id)}" data-v="${f.v}" class="ci-f px-2.5 py-1 rounded-lg text-[10px] font-bold border ${
+             st.focus === f.v ? 'bg-slate-900 border-slate-900 text-white' : 'bg-white border-slate-200 text-slate-500'}">${f.v} · ${f.label}</button>`).join('')}</div>
+         ${st.focus && st.focus <= 2 ? `<p class="text-[10px] text-amber-700 font-bold mt-2 leading-relaxed">Two hours sat there and little of it landed.
+           That is worth knowing — revise that chapter yourself tonight rather than assuming it went in.</p>` : ''}`;
+      li.appendChild(wrap);
+    }
+
+    /* didn't happen, or didn't go — here is the time back */
+    if (st.a === 'no' || st.a === 'off'){
+      const rs = ciRescue(r, st.a);
+      const box = document.createElement('div');
+      box.className = 'mt-2.5 pt-2.5 border-t border-slate-100';
+      box.innerHTML =
+        `<p class="text-[11px] font-bold text-slate-700 leading-relaxed">${esc(rs.line)}</p>
+         ${rs.pick
+           ? `<div class="mt-2 flex items-center gap-2 flex-wrap">
+                <span class="text-[10px] font-black uppercase tracking-wider text-slate-400">Do this instead</span>
+                <span class="text-[11px] font-extrabold text-slate-800">${esc(rs.pick)}</span>
+              </div>
+              <button data-cigo="${esc(r.id)}" class="ci-go mt-2 px-3.5 py-2 rounded-xl btn-coral text-[11px] font-extrabold">
+                ▶ Start ${rs.mins} minutes on it now</button>`
+           : `<p class="text-[10px] text-slate-400 mt-1.5">Add something to your backlog and the app can name the thing to do with this time.</p>`}`;
+      li.appendChild(box);
+    }
+    ul.appendChild(li);
+  });
+
+  ul.querySelectorAll('.ci-a').forEach(b => b.onclick = () => ciAnswer(b.dataset.ci, b.dataset.v));
+  ul.querySelectorAll('.ci-f').forEach(b => b.onclick = () => ciFocusSet(b.dataset.cif, +b.dataset.v));
+  ul.querySelectorAll('.ci-go').forEach(b => b.onclick = () => {
+    const r = rows.find(x => x.id === b.dataset.cigo); if (!r) return;
+    const rs = ciRescue(r, (day[r.id]||{}).a);
+    try {
+      openTab('focus');
+      if (typeof goalText !== 'undefined') goalText = rs.pick || 'Reclaimed time';
+      if (typeof setMode === 'function') setMode('custom', rs.mins);
+      if (typeof start === 'function') start();
+      flashMsg('Clock running. That hour is yours again.');
+    } catch(e){ flashMsg('Open the timer and start — ' + (rs.pick || 'anything from the backlog')); }
+  });
+
+  const asked = rows.length, done = rows.filter(r => (day[r.id]||{}).a).length;
+  const missed = rows.filter(r => ['no','off'].includes((day[r.id]||{}).a)).length;
+  $('#ci-summary').textContent = !done
+    ? `${asked} thing${asked===1?'':'s'} to check off. Takes a minute.`
+    : done < asked ? `${done} of ${asked} answered.`
+    : missed ? `All answered. ${missed} thing${missed===1?'':'s'} did not happen — the time is above, go and take it.`
+    : `All answered, all done. That is a full day, properly.`;
+}
+
+/* the week, for the coach — a run of half-empty classes is a
+   real fact about someone's week and the coach should know */
+function checkinContext(){
+  S.checkin = S.checkin || {};
+  const days = [0,1,2,3,4,5,6].map(i => S.checkin[dayKey(i)]).filter(Boolean);
+  if (!days.length) return '';
+  let yes = 0, no = 0, off = 0; const focus = [];
+  days.forEach(d => Object.values(d).forEach(v => {
+    if (v.a === 'yes') yes++; else if (v.a === 'no') no++; else if (v.a === 'off') off++;
+    if (v.focus) focus.push(v.focus);
+  }));
+  const avg = focus.length ? (focus.reduce((a,b)=>a+b,0)/focus.length).toFixed(1) : null;
+  return `CHECK-IN (7 days): ${yes} kept, ${no} missed, ${off} cancelled on them.` +
+         (avg ? ` Average concentration in classes attended: ${avg}/5.` : '') +
+         (avg && +avg <= 2.5 ? ' They are attending but not absorbing — that is the thing to talk about, not attendance.' : '');
+}
+
 function renderDaily(){
   const ul = $('#daily-list'); if (!ul) return;
   S.daily = S.daily || [];
@@ -4353,15 +5502,18 @@ function addDaily(text){
 }
 
 function showQueue(which){
-  const daily = which === 'daily';
-  $('#q-once').classList.toggle('hidden', daily);
-  $('#q-daily').classList.toggle('hidden', !daily);
-  $('#q-tab-once').className  = 'q-tab px-3 py-1.5 rounded-lg text-[11px] font-extrabold ' +
-    (daily ? 'text-slate-500' : 'bg-white text-slate-800 shadow-sm');
-  $('#q-tab-daily').className = 'q-tab px-3 py-1.5 rounded-lg text-[11px] font-extrabold ' +
-    (daily ? 'bg-white text-slate-800 shadow-sm' : 'text-slate-500');
+  if (!['once','daily','check'].includes(which)) which = 'once';
+  const on = t => 'q-tab px-3 py-1.5 rounded-lg text-[11px] font-extrabold ' +
+                  (t === which ? 'bg-white text-slate-800 shadow-sm' : 'text-slate-500');
+  $('#q-once').classList.toggle('hidden',  which !== 'once');
+  $('#q-daily').classList.toggle('hidden', which !== 'daily');
+  $('#q-check').classList.toggle('hidden', which !== 'check');
+  $('#q-tab-once').className  = on('once');
+  $('#q-tab-daily').className = on('daily');
+  $('#q-tab-check').className = on('check');
   S.queueTab = which; save();
-  if (daily) renderDaily();
+  if (which === 'daily') renderDaily();
+  if (which === 'check') renderCheckin();
 }
 
 if ($('#add-daily-form')) {
@@ -4372,7 +5524,15 @@ if ($('#add-daily-form')) {
   };
   $('#q-tab-once').onclick  = () => showQueue('once');
   $('#q-tab-daily').onclick = () => showQueue('daily');
-  showQueue(S.queueTab === 'daily' ? 'daily' : 'once');
+  $('#q-tab-check').onclick = () => showQueue('check');
+  $('#ci-wake-save').onclick = () => {
+    S.wakeTime = $('#ci-wake-time').value || '06:30';
+    S.ciWakeEdit = false; save(); renderCheckin();
+    flashMsg('Saved. It will ask about that from tomorrow.');
+  };
+  $('#ci-wake-edit').onclick = () => { S.ciWakeEdit = true; save(); renderCheckin();
+                                       $('#ci-wake-time').value = ciWake() || '06:30'; };
+  showQueue(S.queueTab);
 }
 
 function celebrateTask(text){
@@ -4744,7 +5904,7 @@ Rules that matter more than nutrition theory:
       `Diet: ${f.diet}. Allergies: ${f.allergies || 'none stated'}. Medical: ${f.medical || 'none stated'}.
 Sleep aim: ${f.sleep || 'not stated'}. Study blocks: ${when}. Daily goal: ${S.dailyGoal} minutes.`,
       'Write the day.',
-      { maxTokens: 900, temperature: 0.5 });
+      { maxTokens: 900, temperature: 0.5, pov: false });
     dietPlan = (res.text || '').trim() || dietFallback();
     out.innerHTML = withRecipes(dietPlan);
     $('#dt-keep').classList.remove('hidden'); $('#dt-send').classList.remove('hidden');
@@ -4881,48 +6041,105 @@ function medStreak(){
 }
 
 function breathe(){
-  const ring = $('#breath-ring'); if (!ring) return;
   /* 4 in · 2 hold · 6 out — the long exhale is the part that
-     actually shifts the nervous system. */
+     actually shifts the nervous system. Both rings breathe
+     together: the small one on the page, and the big one
+     filling the screen. */
   const steps = [['In', 4, 1.35], ['Hold', 2, 1.35], ['Out', 6, 0.85]];
   let i = 0;
   const step = () => {
     if (!medTimer) return;
     const [label, secs, scale] = steps[i % steps.length];
-    ring.textContent = label;
-    ring.style.transition = `transform ${secs}s ease-in-out`;
-    ring.style.transform = `scale(${scale})`;
+    [$('#breath-ring'), $('#mz-ring')].forEach(ring => {
+      if (!ring) return;
+      ring.textContent = label;
+      ring.style.transition = `transform ${secs}s ease-in-out, box-shadow ${secs}s ease-in-out`;
+      ring.style.transform = `scale(${scale})`;
+      if (ring.id === 'mz-ring')
+        ring.style.boxShadow = `0 0 ${scale > 1 ? 90 : 30}px ${scale > 1 ? 12 : 0}px rgba(190,175,255,${scale > 1 ? .13 : .04})`;
+    });
     i++;
     medPhase = setTimeout(step, secs * 1000);
   };
   step();
 }
 
+/* ── the screen closing in, gently ──────────────────────────
+   The one honest complaint about a timer in a card is that the
+   rest of the app is still sitting right there. So the sit
+   takes the whole screen — and the closer it gets to the end,
+   the further in it draws, so the last minute is the quietest
+   part rather than the part you're watching the clock through. */
+let medZenOn = false;
+function medZenOpen(mins){
+  const el = $('#med-zen'); if (!el) return;
+  medZenOn = true;
+  $('#mz-guard').classList.add('hidden');
+  $('#mz-label').textContent = mins + ' minutes';
+  el.style.setProperty('--mz-zoom', 1);
+  try {
+    const [q, who] = quoteOfDay();
+    $('#mz-quote').textContent = '“' + q + '”  — ' + who;
+  } catch(e){ $('#mz-quote').textContent = ''; }
+  el.classList.remove('hidden'); el.classList.add('flex');
+  document.body.style.overflow = 'hidden';
+}
+function medZenClose(){
+  const el = $('#med-zen'); if (!el) return;
+  medZenOn = false;
+  el.classList.add('hidden'); el.classList.remove('flex');
+  $('#mz-guard').classList.add('hidden');
+  document.body.style.overflow = '';
+}
+/* the guard. Not a nag and not a trap — one breath, then choose. */
+function medGuard(){
+  if (!medTimer) return false;
+  const left = Math.max(0, medEnd - Date.now());
+  const m = Math.ceil(left / 60000);
+  if (!medZenOn) medZenOpen(Math.round((medEnd - Date.now()) / 60000) || 1);
+  $('#mz-guard-left').textContent = m <= 1 ? 'less than a minute' : m + ' minutes';
+  $('#mz-guard').classList.remove('hidden');
+  return true;
+}
+
 function medStart(mins){
   medStop(true);
   medEnd = Date.now() + mins * 60000;
+  const total = mins * 60000;
+  medZenOpen(mins);
   medTimer = setInterval(() => {
     const left = Math.max(0, medEnd - Date.now());
     const m = Math.floor(left / 60000), s = Math.floor(left % 60000 / 1000);
-    $('#med-status').textContent = `${m}:${String(s).padStart(2,'0')} left`;
+    const txt = `${m}:${String(s).padStart(2,'0')}`;
+    if ($('#med-status')) $('#med-status').textContent = txt + ' left';
+    if ($('#mz-time')) $('#mz-time').textContent = txt;
+    /* 1 → 1.22 across the session: the world gets closer, slowly */
+    const done = 1 - (left / total);
+    const zen = $('#med-zen');
+    if (zen) zen.style.setProperty('--mz-zoom', (1 + done * 0.22).toFixed(3));
     if (left <= 0) medDone(mins);
   }, 250);
   breathe();
   $('#med-stop').classList.remove('hidden');
-  try { if (typeof startAlarm === 'function') {} } catch(e){}
 }
 function medDone(mins){
   medStop();
   const k = todayKey();
   S.health.days[k] = { ...(S.health.days[k]||{}), med: ((S.health.days[k]||{}).med || 0) + mins };
   save();
-  $('#med-status').textContent = `Done — ${mins} minutes.`;
+  if ($('#mz-time')) $('#mz-time').textContent = 'Done';
+  if ($('#mz-ring')) $('#mz-ring').textContent = 'Done';
+  setTimeout(medZenClose, 1400);
+  if ($('#med-status')) $('#med-status').textContent = `Done — ${mins} minutes.`;
   renderMind();
   flashMsg('That counts. Go and study.');
 }
 function medStop(quiet){
   clearInterval(medTimer); clearTimeout(medPhase);
   medTimer = null; medPhase = null;
+  if (medZenOn && !quiet) medZenClose();
+  const mzr = $('#mz-ring');
+  if (mzr){ mzr.style.transform = 'scale(1)'; mzr.style.boxShadow = 'none'; if (!quiet) mzr.textContent = 'Ready'; }
   const ring = $('#breath-ring');
   if (ring){ ring.style.transform = 'scale(1)'; if (!quiet) ring.textContent = 'Ready'; }
   const st = $('#med-stop'); if (st) st.classList.add('hidden');
@@ -4961,9 +6178,27 @@ function quoteOfDay(){
   const n = Math.floor(new Date(todayKey()).getTime() / 86400000);
   return CALLIG[n % CALLIG.length];
 }
+/* Rotates with the line, not at random: the same quote always
+   arrives in the same hand, so the day has a face you'd
+   recognise. Every stack ends in a family every device has. */
+const QUOTE_HANDS = [
+  { f:"'Iowan Old Style','Palatino Linotype',Palatino,Georgia,serif", s:27, i:'italic', w:400, t:0 },
+  { f:"'Snell Roundhand','Segoe Script','Brush Script MT',cursive",   s:34, i:'normal', w:400, t:0.5 },
+  { f:"Georgia,'Times New Roman',serif",                              s:26, i:'normal', w:600, t:0.3 },
+  { f:"'Baskerville','Libre Baskerville','Hoefler Text',serif",       s:27, i:'italic', w:400, t:0.4 },
+  { f:"'Optima','Gill Sans','Gill Sans MT',sans-serif",               s:26, i:'normal', w:500, t:1.4 },
+  { f:"'Didot','Bodoni MT','Playfair Display',serif",                 s:28, i:'normal', w:400, t:0.8 },
+  { f:"'American Typewriter','Courier New',monospace",                s:22, i:'normal', w:600, t:0 },
+  { f:"'Hoefler Text','Garamond','EB Garamond',serif",                s:28, i:'italic', w:400, t:0.2 }
+];
+function quoteHand(){
+  const i = CALLIG.findIndex(c => c[0] === quoteOfDay()[0]);
+  return QUOTE_HANDS[(i < 0 ? 0 : i) % QUOTE_HANDS.length];
+}
 function renderQuote(){
   const box = $('#quote-card'); if (!box) return;
   const [q, who] = quoteOfDay();
+  const hand = quoteHand();
   const words = q.split(' ');
   const lines = [];
   let cur = '';
@@ -4976,8 +6211,9 @@ function renderQuote(){
       <rect width="720" height="${H}" fill="var(--paper)"/>
       <path d="M 44 26 H 676" stroke="var(--tint-peach)" stroke-width="1.5" opacity=".5"/>
       ${lines.map((l,i) => `<text x="360" y="${76 + i*46}" text-anchor="middle"
-        font-family="'Iowan Old Style','Palatino Linotype',Palatino,Georgia,serif"
-        font-size="27" font-style="italic" fill="var(--ink)">${esc(l)}</text>`).join('')}
+        font-family="${hand.f.replace(/"/g,'&quot;')}"
+        font-size="${hand.s}" font-style="${hand.i}" font-weight="${hand.w}"
+        letter-spacing="${hand.t}" fill="var(--ink)">${esc(l)}</text>`).join('')}
       <text x="360" y="${76 + lines.length*46 + 4}" text-anchor="middle"
         font-family="system-ui,-apple-system,sans-serif" font-size="11.5" font-weight="700"
         letter-spacing="2.5" fill="var(--ink-3)">${esc(who.toUpperCase())}</text>
@@ -5018,6 +6254,119 @@ function renderMind(){
 
 if ($('#med-stop')){
   $$('.med-go').forEach(b => b.onclick = () => medStart(+b.dataset.med));
+
+/* ── backup, restore, home screen, the week page ─────────── */
+if ($('#ff-export')){
+  $('#ff-export').onclick = ffExport;
+  $('#ff-import').onclick = () => $('#ff-file').click();
+  $('#ff-file').onchange = e => { const f = e.target.files[0]; if (f) ffLoadFile(f); e.target.value = ''; };
+  $('#ff-restore-go').onclick = ffRestore;
+  $('#ff-restore-no').onclick = () => { ffPending = null; $('#ff-restore').classList.add('hidden'); };
+  ffBackupLine(); ffRisk();
+}
+if ($('#wk-open')){
+  $('#wk-open').onclick  = wkOpen;
+  $('#wk-close').onclick = wkClose;
+  $('#wk-save').onclick  = wkSave;
+  $('#wk-tg').onclick    = wkSend;
+  document.addEventListener('keydown', e => {
+    const el = $('#wk-sheet');
+    if (e.key === 'Escape' && el && !el.classList.contains('hidden')){ e.preventDefault(); wkClose(); }
+  });
+}
+if ($('#a2hs')){
+  window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); a2hsEvent = e; a2hsShow(); });
+  $('#a2hs-go').onclick    = a2hsHow;
+  $('#a2hs-later').onclick = () => { $('#a2hs').classList.add('hidden'); };
+  setTimeout(a2hsShow, 4000);
+}
+
+
+/* ── the handwriting desk: buttons ──────────────────────── */
+if ($('#btn-hand-desk')){
+  $('#btn-hand-desk').onclick = () => hdOpen();
+  $('#hd-close').onclick = hdClose;
+  $('#hd-save').onclick  = hdSave;
+  $('#hd-print').onclick = hdPrint;
+  $('#hd-keep').onclick  = hdKeep;
+  $('#hd-title').oninput = e => { hdState().title = e.target.value; save(); hdPaint(); };
+  $('#hd-text').oninput  = e => { hdState().text  = e.target.value; save(); hdPaint(); };
+  $('#hd-clear').onclick = () => {
+    hdState().text = ''; hdState().title = ''; hdState().srcId = ''; save();
+    $('#hd-title').value = ''; $('#hd-text').value = ''; $('#hd-src').value = ''; hdPaint();
+  };
+  $('#hd-margin').onchange = e => { hdState().margin = e.target.checked; save(); hdPaint(); };
+  $('#hd-smaller').onclick = () => { hdState().size = Math.max(13, hdSize() - 2); save(); hdPaint(); };
+  $('#hd-bigger').onclick  = () => { hdState().size = Math.min(28, hdSize() + 2); save(); hdPaint(); };
+  $('#hd-src').onchange = e => {
+    const n = (S.notes || []).find(x => x.id === e.target.value);
+    hdState().srcId = e.target.value;
+    if (n){ hdState().title = n.title || ''; hdState().text = n.body || ''; }
+    save();
+    $('#hd-title').value = hdState().title || '';
+    $('#hd-text').value  = hdState().text  || '';
+    hdPaint();
+  };
+  document.addEventListener('keydown', e => {
+    const el = $('#hw-desk');
+    if (e.key === 'Escape' && el && !el.classList.contains('hidden')
+        && !['INPUT','TEXTAREA','SELECT'].includes(e.target.tagName)){ e.preventDefault(); hdClose(); }
+  });
+}
+
+
+/* ── between sets: buttons ──────────────────────────────── */
+if ($('#gr-close')){
+  $('#gr-close').onclick = grClose;
+  document.addEventListener('keydown', e => {
+    const el = $('#gym-rest');
+    if (e.key === 'Escape' && el && !el.classList.contains('hidden')){ e.preventDefault(); grClose(); }
+  });
+  $('#gr-next').onclick  = () => { grClose(); const f = $('#lf-name'); if (f){ f.value=''; f.focus(); } };
+  $('#gr-again').onclick = () => {
+    grClose();
+    if (grLast){ $('#lf-name').value = grLast.name; $('#lf-kg').value = grLast.kg; $('#lf-reps').value = grLast.reps; }
+    const r = $('#lf-reps'); if (r) r.focus();
+  };
+  $$('.gr-len').forEach(b => b.onclick = () => {
+    S.health = S.health || { file:{}, days:{} };
+    S.health.restSec = +b.dataset.rest; save();
+    grLenButtons(); grStartClock();
+  });
+}
+
+/* ── a note on its own: buttons and keys ────────────────── */
+if ($('#nz-close')){
+  $('#nz-close').onclick   = nzClose;
+  $('#nz-prev').onclick    = () => nzStep(-1);
+  $('#nz-next').onclick    = () => nzStep(1);
+  $('#nz-bigger').onclick  = () => nzZoom(2);
+  $('#nz-smaller').onclick = () => nzZoom(-2);
+  $('#nz-edit').onclick    = () => { const n = nzList[nzAt]; nzClose(); if (n) openNote(n); };
+  $('#nz-hand').onclick    = nzHandToggle;
+  /* from reading straight to the desk, with this note loaded */
+  $('#nz-desk') && ($('#nz-desk').onclick = () => { const n = nzList[nzAt]; nzClose(); if (n) hdOpen(n); });
+  $('#nz-img').onclick     = nzImage;
+  document.addEventListener('keydown', e => {
+    const open = $('#note-zen') && !$('#note-zen').classList.contains('hidden');
+    if (!open) return;
+    if (e.key === 'Escape'){ e.preventDefault(); nzClose(); }
+    if (e.key === 'ArrowRight'){ e.preventDefault(); nzStep(1); }
+    if (e.key === 'ArrowLeft'){ e.preventDefault(); nzStep(-1); }
+  });
+}
+
+
+/* ── the full-screen sit: buttons ───────────────────────── */
+if ($('#mz-exit')){
+  $('#mz-exit').onclick   = () => { if (!medGuard()) medZenClose(); };
+  $('#mz-stay').onclick   = () => $('#mz-guard').classList.add('hidden');
+  $('#mz-leave').onclick  = () => { medStop(); medZenClose(); flashMsg('Fine. Come back when you want to.'); };
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && medZenOn){ e.preventDefault(); if (!medGuard()) medZenClose(); }
+  });
+}
+
   $('#med-stop').onclick = () => medStop();
 }
 
@@ -7047,10 +8396,81 @@ function lfLog(){
   save();
   const now = e1rm(kg, reps);
   $('#lf-kg').value = ''; $('#lf-reps').value = '';
-  $('#lf-msg').textContent = now > bestBefore && bestBefore > 0
+  const isPB = now > bestBefore && bestBefore > 0;
+  $('#lf-msg').textContent = isPB
     ? '🎉 Personal best.'
     : bestBefore === 0 ? 'First one on the board.' : 'Logged.';
   renderLifts();
+  grOpen({ name, kg, reps, pb: isPB, count: before.length + 1 });
+}
+
+/* ═══════════════════════════════════════════════════════════
+   🏋️ BETWEEN SETS
+   The rest is part of the set. Ninety seconds is roughly what
+   the strength system needs to come back; guessing it — or
+   scrolling through it — is how a session quietly turns into
+   an hour of nothing. So it takes the screen and counts.
+   The clock is kept as a timestamp rather than a tick count,
+   so it stays honest if the phone sleeps or the app is left.
+   ═══════════════════════════════════════════════════════════ */
+let grTimer = null, grEnd = 0, grLast = null, grBeeped = false;
+const grLen = () => ((S.health && S.health.restSec) || 90);
+
+function grPaint(){
+  const total = grLen() * 1000;
+  const left = Math.max(0, grEnd - Date.now());
+  const s = Math.ceil(left / 1000);
+  const t = $('#gr-time'); if (!t) return;
+  if (left > 0){
+    t.textContent = `${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`;
+    t.classList.remove('gr-go','text-orange-300');
+    t.classList.add('text-white/90');
+    $('#gr-bar').style.width = Math.max(0, (left/total)*100).toFixed(1) + '%';
+  } else {
+    t.textContent = 'GO';
+    t.classList.remove('text-white/90');
+    t.classList.add('gr-go','text-orange-300');
+    $('#gr-bar').style.width = '0%';
+    if (!grBeeped){
+      grBeeped = true;
+      try { if (navigator.vibrate) navigator.vibrate([90,60,90]); } catch(e){}
+      try { if (typeof chime === 'function') chime(); } catch(e){}
+    }
+  }
+}
+function grLenButtons(){
+  const cur = grLen();
+  $$('.gr-len').forEach(b => {
+    const on = +b.dataset.rest === cur;
+    b.className = 'gr-len px-3 py-1.5 rounded-lg text-[11px] font-extrabold ' +
+      (on ? 'bg-white/90 text-slate-900' : 'bg-white/10 text-white/60');
+  });
+}
+function grStartClock(){
+  clearInterval(grTimer);
+  grBeeped = false;
+  grEnd = Date.now() + grLen() * 1000;
+  grPaint();
+  grTimer = setInterval(grPaint, 250);
+}
+function grOpen(set){
+  const el = $('#gym-rest'); if (!el) return;
+  grLast = set;
+  $('#gr-name').textContent = (set.name || '').toUpperCase();
+  $('#gr-set').innerHTML = `${set.kg}<span class="text-2xl md:text-3xl text-white/50"> kg</span> × ${set.reps}`;
+  $('#gr-total').textContent = set.count > 1
+    ? `set ${set.count} of this lift · ${set.count} logged all time` : 'first one on the board';
+  $('#gr-pb').classList.toggle('hidden', !set.pb);
+  grLenButtons();
+  grStartClock();
+  el.classList.remove('hidden'); el.classList.add('flex');
+  document.body.style.overflow = 'hidden';
+}
+function grClose(){
+  clearInterval(grTimer); grTimer = null;
+  const el = $('#gym-rest'); if (!el) return;
+  el.classList.add('hidden'); el.classList.remove('flex');
+  document.body.style.overflow = '';
 }
 
 function renderLifts(){
@@ -7311,13 +8731,44 @@ Rules:
 
 /* If Claude answered because it's the better teacher, say so —
    a student deserves to know whose answer they are reading. */
+/* The standard is not much use if nobody knows it was applied.
+   One quiet line, tappable, that says what was done to the page
+   before it arrived. */
+function povBadge(){
+  return `<button type="button" class="pov-badge text-[10px] font-bold text-slate-400 mt-1.5 hover:text-slate-600 text-left">
+    🎓 Written like a topper's notes · checked against source · read back as a teacher</button>`;
+}
+const POV_EXPLAIN = `Every answer in FocusFlow is written to one standing brief, not one per button.
+
+🎓 Like the topper's notes — the answer first, the section or formula named, one worked line with real numbers, and the mistakes people lose marks on at the end.
+
+🔍 Checked against the source — no section, date, rate or case is given unless the model is sure of it. Where something changes by syllabus year or board, it says so. Where it cannot verify, it tells you to check the bare Act rather than inventing a number.
+
+👩‍🏫 Read back as a teacher — re-read as the person marking it: right order, no skipped step, nothing a weaker student would misread.
+
+None of that makes a model infallible. It is why every answer is also put past a second opinion where you have two keys.`;
+
+/* Opens in place rather than in an alert box — an alert would
+   throw you out of the answer you were reading. */
+document.addEventListener('click', e => {
+  const b = e.target.closest && e.target.closest('.pov-badge');
+  if (!b) return;
+  e.preventDefault();
+  const open = b.nextElementSibling && b.nextElementSibling.classList.contains('pov-why');
+  if (open){ b.nextElementSibling.remove(); return; }
+  const box = document.createElement('div');
+  box.className = 'pov-why mt-1.5 p-3 rounded-xl bg-white/80 border border-slate-200 text-[11px] text-slate-600 leading-relaxed';
+  box.innerHTML = POV_EXPLAIN.split(/\n{2,}/).map(p => `<p class="mb-1.5">${esc(p)}</p>`).join('');
+  b.insertAdjacentElement('afterend', box);
+});
+
 function modelBadge(res){
   if (!res || !res.from) return '';
   const two = res.from.length > 1;
   return `<p class="text-[10px] font-bold ${res.disagree ? 'text-amber-700' : 'text-slate-400'} mt-2">
     ${two ? '⚖️ Answered by ' + esc(res.from.join(' and ')) + ', then reconciled' : '🤖 ' + esc(res.from[0])}
     ${res.disagree ? ' — they disagreed on something, marked above. Trust that line least.' : ''}
-    ${res.note ? ' · ' + esc(res.note) : ''}</p>`;
+    ${res.note ? ' · ' + esc(res.note) : ''}</p>` + povBadge();
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -7603,21 +9054,37 @@ const bytesToB64 = b => {
 
 /* Mindmaps go as a picture, not a file — an SVG attachment on
    a phone is a document nobody opens. */
-function svgToPNG(svg){
+function svgToPNG(svg, w, hh){
   return new Promise((resolve, reject) => {
     try {
       const img = new Image();
       const url = URL.createObjectURL(new Blob([svg], { type:'image/svg+xml' }));
+      /* On some browsers a picture that cannot be drawn fires
+         neither onload nor onerror — the button would then spin
+         forever with no way to tell the person why. Ten seconds,
+         then we admit defeat. */
+      let settled = false;
+      const giveUp = setTimeout(() => {
+        if (settled) return;
+        settled = true;
+        try { URL.revokeObjectURL(url); } catch(e){}
+        reject(new Error('the picture took too long to draw'));
+      }, 10000);
       img.onload = () => {
+        if (settled) return; settled = true; clearTimeout(giveUp);
         const c = document.createElement('canvas');
-        c.width = 1400; c.height = Math.round(1400 * 640/900);
+        /* mindmaps keep the size they always had; the week page
+           is portrait and passes its own */
+        c.width = w || 1400; c.height = hh || Math.round((w || 1400) * 640/900);
         const g = c.getContext('2d');
         g.fillStyle = '#fffdfa'; g.fillRect(0,0,c.width,c.height);
         g.drawImage(img, 0, 0, c.width, c.height);
         URL.revokeObjectURL(url);
         resolve(c.toDataURL('image/png').split(',')[1]);
       };
-      img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('could not draw it')); };
+      img.onerror = () => { if (settled) return; settled = true; clearTimeout(giveUp);
+        try { URL.revokeObjectURL(url); } catch(e){}
+        reject(new Error('could not draw it')); };
       img.src = url;
     } catch(e){ reject(e); }
   });
@@ -7719,7 +9186,7 @@ something, say "couldn't verify" rather than assuming it is right.`;
                sources: ((c.groundingMetadata||{}).groundingChunks||[]).map(x=>x.web).filter(Boolean).slice(0,4) };
     }
     const txt = await askAIWith('You are a strict fact-checker.', '', prompt,
-                                { ...mapModel(), temperature: 0.1, maxTokens: 400 });
+                                { ...mapModel(), temperature: 0.1, maxTokens: 400, pov: false });
     return { text: txt, sources: [] };
   } catch(e){ return null; }
 }
@@ -8004,6 +9471,419 @@ const NOTE_COLS = {
 };
 let noteCol = 'all';
 
+/* ═══════════════════════════════════════════════════════════
+   📓 A NOTE, ON ITS OWN
+   Notes are written inside the app and then read inside the
+   app, which means they are read in a 11px grey box with six
+   buttons next to them. That is fine for finding one and
+   useless for revising from one. This is the reading half:
+   the note, warm paper, a serif, and arrows to walk the pile
+   the way you'd turn pages.
+   ═══════════════════════════════════════════════════════════ */
+
+
+/* ═══════════════════════════════════════════════════════════
+   ✍️ THE HANDWRITING DESK
+   The toggle in the reader writes out a note you already have.
+   This is where you make one: type or paste, or pull in
+   anything you've kept, then choose the hand and watch it land
+   on paper. Nothing here touches your saved notes unless you
+   press Keep — the desk is a workbench, not a filing cabinet.
+   ═══════════════════════════════════════════════════════════ */
+const PAPERS = [
+  { id:'ruled', label:'Ruled' }, { id:'plain', label:'Plain' }, { id:'grid', label:'Squared' }
+];
+/* "Clean handwriting" is a real setting, not a mood: it is how
+   far each word is allowed to wander off the line. */
+const NEATS = [
+  { id:'tidy',    label:'Very neat', w:0.35 },
+  { id:'natural', label:'Natural',   w:1.0  },
+  { id:'quick',   label:'In a rush', w:1.9  }
+];
+const hdState = () => (S.hwDesk = S.hwDesk || {});
+const hdFace  = () => HANDS.find(x => x.id === hdState().face)   || HANDS[0];
+const hdInk   = () => INKS.find(x  => x.id === hdState().ink)    || INKS[0];
+const hdPaper = () => PAPERS.find(x => x.id === hdState().paper) || PAPERS[0];
+const hdNeat  = () => NEATS.find(x => x.id === hdState().neat)   || NEATS[1];
+const hdSize  = () => Math.min(28, Math.max(13, hdState().size || 18));
+
+function hdChips(){
+  const pick = (host, list, cur, attr) =>
+    $(host).innerHTML = list.map(x =>
+      `<button data-${attr}="${x.id}" class="hd-pick hw-pick border ${
+        x.id === cur ? 'on border-slate-400' : 'border-slate-200 opacity-60'}"
+        ${attr === 'face' ? `style="font-family:${x.face.replace(/"/g,'&quot;')}"` : ''}
+        ${attr === 'ink'  ? `style="color:${x.c}"` : ''}>${attr === 'ink' ? '● ' : ''}${esc(x.label)}</button>`).join('');
+  pick('#hd-faces',  HANDS,  hdFace().id,  'face');
+  pick('#hd-neats',  NEATS,  hdNeat().id,  'neat');
+  pick('#hd-inks',   INKS,   hdInk().id,   'ink');
+  pick('#hd-papers', PAPERS, hdPaper().id, 'paper');
+  const set = (attr, key) => $$(`[data-${attr}]`).forEach(b => {
+    if (!b.classList.contains('hd-pick')) return;
+    b.onclick = () => { hdState()[key] = b.dataset[attr]; save(); hdPaint(); };
+  });
+  set('face','face'); set('neat','neat'); set('ink','ink'); set('paper','paper');
+}
+
+function hdSources(){
+  const notes = (S.notes || []).slice().reverse().slice(0, 60);
+  $('#hd-src').innerHTML =
+    `<option value="">Blank page — I'll type it</option>` +
+    notes.map(n => `<option value="${esc(n.id)}">${esc((n.title || 'Untitled').slice(0,44))}</option>`).join('');
+  $('#hd-src').value = hdState().srcId || '';
+}
+
+function hdPaint(){
+  const el = $('#hw-desk'); if (!el) return;
+  const face = hdFace(), ink = hdInk(), st = hdState();
+  el.style.setProperty('--hw-face', face.face);
+  el.style.setProperty('--hw-scale', face.scale);
+  el.style.setProperty('--hw-ink', ink.c);
+  el.style.setProperty('--hd-size', hdSize() + 'px');
+
+  const title = st.title || '', text = st.text || '';
+  const seed = hwSeed(title + text);
+  $('#hd-head').innerHTML = title ? hwWrite(title, seed, hdNeat().w, face) : '';
+  $('#hd-head').style.display = title ? '' : 'none';
+  $('#hd-body').innerHTML = text
+    ? hwWrite(text, seed + 31, hdNeat().w, face)
+    : `<span class="opacity-30">Nothing written yet — type in the box on the left.</span>`;
+  $('#hd-foot').textContent = new Date().toLocaleDateString();
+
+  const sheet = $('#hd-paper');
+  sheet.className = `hd-sheet w-full max-w-2xl p-8 md:p-12 min-h-[26rem] pp-${hdPaper().id}` +
+                    (st.margin === false ? '' : ' has-margin');
+  $('#hd-count').textContent = text ? `${text.trim().split(/\s+/).length} words` : '';
+  $('#hd-margin').checked = st.margin !== false;
+  hdChips();
+}
+
+function hdOpen(note){
+  const el = $('#hw-desk'); if (!el) return;
+  const st = hdState();
+  if (note){ st.srcId = note.id; st.title = note.title || ''; st.text = note.body || ''; }
+  if (st.margin == null) st.margin = true;
+  save();
+  hdSources();
+  $('#hd-title').value = st.title || '';
+  $('#hd-text').value  = st.text  || '';
+  hdPaint();
+  el.classList.remove('hidden'); el.classList.add('flex');
+  document.body.style.overflow = 'hidden';
+}
+function hdClose(){
+  const el = $('#hw-desk'); if (!el) return;
+  el.classList.add('hidden'); el.classList.remove('flex');
+  document.body.style.overflow = '';
+}
+function hdSave(){
+  const st = hdState();
+  if (!(st.text || '').trim()){ flashMsg('Write something first — the page is empty.'); return; }
+  handSave(handCanvas({
+    title: st.title, body: st.text, at: Date.now(),
+    face: hdFace(), ink: hdInk(), paper: hdPaper().id,
+    margin: st.margin !== false, wobble: hdNeat().w
+  }), st.title || 'handwritten');
+}
+function hdPrint(){
+  const st = hdState();
+  if (!(st.text || '').trim()){ flashMsg('Write something first — the page is empty.'); return; }
+  document.body.classList.add('hd-printing');
+  const off = () => document.body.classList.remove('hd-printing');
+  try { window.onafterprint = off; window.print(); } catch(e){ off(); return; }
+  setTimeout(off, 4000);          // some browsers never fire onafterprint
+}
+function hdKeep(){
+  const st = hdState();
+  if (!(st.text || '').trim()){ flashMsg('Nothing to keep yet.'); return; }
+  S.notes = S.notes || [];
+  S.notes.push({ id: uid(), title: (st.title || 'Handwritten page').slice(0,70),
+                 body: st.text, at: Date.now(), src: 'desk' });
+  save();
+  if (typeof renderNotes === 'function') renderNotes();
+  hdSources();
+  flashMsg('Kept. It is in your notes now.');
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ✍️ TYPED NOTES, IN A HAND
+   No font is downloaded — everything here is already on the
+   device, so it works on a plane and adds nothing to the file
+   size. Which does mean the exact hand depends on the phone;
+   the app checks what it actually got and says so rather than
+   pretending.
+   ═══════════════════════════════════════════════════════════ */
+const HANDS = [
+  { id:'neat',    label:'Neat',
+    face:"'Bradley Hand','Segoe Print','Chalkboard SE','Comic Sans MS',cursive",   scale:1.15, tilt:0 },
+  { id:'cursive', label:'Cursive',
+    face:"'Snell Roundhand','Segoe Script','Lucida Handwriting','Apple Chancery',cursive", scale:1.45, tilt:0 },
+  { id:'scrawl',  label:'Scrawl',
+    face:"'Noteworthy','Marker Felt','Ink Free','Comic Sans MS',cursive",          scale:1.12, tilt:-1.2 }
+];
+const INKS = [
+  { id:'blue',   label:'Blue',   c:'#1F3FA8' },
+  { id:'black',  label:'Black',  c:'#1B1B20' },
+  { id:'pencil', label:'Pencil', c:'#55565E' }
+];
+const handFace = () => HANDS.find(x => x.id === S.handFace) || HANDS[0];
+const handInk  = () => INKS.find(x => x.id === S.handInk)  || INKS[0];
+
+/* Seeded, so the same note is always written the same way.
+   Jitter that re-rolls on every repaint reads as a glitch. */
+function hwSeed(s){ let x = 2166136261; for (let i=0;i<s.length;i++){ x ^= s.charCodeAt(i); x = Math.imul(x, 16777619); } return x >>> 0; }
+function hwRnd(seed, i){
+  let x = (seed + i * 2654435761) >>> 0;
+  x ^= x << 13; x >>>= 0; x ^= x >> 17; x ^= x << 5; x >>>= 0;
+  return (x % 10000) / 10000;
+}
+/* one <span> per word — per character would be prettier and
+   would also make a 2,000-word note crawl */
+function hwWrite(text, seed, wobble, faceOverride){
+  const wob = wobble == null ? 1 : wobble;
+  const tilt = (faceOverride || handFace()).tilt;
+  return String(text || '').split(/(\s+)/).map((w, i) => {
+    if (!w.trim()) return esc(w);
+    const r1 = hwRnd(seed, i), r2 = hwRnd(seed, i + 7919), r3 = hwRnd(seed, i + 104729);
+    const rot  = (tilt + (r1 - 0.5) * 2.4 * wob).toFixed(2);
+    const lift = ((r2 - 0.5) * 2.6 * wob).toFixed(2);
+    const sz   = (1 + ((0.965 + r3 * 0.075) - 1) * wob).toFixed(3);
+    const dim  = (1 - (0.14 - r1 * 0.14) * wob).toFixed(2);
+    return `<span class="hw" style="transform:rotate(${rot}deg) translateY(${lift}px);font-size:${sz}em;opacity:${dim}">${esc(w)}</span>`;
+  }).join('');
+}
+
+/* Does this device actually have a handwriting font, or is it
+   about to quietly render Times New Roman and call it writing? */
+function hasHandFont(){
+  try {
+    const c = document.createElement('canvas').getContext('2d');
+    if (!c) return true;                       // can't tell — don't nag
+    const measure = f => { c.font = '48px ' + f; return c.measureText('Handwriting 123').width; };
+    const base = measure('monospace');
+    return HANDS.some(hnd => hnd.face.split(',').slice(0, -1)
+      .some(f => Math.abs(measure(f + ',monospace') - base) > 0.5));
+  } catch(e){ return true; }
+}
+
+function nzTray(){
+  const on = !!S.handOn;
+  $('#nz-tray').classList.toggle('hidden', !on);
+  $('#nz-hand').textContent = on ? '⌨️ Typed' : '✍️ Handwrite';
+  $('#nz-faces').innerHTML = HANDS.map(hd =>
+    `<button data-face="${hd.id}" class="hw-face hw-pick ${hd.id === handFace().id ? 'on' : 'opacity-50'}"
+       style="font-family:${hd.face.replace(/"/g,'&quot;')}">${esc(hd.label)}</button>`).join('');
+  $('#nz-inks').innerHTML = INKS.map(ink =>
+    `<button data-ink="${ink.id}" class="hw-ink hw-pick ${ink.id === handInk().id ? 'on' : 'opacity-50'}"
+       style="color:${ink.c}">● ${esc(ink.label)}</button>`).join('');
+  $$('.hw-face').forEach(b => b.onclick = () => { S.handFace = b.dataset.face; save(); nzPaint(); });
+  $$('.hw-ink').forEach(b  => b.onclick = () => { S.handInk  = b.dataset.ink;  save(); nzPaint(); });
+}
+
+function nzHandToggle(){
+  S.handOn = !S.handOn;
+  save();
+  if (S.handOn && !S.handWarned && !hasHandFont()){
+    S.handWarned = true; save();
+    flashMsg('This device has no handwriting font — it will look close, not perfect.');
+  }
+  nzPaint();
+}
+
+/* ── the picture ────────────────────────────────────────────
+   A page you can send. Drawn rather than screenshotted, so it
+   comes out the same size on every phone and there are no app
+   buttons down the side of it.                               */
+/* The reader's ✍️ button: same drawer, this note's details. */
+function nzImage(){
+  const n = nzList[nzAt]; if (!n) return;
+  handSave(handCanvas({ title:n.title, body:n.body, at:n.at, topic:n.topic,
+                        face:handFace(), ink:handInk() }), n.title);
+}
+
+/* One drawer for both — the reader's ✍️ button and the desk
+   must produce the same page, or the preview is a lie. */
+function handCanvas(o){
+  const n = { title: o.title || '', body: o.body || '', at: o.at || Date.now(), topic: o.topic || '' };
+  const cv = document.createElement('canvas');
+  const ctx = cv.getContext && cv.getContext('2d');
+  if (!ctx) return null;
+
+  const W = 1240, M = 96, RULE = 62, FS = 30;
+  const face = o.face || handFace(), ink = o.ink || handInk();
+  const paper = o.paper || 'ruled', margin = o.margin !== false, wob = o.wobble == null ? 1 : o.wobble;
+  const seed = hwSeed((n.title || '') + (n.body || ''));
+
+  /* wrap first so the page is exactly as tall as the writing */
+  ctx.font = `${Math.round(FS * face.scale)}px ${face.face}`;
+  const wrap = (txt, width) => {
+    const out = [];
+    String(txt || '').split('\n').forEach(para => {
+      let line = '';
+      (para.split(' ')).forEach(word => {
+        const test = line ? line + ' ' + word : word;
+        if (ctx.measureText(test).width > width && line){ out.push(line); line = word; }
+        else line = test;
+      });
+      out.push(line);
+    });
+    return out;
+  };
+  const lines = wrap(n.body || '', W - M * 2 - 40);
+  const titleLines = wrap(n.title || 'Untitled', W - M * 2 - 40);
+  const H = Math.max(900, M * 2 + (titleLines.length + lines.length + 3) * RULE);
+  cv.width = W; cv.height = H;
+
+  ctx.fillStyle = '#FBF7EE'; ctx.fillRect(0, 0, W, H);
+  if (paper !== 'plain'){
+    ctx.strokeStyle = 'rgba(120,140,190,.30)'; ctx.lineWidth = 1;
+    for (let y = M + RULE; y < H - 20; y += RULE){
+      ctx.beginPath(); ctx.moveTo(40, y + 0.5); ctx.lineTo(W - 40, y + 0.5); ctx.stroke();
+    }
+    if (paper === 'grid'){
+      ctx.strokeStyle = 'rgba(120,140,190,.22)';
+      for (let x = 40; x < W - 20; x += RULE){
+        ctx.beginPath(); ctx.moveTo(x + 0.5, 30); ctx.lineTo(x + 0.5, H - 20); ctx.stroke();
+      }
+    }
+  }
+  if (margin){
+    ctx.strokeStyle = 'rgba(214,90,90,.45)'; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(M - 24, 20); ctx.lineTo(M - 24, H - 20); ctx.stroke();
+  }
+
+  ctx.fillStyle = ink.c;
+  ctx.textBaseline = 'alphabetic';
+  let y = M + RULE, k = 0;
+
+  const writeLine = (txt, size, underline) => {
+    ctx.font = `${size}px ${face.face}`;
+    let x = M;
+    txt.split(/(\s+)/).forEach(word => {
+      if (!word) return;
+      const r1 = hwRnd(seed, k), r2 = hwRnd(seed, k + 7919), r3 = hwRnd(seed, k + 104729);
+      k++;
+      if (!word.trim()){ x += ctx.measureText(word).width; return; }
+      ctx.save();
+      ctx.translate(x, y + (r2 - 0.5) * 3.2 * wob);
+      ctx.rotate(((face.tilt + (r1 - 0.5) * 2.4 * wob) * Math.PI) / 180);
+      ctx.globalAlpha = 1 - (0.14 - r1 * 0.14) * wob;
+      ctx.font = `${Math.round(size * (1 + ((0.965 + r3 * 0.075) - 1) * wob))}px ${face.face}`;
+      ctx.fillText(word, 0, 0);
+      ctx.restore();
+      x += ctx.measureText(word).width + 2;
+    });
+    if (underline){
+      ctx.save(); ctx.globalAlpha = .5; ctx.strokeStyle = 'rgba(214,90,90,.8)'; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.moveTo(M, y + 9); ctx.lineTo(Math.min(x, W - M), y + 9); ctx.stroke(); ctx.restore();
+    }
+    y += RULE;
+  };
+
+  titleLines.forEach(l => writeLine(l, Math.round(FS * face.scale * 1.35), true));
+  y += RULE * 0.4;
+  lines.forEach(l => writeLine(l, Math.round(FS * face.scale)));
+
+  ctx.globalAlpha = .35; ctx.fillStyle = '#6B6B72';
+  ctx.font = '20px ui-sans-serif, system-ui, sans-serif';
+  ctx.fillText(new Date(n.at).toLocaleDateString() + (n.topic ? ' · ' + n.topic : ''), M, H - 34);
+  return cv;
+}
+
+/* download whichever canvas we were handed */
+function handSave(cv, title){
+  if (!cv){ flashMsg('This browser cannot make the picture — the note is still safe.'); return; }
+  const n = { title: title || 'note' };
+  const name = ((n.title || 'note').replace(/[^\w -]/g, '').trim().slice(0, 40)) || 'note';
+  const done = url => {
+    const a = document.createElement('a');
+    a.href = url; a.download = name + '.png'; a.click();
+    setTimeout(() => { try { URL.revokeObjectURL(url); } catch(e){} }, 1500);
+    flashMsg('Saved as a picture — send it to anyone.');
+  };
+  /* toBlob is the tidy way — but on some browsers it exists,
+     is called, and simply never calls back, which would leave
+     you tapping a button that does nothing forever. So it gets
+     one and a half seconds, then we fall back to the older,
+     duller method that always works. Whichever wins, only one
+     download happens. */
+  let saved = false;
+  const once = url => { if (saved) return; saved = true; done(url); };
+  const plainB = () => { try { once(cv.toDataURL('image/png')); }
+                         catch(e){ flashMsg('Could not make the picture — the note is still safe.'); } };
+  if (cv.toBlob){
+    try {
+      cv.toBlob(b => b ? once(URL.createObjectURL(b)) : plainB(), 'image/png');
+      setTimeout(() => { if (!saved) plainB(); }, 1500);
+    } catch(e){ plainB(); }
+  } else plainB();
+}
+
+let nzList = [], nzAt = 0;
+const nzSize = () => Math.min(30, Math.max(14, S.noteZenSize || 18));
+
+function nzPaint(){
+  const n = nzList[nzAt]; if (!n) return;
+  const el = $('#note-zen');
+  el.style.setProperty('--nz-size', nzSize() + 'px');
+  const hand = !!S.handOn;
+  const face = handFace(), ink = handInk();
+  el.style.setProperty('--hw-face', face.face);
+  el.style.setProperty('--hw-scale', face.scale);
+  el.style.setProperty('--hw-ink', ink.c);
+  const seed = hwSeed((n.title || '') + (n.body || ''));
+  const body = n.body || '(nothing written in this one)';
+  if (hand){
+    $('#nz-title').innerHTML = hwWrite(n.title || 'Untitled', seed);
+    $('#nz-body').innerHTML  = hwWrite(body, seed + 31);
+  } else {
+    $('#nz-title').textContent = n.title || 'Untitled';
+    $('#nz-body').textContent  = body;
+  }
+  $('#nz-title').className = hand ? 'hw-title mb-6' : 'font-bold mb-6';
+  $('#nz-body').className  = hand ? 'hw-text hw-page whitespace-pre-wrap'
+                                  : 'whitespace-pre-wrap opacity-85';
+  /* the reader's own faint ruling would fight the paper's */
+  const sheet = $('#note-zen .nz-rule');
+  if (sheet) sheet.style.background = hand ? 'none' : '';
+  nzTray();
+  const bits = [];
+  if (typeof noteKind === 'function' && noteKind(n) === 'doubt')
+    bits.push(n.resolved ? 'cleared doubt' : 'open doubt');
+  if (n.topic) bits.push(n.topic);
+  bits.push(new Date(n.at).toLocaleDateString());
+  if (n.src === 'telegram') bits.push('from Telegram');
+  $('#nz-meta').textContent = bits.join(' · ');
+  $('#nz-pos').textContent = `${nzAt + 1} / ${nzList.length}`;
+  $('#nz-prev').style.visibility = nzAt > 0 ? 'visible' : 'hidden';
+  $('#nz-next').style.visibility = nzAt < nzList.length - 1 ? 'visible' : 'hidden';
+  const scroller = $('#note-zen .overflow-y-auto');
+  if (scroller) scroller.scrollTop = 0;
+}
+function nzOpen(id, list){
+  const el = $('#note-zen'); if (!el) return;
+  nzList = (list && list.length ? list : (S.notes || []));
+  nzAt = Math.max(0, nzList.findIndex(n => n.id === id));
+  if (!nzList[nzAt]) return;
+  nzPaint();
+  el.classList.remove('hidden'); el.classList.add('flex');
+  document.body.style.overflow = 'hidden';
+}
+function nzClose(){
+  const el = $('#note-zen'); if (!el) return;
+  el.classList.add('hidden'); el.classList.remove('flex');
+  document.body.style.overflow = '';
+}
+function nzStep(d){
+  const to = nzAt + d;
+  if (to < 0 || to >= nzList.length) return;
+  nzAt = to; nzPaint();
+}
+function nzZoom(d){
+  S.noteZenSize = Math.min(30, Math.max(14, nzSize() + d));
+  save(); nzPaint();
+}
+
 function renderNotes(){
   const box = $('#notes-list'); if (!box) return;
   S.notes = S.notes || [];
@@ -8027,7 +9907,7 @@ function renderNotes(){
     <div class="p-3 rounded-xl bg-white/90 border border-slate-200">
       <div class="flex items-start justify-between gap-2">
         <div class="min-w-0">
-          <div class="text-xs font-extrabold text-slate-800">${n.map ? '🗺 ' : ''}${esc(n.title || 'Untitled')}</div>
+          <button data-nread="${n.id}" class="note-read text-left text-xs font-extrabold text-slate-800 hover:text-emerald-700">${n.map ? '🗺 ' : ''}${esc(n.title || 'Untitled')}</button>
           <div class="text-[10px] font-bold ${noteKind(n)==='doubt' && !n.resolved ? 'text-amber-700' : 'text-slate-400'}">${
             noteKind(n) === 'doubt' ? (n.resolved ? '✓ cleared · ' : '◦ still open · ') : ''}${
             n.topic ? esc(n.topic) + ' · ' : ''}${new Date(n.at).toLocaleDateString()}${n.src === 'telegram' ? ' · from Telegram' : ''}</div>
@@ -8075,6 +9955,9 @@ function renderNotes(){
     });
   });
   $$('.note-edit').forEach(b => b.onclick = () => openNote(S.notes.find(n => n.id === b.dataset.nedit)));
+  /* reading order = the order on screen, so the arrows walk the
+     pile you're actually looking at, not all of them */
+  $$('.note-read').forEach(b => b.onclick = () => nzOpen(b.dataset.nread, shown));
   $$('.note-pdf').forEach(b => b.onclick  = () => downloadPDF(S.notes.find(n => n.id === b.dataset.npdf)));
   $$('.note-send').forEach(b => b.onclick = () => sendToTelegram(S.notes.find(n => n.id === b.dataset.nsend)));
   /* A doubt isn't done when it's answered — it's done when the
@@ -10186,6 +12069,7 @@ function studyContext(){
       : 'No verified syllabus on file. Do not state the official syllabus from memory — tell the student to run the syllabus check instead.',
     `Studied this week: ${(week/60).toFixed(1)}h across ${days}/7 days. Today: ${S.log[todayKey()]||0} of ${S.dailyGoal} min. Streak ${streak()} (best ${S.bestStreak||0}). Focus strikes: ${S.strikes||0}.`,
     `Timetable holds ${ttHours}h per week.`,
+    (typeof checkinContext === 'function' ? checkinContext() : ''),
     exams.length ? 'Upcoming exams:\n' + exams.map(e => {
       const d = Math.ceil((new Date(e.dt)-Date.now())/86400000);
       const need = open.filter(b=>b.examId===e.id).reduce((a,b)=>a+remainingMins(b),0)/60;
@@ -10257,9 +12141,77 @@ function conceptModel(){
   return {};                                                     // no Claude — carry on as before
 }
 
+
+/* ═══════════════════════════════════════════════════════════
+   🎓 THE FIXED POV
+   Every answer this app produces — a doubt, a chapter's notes,
+   a mindmap, a practice test, anything added later — is written
+   under the same standing brief, so quality is not a matter of
+   which button you happened to press.
+
+   Three people look at the page before you see it:
+     the topper who wrote it — structure, citations, the two
+       mistakes people lose marks on;
+     the checker — every section, date, rate and name either
+       verified or openly flagged, never bluffed;
+     the teacher — would this be accepted on an answer sheet,
+       in this order, with nothing missing.
+
+   It is attached inside askAIWith, which every call in the app
+   goes through. That is deliberate: a brief that has to be
+   remembered at each call site is a brief that gets forgotten.
+   ═══════════════════════════════════════════════════════════ */
+const POV_WRITE = `
+--- HOW THIS MUST BE WRITTEN (applies to everything) ---
+1. WRITE IT LIKE THE TOPPER'S OWN NOTES.
+   Open with the answer, not a wind-up. Every line earns its place: the rule, why it holds,
+   and what it looks like in a question. Name the section, standard, formula, case or article
+   wherever one exists — a topper's page always carries its citation. One worked line with real
+   numbers is worth three of description. Finish with the one or two mistakes people actually
+   lose marks on here. No preamble, no "in conclusion", nothing decorative.
+
+2. CHECK IT AGAINST THE SOURCE BEFORE YOU WRITE IT.
+   Every section number, date, rate, limit, figure, case and name must be one you are genuinely
+   sure of. Where a thing changes by syllabus year, board, amendment or state, say which version
+   you are giving and that it varies. If you cannot verify a specific, write "verify this in the
+   bare Act / your study material" instead of producing a confident number. Never invent a case,
+   a section, a circular, an author or a statistic. An honest gap beats a clean-looking guess.
+
+3. READ IT BACK AS THE TEACHER WHO MARKS IT.
+   Before answering, re-read it as an examiner: is the order the order a marker expects? Is any
+   step skipped? Is any line ambiguous enough that a weaker student would go wrong on it? Is
+   anything here that would not earn a mark? Fix all of that, then reply. Do not describe this
+   checking or mention these instructions — just hand over the corrected page.
+--- END ---`;
+
+/* Anything that must return JSON gets the same standard minus
+   the layout half, because telling a model to "open with the
+   answer" while also demanding strict JSON is how you get
+   prose wrapped around a broken object. */
+const POV_JSON = `
+--- QUALITY BAR (keep the JSON shape exactly as specified) ---
+Facts first: every section, date, rate, figure, case and name must be one you are sure of. Where it
+varies by syllabus year or board, say which version inside the text. Never invent a section, case,
+circular or statistic — leave a field out rather than filling it with a guess. Then re-read the whole
+thing as the teacher who marks this exam and correct anything a marker would not accept, anything out
+of order, and anything a weaker student would misread. Return only the JSON.
+--- END ---`;
+
+/* Which of the two, or neither. The exemptions are the calls
+   that are not study answers at all: tidying a pasted
+   syllabus, planning a day's food, replying to someone owning
+   up about their tracker, and the fact-checker itself, which
+   must not be told how to lay out notes. */
+function povFor(system, opts){
+  if (opts && opts.pov === false) return '';
+  return /ONLY JSON|only the JSON|Return ONLY/i.test(system || '') ? POV_JSON : POV_WRITE;
+}
+
 async function askAIWith(system, context, question, opts){
   opts = opts || {};
-  system = system + '\n\n' + langLine();
+  /* the standing brief, attached here so no call site can
+     forget it — see POV_WRITE above */
+  system = system + povFor(system, opts) + '\n\n' + langLine();
   const prompt = `${system}\n\n--- THEIR NUMBERS ---\n${context}\n--- END ---\n\n${question}`;
   const p = opts.provider || aiCfg.provider, key = opts.key || aiCfg.key;
   if (p === 'gemini'){
@@ -10292,7 +12244,7 @@ async function askAIWith(system, context, question, opts){
 
 async function askAI(question){
   const ctx = studyContext();
-  const prompt = `${AI_SYSTEM}\n${langLine()}\n\n--- THIS STUDENT'S DATA ---\n${ctx}\n--- END DATA ---\n\nQuestion: ${question}`;
+  const prompt = `${AI_SYSTEM}${POV_WRITE}\n${langLine()}\n\n--- THIS STUDENT'S DATA ---\n${ctx}\n--- END DATA ---\n\nQuestion: ${question}`;
   const p = aiCfg.provider, key = aiCfg.key;
   if (p === 'gemini'){
     const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${encodeURIComponent(key)}`, {
@@ -10307,7 +12259,7 @@ async function askAI(question){
     const r = await fetch('https://api.openai.com/v1/chat/completions', {
       method:'POST', headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},
       body: JSON.stringify({ model:'gpt-4o-mini', max_tokens:600, temperature:0.6,
-        messages:[{role:'system',content:AI_SYSTEM},{role:'user',content:`--- MY DATA ---\n${ctx}\n--- END ---\n\n${question}`}] }) });
+        messages:[{role:'system',content:AI_SYSTEM + POV_WRITE},{role:'user',content:`--- MY DATA ---\n${ctx}\n--- END ---\n\n${question}`}] }) });
     const j = await r.json();
     if (!r.ok) throw new Error((j.error && j.error.message) || 'OpenAI refused the request');
     return j.choices[0].message.content;
@@ -10315,7 +12267,7 @@ async function askAI(question){
   const r = await fetch('https://api.anthropic.com/v1/messages', {
     method:'POST', headers:{'Content-Type':'application/json','x-api-key':key,
       'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-    body: JSON.stringify({ model: claudeModel(), max_tokens:600, system:AI_SYSTEM,
+    body: JSON.stringify({ model: claudeModel(), max_tokens:600, system:AI_SYSTEM + POV_WRITE,
       messages:[{role:'user',content:`--- MY DATA ---\n${ctx}\n--- END ---\n\n${question}`}] }) });
   const j = await r.json();
   if (!r.ok) throw new Error((j.error && j.error.message) || 'Claude refused the request');
@@ -12053,7 +14005,7 @@ thing to do today about this topic. Two short paragraphs. No lecture, no disappo
 no exclamation marks. Do not call them dishonest or a liar.`,
           `Topic they over-marked: ${honestPick.topic} (${honestPick.subject}), currently ${Math.round(doneFactor(honestPick)*100)}% done.
 Estimated ${(honestPick.estMins/60).toFixed(1)}h of work. Studied today: ${S.log[todayKey()]||0} min. Streak ${streak()} days.`,
-          'What should I do about it today?');
+          'What should I do about it today?', { pov: false });
         box.innerHTML = (txt||'').trim().split(/\n{2,}/).map(p=>`<p class="mb-2">${esc(p)}</p>`).join('') || local;
       }catch(e){ box.innerHTML = local; }
     }
@@ -14477,7 +16429,7 @@ $('#btn-own-tidy').onclick = async () => {
       `You clean up a messy syllabus a student has pasted from a PDF. Output ONLY the cleaned list:
 subject lines ending with a colon, chapters on their own lines beneath. Remove page numbers, marks,
 headers, footers and duplicates. Do not invent chapters that aren't there. Do not add commentary.`,
-      raw.slice(0,6000), 'Clean this up.');
+      raw.slice(0,6000), 'Clean this up.', { pov: false });
     if (out && out.trim()){ $('#own-text').value = out.replace(/```/g,'').trim(); $('#own-text').dispatchEvent(new Event('input')); }
   }catch(e){ $('#own-preview').textContent = 'Could not tidy it: ' + (e.message||'').slice(0,60); }
 };

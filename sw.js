@@ -13,7 +13,7 @@
    IMPORTANT: bump CACHE_VERSION whenever you upload a new
    index.html, otherwise people keep seeing the old one.        */
 
-const CACHE_VERSION = 'focusflow-v11';
+const CACHE_VERSION = 'focusflow-v12';
 const APP_SHELL = ['./', './index.html'];
 
 /* Install — pre-cache the shell */

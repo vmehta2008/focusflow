@@ -108,7 +108,7 @@ kbd{background:#f3efec;border:1px solid #e2dad4;border-radius:6px;padding:1px 7p
 
 <div class="cover">
   <div class="kick">Project Report · September 2026</div>
-  <h1>FocusFlow<br><em>Building a study app in 33 days</em></h1>
+  <h1>FocusFlow<br><em>Building a study app in 35 days</em></h1>
   <p class="by">A single-file study companion with a Telegram bot, built by <b>Vaani Mehta</b> (17)<br>
   with an AI pair-programmer — starting from no coding background at all.</p>
 </div>
@@ -118,10 +118,10 @@ kbd{background:#f3efec;border:1px solid #e2dad4;border-radius:6px;padding:1px 7p
   <div class="rule"><span>At a glance</span></div>
   <div class="metrics">
     <div class="m"><b>33</b><span>days, 2 Aug – 3 Sep 2026</span></div>
-    <div class="m"><b>14,609</b><span>lines in the app</span></div>
-    <div class="m"><b>364</b><span>functions</span></div>
+    <div class="m"><b>16,561</b><span>lines in the app</span></div>
+    <div class="m"><b>380</b><span>functions</span></div>
     <div class="m"><b>35</b><span>features shipped</span></div>
-    <div class="m"><b>266</b><span>automated checks</span></div>
+    <div class="m"><b>617</b><span>automated checks</span></div>
     <div class="m"><b>14</b><span>test suites</span></div>
     <div class="m"><b>0</b><span>lines written by hand by the author</span></div>
     <div class="m"><b>₹0</b><span>total cost to build and host</span></div>
@@ -153,7 +153,7 @@ kbd{background:#f3efec;border:1px solid #e2dad4;border-radius:6px;padding:1px 7p
   </table>
 
   <div class="rule"><span>2 · How it was built</span></div>
-  <h2>Thirty-three days, in five phases</h2>
+  <h2>Thirty-five days, in six phases</h2>
   <p class="lede">The author wrote no code. The author described what was wanted, in plain words, and corrected what came back — which turned out to be the harder and more important half of the job.</p>
 
   <div class="ph"><div class="tag">Days<br>1–7</div><div>
@@ -186,6 +186,24 @@ kbd{background:#f3efec;border:1px solid #e2dad4;border-radius:6px;padding:1px 7p
     <p class="said">“not everyone goes to gym… it takes me 30 min to settle down, my brother takes 1 hr… the gaps are real”</p>
   </div></div>
 
+  <h3>Phase six — the week it was actually used</h3>
+  <p>Everything above was built from a description of a student's day. Phase six was built from a student using it, which produced a different kind of instruction: <em>"all the pages are lacking the vibe"</em>, <em>"the gaps are real to be fixed"</em>, <em>"if I want to make notes in clean handwriting that doesn't work"</em>. These are not feature requests. They are reports that something felt wrong, and they were the most valuable input of the whole project — because nobody can find them by reading their own code.</p>
+  <table>
+    <tr><th style="width:30%">What was said</th><th>What it became</th></tr>
+    <tr><td class="mono">"all the pages are lacking the vibe — meditation should feel like meditation"</td>
+        <td>A per-page atmosphere layer: a drifting wash, a typeface for the page's own title, and a paper texture — ruled behind notes, a diagonal grain behind the gym, nothing at all behind meditation. <b>Not one card, tint, radius or shadow was changed</b>, which was the condition, and there is a test that fails if one ever is.</td></tr>
+    <tr><td class="mono">"the meditation timer should zoom in… hold on, are you calm before you decide"</td>
+        <td>The sit takes the whole screen and draws in as it runs. Leaving mid-way asks once, in those words, and takes either answer.</td></tr>
+    <tr><td class="mono">"add an option where text notes are converted into handwritten ones"</td>
+        <td>Every word gets its own rotation, lift and weight — seeded from the note's own text, so the same note always comes out in the same hand. Reshuffling on every repaint would have read as a glitch rather than as writing.</td></tr>
+    <tr><td class="mono">"if I want to make notes in clean handwriting that doesn't work — make a separate corner along the mindmap"</td>
+        <td>A handwriting desk beside the mindmap button, and "clean" became a measured setting: very neat wobbles ±0.4°, in a rush ±2.1°, and very neat is still not a straight line, because a straight line stops reading as handwriting.</td></tr>
+    <tr><td class="mono">"a column of daily check-in… did you go to the gym… and if the user says no, don't waste your time, do this instead"</td>
+        <td>A check-in built from the timetable, and — the important half — every "no" returns the minutes and names the next task from the backlog, with a button that starts the clock. A cancelled class is two hours nobody has claimed.</td></tr>
+    <tr><td class="mono">"build it like a topper's handwritten notes, verify it with source, check the presentation like a teacher — this is the fixed prompt for anything"</td>
+        <td>One standing brief attached inside the single function every model call passes through. A brief that has to be remembered at each call site is a brief that gets forgotten.</td></tr>
+  </table>
+
   <div class="rule"><span>3 · The method</span></div>
   <h2>Prompt, build, break, correct</h2>
   <p class="lede">The interesting finding of this project is not the app. It is that the most valuable contribution from a non-programmer was <b>domain correction</b> — catching where the software had quietly assumed a life nobody actually lives.</p>
@@ -209,7 +227,7 @@ kbd{background:#f3efec;border:1px solid #e2dad4;border-radius:6px;padding:1px 7p
   </table>
 
   <div class="rule"><span>4 · Correctness</span></div>
-  <h2>266 automated checks, and what they caught</h2>
+  <h2>617 automated checks, and what they caught</h2>
   <p class="lede">Every feature ships with a test suite that boots the real app in a simulated browser and drives it. Not "does it load" — does every button do something, does every Telegram tap lead somewhere, does it fail honestly.</p>
 
   <table>
@@ -220,10 +238,35 @@ kbd{background:#f3efec;border:1px solid #e2dad4;border-radius:6px;padding:1px 7p
     <tr><td class="n">tdaily</td><td>23</td><td>The every-day list: overnight reset, streak counting, the eight-item cap</td></tr>
     <tr><td class="n">ttg-app · tnlm · tob</td><td>66</td><td>Telegram panel, NotebookLM bridge, first-run onboarding</td></tr>
     <tr><td class="n">tgoal · tlife · twt</td><td>60</td><td>Plain-words goals, gaps in the day, weight safety</td></tr>
+    <tr><td class="n">tvibe · tvibe2</td><td>121</td><td>Per-page atmosphere without touching a card · the full-screen sit and its leave-guard · the gym rest clock · reading a note on its own</td></tr>
+    <tr><td class="n">thand · tdesk</td><td>122</td><td>Handwriting that never re-rolls for the same note · three hands, three inks, three papers · the neatness dial measured in degrees · the saved picture, drawn line by line</td></tr>
+    <tr><td class="n">tcheck</td><td>60</td><td>The daily check-in built from a real timetable · that a "no" returns time and a task, and never a telling-off</td></tr>
+    <tr><td class="n">tpov</td><td>30</td><td>That the standing brief reaches every model call, and that the four non-study calls are exempt</td></tr>
+    <tr><td class="n">tsafe</td><td>72</td><td>Backup and restore including photos · that a restore warns before it wipes · that the week page carries nothing private</td></tr>
     <tr><td class="n">others</td><td>49</td><td>Model routing, rewards, walkthrough page, the bot conversation end to end</td></tr>
   </table>
 
   <h3>The bugs worth naming</h3>
+
+  <div class="bug"><div class="h"><span class="sev crit">Critical</span><b>Escape was broken for every user, on every screen</b></div>
+    <p>A variable was assigned inside the voice recorder but never declared. Pressing Escape read it, threw, and killed the entire keyboard handler — so Escape closed nothing, unless you happened to have recorded a voice note first that session. Shipped, and invisible, because nothing logs an error a user never reports.</p>
+    <div class="fix">Declared where it is read. Found only because a new full-screen mode needed Escape and the test pressed it on a fresh load.</div></div>
+
+  <div class="bug"><div class="h"><span class="sev crit">Critical</span><b>Keyboard shortcuts fired behind full-screen modes</b></div>
+    <p>Space, R, Z and F were global. Reading a note full screen and pressing <b>R</b> silently reset a running study session.</p>
+    <div class="fix">The shortcuts stand down whenever a sit, a rest or a note has the screen. Escape still gets you out.</div></div>
+
+  <div class="bug"><div class="h"><span class="sev harm">Harm</span><b>The week page scolded brand-new users</b></div>
+    <p>Someone who installed the app an hour ago got a page reading "Only 0 of the last 7 days had any study." They had not had a bad week; they had not had a week. That is how a tool loses somebody on day one.</p>
+    <div class="fix">Nothing is judged until there is something to judge. It says "nothing logged yet" instead.</div></div>
+
+  <div class="bug"><div class="h"><span class="sev">Reliability</span><b>Two buttons that could spin forever</b></div>
+    <p><span class="mono">toBlob</span> and image loading can both exist, be called, and simply never call back. The user taps "save the picture" and nothing happens, with no error and no explanation, permanently.</p>
+    <div class="fix">Both now have a deadline — then fall back to the older method, or say plainly that it could not be drawn. Exactly one file is ever produced.</div></div>
+
+  <div class="bug"><div class="h"><span class="sev crit">Critical</span><b>The service worker was still on v11</b></div>
+    <p>Caught during the final pre-upload check, not by a test. Uploading a new build without bumping the cache version means every existing user keeps the old one, forever, and the upload looks like it did nothing. This had already happened once in this project.</p>
+    <div class="fix">Bumped to v12. It is now the first thing checked before any upload.</div></div>
 
   <div class="bug"><div class="h"><span class="sev crit">Critical</span><b>Five Telegram commands crashed with no data</b></div>
     <p>Reading the snapshot without a guard threw an error the moment a student connected the bot before ever opening the app. A thrown webhook returns a 500; Telegram shows the user nothing. <b>This was the cause of "the bot feels broken."</b></p>
@@ -272,7 +315,7 @@ kbd{background:#f3efec;border:1px solid #e2dad4;border-radius:6px;padding:1px 7p
   <h3>What it's made of</h3>
   <table>
     <tr><th>Piece</th><th style="width:18%">Size</th><th>Role</th></tr>
-    <tr><td class="n">index.html</td><td>945 KB<br><span style="font-weight:400;color:#8d8792">14,609 lines</span></td><td>The entire app. Markup, styles and logic in one file — no build step, no framework, no dependencies to rot.</td></tr>
+    <tr><td class="n">index.html</td><td>1,025 KB<br><span style="font-weight:400;color:#8d8792">16,561 lines</span></td><td>The entire app. Markup, styles and logic in one file — no build step, no framework, no dependencies to rot.</td></tr>
     <tr><td class="n">sw.js</td><td>3 KB</td><td>Service worker. Caches the app so it opens with no internet at all.</td></tr>
     <tr><td class="n">worker.js</td><td>84 KB<br><span style="font-weight:400;color:#8d8792">1,718 lines</span></td><td>Cloudflare Worker. Holds the bot token and AI key so they never touch the public page.</td></tr>
     <tr><td class="n">3 doc pages</td><td>63 KB</td><td>Walkthrough, reasoning, and the one-page infographic.</td></tr>
@@ -306,7 +349,7 @@ kbd{background:#f3efec;border:1px solid #e2dad4;border-radius:6px;padding:1px 7p
     <div class="card c-mint">
       <h3 style="margin-top:0">✅ Proven</h3>
       <ul style="margin-bottom:0">
-        <li>266 automated checks passing</li>
+        <li>617 automated checks passing</li>
         <li>Every button reaches a handler</li>
         <li>The bot never goes silent, across 30 hostile cases</li>
         <li>Clean boot with no data at all</li>
