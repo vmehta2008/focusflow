@@ -44,6 +44,116 @@
 
 
 
+
+  /* ── printing ─────────────────────────────────────────────
+     Three different documents come out of this app and each
+     should look like the thing it is, not like a web page that
+     happened to meet a printer:
+
+       the question paper   → a question paper
+       the corrected script → a marked script
+       the timetable        → a wall chart worth putting up
+
+     Every printer flags itself on <body> first, so the three
+     rule sets can never fight each other. They did once: the
+     timetable's rule hid every panel on every print, which made
+     the exam paper come out blank.                            */
+
+  /* the paper — serif, centred masthead, marks in the margin */
+  .ex-sheet { display:none; }
+  .tt-sheet { display:none; }
+
+  @media print {
+    @page { margin: 14mm 12mm; }
+    /* the wall chart wants landscape and a little more room */
+    body.tt-printing { }
+
+    body.ex-printing > *, body.tt-printing > * { display:none !important; }
+    body.ex-printing .ex-sheet, body.tt-printing .tt-sheet {
+      display:block !important; position:static !important;
+      background:#fff !important; color:#000 !important;
+    }
+    body.ex-printing, body.tt-printing {
+      background:#fff !important; padding:0 !important; max-width:none !important; display:block !important;
+    }
+
+    .ex-sheet {
+      font-family:'Iowan Old Style','Palatino Linotype',Palatino,Georgia,'Times New Roman',serif;
+      font-size:11.5pt; line-height:1.55; color:#000;
+    }
+    .ex-mast { text-align:center; border-bottom:2.5px solid #000; padding-bottom:9px; margin-bottom:4px; }
+    .ex-mast .body  { font-size:9pt; letter-spacing:2.6px; text-transform:uppercase; font-weight:700; }
+    .ex-mast .title { font-size:16pt; font-weight:700; margin:5px 0 2px; }
+    .ex-mast .sub   { font-size:10pt; font-style:italic; }
+    .ex-bar { display:flex; justify-content:space-between; font-size:10pt; font-weight:700;
+              border-bottom:1px solid #000; padding:5px 0 7px; margin-bottom:12px; }
+    .ex-instr { border:1px solid #000; padding:8px 11px; margin-bottom:16px; font-size:9.5pt; line-height:1.5; }
+    .ex-instr b { text-transform:uppercase; letter-spacing:1.4px; font-size:8.5pt; }
+    .ex-instr ol { margin:5px 0 0 16px; padding:0; }
+    .ex-q { margin-bottom:15px; break-inside:avoid; page-break-inside:avoid; }
+    .ex-q .row { display:flex; align-items:flex-start; gap:9px; }
+    .ex-q .n { font-weight:700; min-width:26px; }
+    .ex-q .txt { flex:1; }
+    .ex-q .m { font-weight:700; white-space:nowrap; }
+    .ex-q ol.opts { margin:5px 0 0 34px; padding:0; list-style:none; }
+    .ex-q ol.opts li { margin-bottom:2px; }
+    .ex-rule { border-bottom:1px solid #bbb; height:26px; }
+    .ex-foot { border-top:1px solid #000; margin-top:20px; padding-top:7px; font-size:8pt; line-height:1.5; }
+    .ex-sec { text-align:center; font-weight:700; letter-spacing:2px; font-size:9.5pt;
+              text-transform:uppercase; margin:20px 0 12px; }
+
+    /* the corrected script */
+    .ck-q { border:1px solid #999; border-radius:3px; padding:9px 11px; margin-bottom:11px;
+            break-inside:avoid; page-break-inside:avoid; }
+    .ck-h { display:flex; justify-content:space-between; gap:10px; font-weight:700; margin-bottom:5px; }
+    .ck-margin { border-left:3px solid #000; padding-left:9px; font-style:italic; margin:6px 0; }
+    .ck-lbl { font-size:8pt; letter-spacing:1.6px; text-transform:uppercase; font-weight:700; }
+    .ck-score { text-align:center; border:2.5px solid #000; padding:11px; margin-bottom:16px; }
+    .ck-score .big { font-size:26pt; font-weight:700; line-height:1.1; }
+
+    /* the timetable — made to be pinned up, not filed */
+    .tt-sheet { -webkit-print-color-adjust:exact; print-color-adjust:exact;
+                font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+                color:#2A2822; }
+    .tt-mast { text-align:center; margin-bottom:4mm; }
+    .tt-mast .kick { font-size:7.5pt; letter-spacing:4.5px; text-transform:uppercase;
+                     font-weight:700; color:#A39684; }
+    .tt-mast h1 { font-family:'Iowan Old Style','Palatino Linotype',Palatino,Georgia,serif;
+                  font-size:27pt; font-weight:400; letter-spacing:-.3px; margin:2mm 0 1mm; color:#2A2822; }
+    .tt-mast .who { font-size:9pt; color:#8A8072; letter-spacing:.4px; }
+    .tt-rule { display:flex; align-items:center; gap:3mm; margin:3mm 0 5mm; }
+    .tt-rule .ln { flex:1; height:1px; background:linear-gradient(to right,transparent,#D8CEBE,transparent); }
+    .tt-rule .dot { width:4px; height:4px; border-radius:9px; background:#C9BCA6; }
+
+    .tt-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:2.6mm; }
+    .tt-day  { border-radius:3.4mm; overflow:hidden; break-inside:avoid;
+               border:1px solid rgba(0,0,0,.07); background:#FDFBF7; }
+    .tt-day .hd { padding:2.4mm 1mm 2mm; text-align:center; }
+    .tt-day .hd .dy { font-size:8.5pt; letter-spacing:2.4px; text-transform:uppercase;
+                      font-weight:800; color:#4A4237; }
+    .tt-day .hd .hr { font-size:6.8pt; letter-spacing:1.2px; color:#8A8072; margin-top:.6mm; font-weight:600; }
+    .tt-day .in { padding:2mm 1.8mm 2.6mm; min-height:46mm; }
+    .tt-slot { border-radius:2.2mm; padding:1.9mm 2mm 1.9mm 2.6mm; margin-bottom:1.8mm;
+               position:relative; overflow:hidden; }
+    .tt-slot .bar { position:absolute; left:0; top:0; bottom:0; width:1.1mm; }
+    .tt-slot .s { font-weight:800; font-size:8.2pt; line-height:1.3; color:#2A2822; }
+    .tt-slot .t { font-size:7pt; color:#6E6558; margin-top:.5mm; font-weight:600; letter-spacing:.2px; }
+    .tt-slot .d { font-size:6.4pt; color:#9A8F7E; margin-top:.3mm; font-weight:700; letter-spacing:.6px; }
+    .tt-free { font-size:7.5pt; color:#BCB3A4; font-style:italic; text-align:center; padding-top:5mm;
+               font-family:'Iowan Old Style',Georgia,serif; }
+
+    .tt-foot { margin-top:5mm; padding-top:3mm; border-top:1px solid #E4DCCD; }
+    .tt-legend { display:flex; gap:4mm; flex-wrap:wrap; justify-content:center; margin-bottom:2.5mm; }
+    .tt-legend span { display:inline-flex; align-items:center; gap:1.4mm; font-size:7.5pt;
+                      font-weight:700; color:#5A5246; }
+    .tt-legend i { width:2.6mm; height:2.6mm; border-radius:.8mm; display:inline-block; }
+    .tt-sign { display:flex; justify-content:space-between; align-items:baseline;
+               font-size:7pt; color:#A39684; letter-spacing:.4px; }
+    .tt-sign .big { font-family:'Iowan Old Style',Georgia,serif; font-size:10pt; color:#6E6558; font-style:italic; }
+    .tt-note { text-align:center; font-family:'Iowan Old Style',Georgia,serif; font-style:italic;
+               font-size:9pt; color:#8A8072; margin-top:3.5mm; }
+  }
+
   /* ── ✍️ the handwriting desk ──────────────────────────────
      The toggle inside the reader dresses up a note you already
      have. This is the other thing entirely: a place to WRITE
@@ -90,6 +200,11 @@
 
   /* printing: the page, and nothing else in the building */
   @media print {
+    /* Printing from the exam room gives you the paper and
+       nothing else. This has to say so explicitly, because the
+       timetable's own print rule further down hides every
+       .tab-panel and brings back only the timetable — which
+       would have printed the paper as one blank sheet. */
     body.hd-printing > *:not(#hw-desk) { display:none !important; }
     body.hd-printing #hw-desk { position:static !important; background:none !important; padding:0 !important; }
     body.hd-printing #hd-side, body.hd-printing #hd-bar { display:none !important; }
@@ -491,12 +606,14 @@
     body { background:#fff !important; padding:0; max-width:none; }
     /* hide everything, then bring back only the weekly grid —
        so adding new pages later can never break printing again */
-    header, nav, footer, #subnav, .tab-panel,
-    #btn-autofill-timetable, #btn-print-timetable, #btn-clear-timetable,
-    #add-slot-form, #today-schedule, .rm-slot,
-    #panel-timetable > .card-lavender { display:none !important; }
-    #panel-timetable { display:block !important; }
-    #panel-timetable .card-sky { display:block !important; }
+    /* The timetable used to be printed by hiding the app around
+       it. It is now BUILT as a wall chart in .tt-sheet, so all
+       that is left here is a sane fallback for anyone printing
+       from a page with no printer of its own. */
+    body:not(.ex-printing):not(.tt-printing):not(.hd-printing) header,
+    body:not(.ex-printing):not(.tt-printing):not(.hd-printing) nav,
+    body:not(.ex-printing):not(.tt-printing):not(.hd-printing) footer,
+    body:not(.ex-printing):not(.tt-printing):not(.hd-printing) #subnav { display:none !important; }
     .pastel-card { box-shadow:none !important; border:1px solid #ddd !important; break-inside:avoid; }
     #timetable-grid { display:grid !important; grid-template-columns:repeat(7,1fr) !important; }
   }
@@ -1701,6 +1818,110 @@
   </div>
 </section>
 
+<!-- ══════════════════ EXAM ROOM ══════════════════ -->
+<section id="panel-paper" class="tab-panel" hidden>
+  <div class="pastel-card card-lavender p-6 mb-6">
+    <h3 class="text-lg font-bold text-slate-800 mb-1">🧾 Exam room</h3>
+    <p class="text-xs text-slate-500 leading-relaxed">Get a paper, write it by hand the way you will in the hall, photograph it,
+      and have it marked question by question — what you got, what was missing, and the sentence a teacher would write in the margin.</p>
+  </div>
+
+  <!-- ═══ 1 · GET A PAPER ═══ -->
+  <div class="pastel-card card-cream p-6 mb-6">
+    <h4 class="text-sm font-extrabold text-slate-800 mb-1">1 · Get a paper</h4>
+    <p class="text-xs text-slate-500 mb-4">Past papers where they exist, written practice where they don't. It will always tell you which you got.</p>
+
+    <div class="grid sm:grid-cols-2 gap-3 mb-3">
+      <div>
+        <label class="text-[10px] font-black uppercase tracking-wider text-slate-500">Subject</label>
+        <input id="pp-subject" list="pp-subjects" placeholder="e.g. Business Laws"
+               class="w-full mt-1 px-3 py-2 rounded-xl border border-slate-200 text-xs font-semibold bg-white focus:outline-none">
+        <datalist id="pp-subjects"></datalist>
+      </div>
+      <div>
+        <label class="text-[10px] font-black uppercase tracking-wider text-slate-500">Chapter or topic <span class="font-bold normal-case tracking-normal text-slate-400">— leave blank for the whole paper</span></label>
+        <input id="pp-topic" placeholder="e.g. Indian Contract Act, 1872"
+               class="w-full mt-1 px-3 py-2 rounded-xl border border-slate-200 text-xs font-semibold bg-white focus:outline-none">
+      </div>
+    </div>
+
+    <div class="grid grid-cols-3 gap-3 mb-4">
+      <div>
+        <label class="text-[10px] font-black uppercase tracking-wider text-slate-500">Marks</label>
+        <input type="number" id="pp-total" value="50" min="10" max="200"
+               class="w-full mt-1 px-3 py-2 rounded-xl border border-slate-200 text-xs font-semibold bg-white focus:outline-none">
+      </div>
+      <div>
+        <label class="text-[10px] font-black uppercase tracking-wider text-slate-500">Minutes</label>
+        <input type="number" id="pp-mins" value="90" min="10" max="240"
+               class="w-full mt-1 px-3 py-2 rounded-xl border border-slate-200 text-xs font-semibold bg-white focus:outline-none">
+      </div>
+      <div>
+        <label class="text-[10px] font-black uppercase tracking-wider text-slate-500">Style</label>
+        <select id="pp-kind" class="w-full mt-1 px-3 py-2 rounded-xl border border-slate-200 text-xs font-semibold bg-white focus:outline-none">
+          <option value="mixed">Mixed</option>
+          <option value="written">Written answers only</option>
+          <option value="mcq">MCQ only</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="mb-4">
+      <label class="text-[10px] font-black uppercase tracking-wider text-slate-500">Where the questions come from</label>
+      <div id="pp-kinds" class="flex flex-wrap gap-1.5 mt-1.5"></div>
+      <p id="pp-kinds-note" class="text-[10px] text-slate-400 mt-1.5 leading-relaxed"></p>
+    </div>
+
+    <div class="flex flex-wrap gap-2">
+      <button id="pp-official" class="px-4 py-2.5 rounded-xl btn-coral text-xs font-extrabold">🔍 Find real questions</button>
+      <button id="pp-practice" class="px-4 py-2.5 rounded-xl bg-white border border-purple-300 text-purple-800 text-xs font-extrabold">✍️ Write me a practice paper</button>
+      <button id="pp-print" class="hidden px-4 py-2.5 rounded-xl bg-white border border-slate-200 text-slate-700 text-xs font-extrabold">🖨 Print the paper</button>
+      <button id="pp-print-lines" class="hidden px-4 py-2.5 rounded-xl bg-white border border-slate-200 text-slate-700 text-xs font-extrabold">🖨 With answer lines</button>
+    </div>
+    <p id="pp-status" class="text-[11px] font-bold text-slate-500 mt-3"></p>
+  </div>
+
+  <!-- ═══ WHAT KEEPS COMING BACK ═══ -->
+  <div class="pastel-card card-peach p-6 mb-6">
+    <h4 class="text-sm font-extrabold text-slate-800 mb-1">🔁 What keeps coming back</h4>
+    <p class="text-xs text-slate-500 mb-4">The questions this subject asks again and again, across recent sittings —
+      with the source beside each one so you can go and check it yourself.</p>
+    <div class="flex flex-wrap gap-2">
+      <button id="rq-go" class="px-4 py-2.5 rounded-xl bg-white border border-rose-300 text-rose-800 text-xs font-extrabold">🔁 Find the repeats</button>
+      <button id="rq-print" class="hidden px-4 py-2.5 rounded-xl bg-white border border-slate-200 text-slate-700 text-xs font-extrabold">🖨 Print the list</button>
+      <button id="rq-note" class="hidden px-4 py-2.5 rounded-xl bg-white border border-slate-200 text-slate-700 text-xs font-extrabold">📓 Keep as a note</button>
+    </div>
+    <p id="rq-status" class="text-[11px] font-bold text-slate-500 mt-3"></p>
+    <div id="rq-out" class="hidden mt-4"></div>
+  </div>
+
+  <div id="pp-paper" class="hidden pastel-card card-sky p-6 mb-6"></div>
+
+  <!-- ═══ 2 · YOUR ANSWERS ═══ -->
+  <div id="pp-answers-card" class="hidden pastel-card card-mint p-6 mb-6">
+    <h4 class="text-sm font-extrabold text-slate-800 mb-1">2 · Write it, then photograph it</h4>
+    <p class="text-xs text-slate-500 mb-4">On paper, in your own hand, with a clock running — that is the thing being practised.
+      Then photograph each sheet. Write the question number clearly beside each answer; that is how it knows what it's marking.</p>
+
+    <div class="mb-3">
+      <label class="text-[10px] font-black uppercase tracking-wider text-slate-500">How hard should it be marked?</label>
+      <div id="ev-modes" class="flex flex-wrap gap-1.5 mt-1.5"></div>
+      <p id="ev-mode-note" class="text-[10px] text-slate-500 mt-1.5 leading-relaxed"></p>
+    </div>
+
+    <div class="flex flex-wrap gap-2 mb-3">
+      <button id="ev-timer" class="px-4 py-2.5 rounded-xl bg-white border border-amber-300 text-amber-800 text-xs font-extrabold">⏱ Start the clock</button>
+      <button id="ev-add" class="px-4 py-2.5 rounded-xl bg-white border border-sky-300 text-sky-800 text-xs font-extrabold">📷 Add answer sheets</button>
+      <input type="file" id="ev-file" accept="image/*" multiple class="hidden">
+      <button id="ev-go" class="hidden px-4 py-2.5 rounded-xl btn-coral text-xs font-extrabold">✅ Mark it</button>
+    </div>
+    <div id="ev-sheets" class="flex flex-wrap gap-2 mb-2"></div>
+    <p id="ev-status" class="text-[11px] font-bold text-slate-500"></p>
+  </div>
+
+  <div id="ev-out" class="hidden mb-6"></div>
+</section>
+
 <!-- ══════════════════ HEALTH FILE ══════════════════ -->
 <section id="panel-healthfile" class="tab-panel" hidden>
   <div class="pastel-card card-mint p-6 mb-6">
@@ -2329,6 +2550,10 @@
     <button id="zoomed-reset-btn" class="px-8 py-4 rounded-2xl bg-slate-100 text-slate-800 font-bold border border-slate-300 text-base shadow-sm">Reset</button>
   </div>
 </div>
+
+<!-- the printed documents are built into these, not scraped off the screen -->
+<div class="ex-sheet" id="ex-sheet" aria-hidden="true"></div>
+<div class="tt-sheet" id="tt-sheet" aria-hidden="true"></div>
 
 <!-- ══════════════════ ADD TO HOME SCREEN ══════════════════ -->
 <div id="a2hs" class="hidden fixed left-3 right-3 bottom-3 z-40 pastel-card card-cream p-4 shadow-2xl max-w-lg mx-auto">
@@ -3771,7 +3996,7 @@ let activeId = localStorage.getItem(AKEY);
 if (!profiles.some(p => p.id === activeId)) activeId = null;
 /* Which build is this? We genuinely could not tell once, and
    it cost an hour of chasing a bug that had already been fixed. */
-const BUILD = { v: '2026.09.05g', name: 'the check-in · backup · the week on one page' };
+const BUILD = { v: '2026.09.06f', name: 'five bugs out · a timetable worth pinning up' };
 /* kept for the console, off the screen */
 setTimeout(() => console.info('FocusFlow build', BUILD.v, '—', BUILD.name), 0);
 
@@ -3785,7 +4010,7 @@ const DEFAULTS = {
   customFocus:25, customBreak:10, bestStreak:0, totalSessions:0,
   coachSubjects:[], coachDays:[1,2,3,4,5], commitments:[], settleDefault:20,
   daily:[], dailyDone:{}, queueTab:'once', noteZenSize:18,
-  checkin:{}, wakeTime:'', ciWakeEdit:false,
+  checkin:{}, wakeTime:'', ciWakeEdit:false, paper:null, paperKinds:[], markMode:'', repeats:null,
   lastBackup:0, lastWeekSent:0, a2hsDone:false,
   handOn:false, handFace:'neat', handInk:'blue', handWarned:false,
   hwDesk:{ title:'', text:'', face:'neat', ink:'blue', paper:'ruled', neat:'tidy', size:18, margin:true, srcId:'' },
@@ -3914,7 +4139,8 @@ const NAV = {
              { id:'tests',     label:'🗓 Weekly tests' },
              { id:'syllabus',  label:'📘 Syllabus' },
              { id:'backlog',   label:'📌 Backlog' },
-             { id:'timetable', label:'📅 Timetable' }],
+             { id:'timetable', label:'📅 Timetable' },
+             { id:'paper',     label:'🧾 Exam room' }],
   progress: [{ id:'progress',  label:'🔥 Streaks' },
              { id:'notes',     label:'📓 Notes' },
              { id:'cocur',     label:'🎨 Beyond Books' }],
@@ -3935,6 +4161,7 @@ const RENDERERS = {
   healthfile: () => renderHealthFile(),
   backlog:  () => renderBacklog(),
   tests:    () => renderTests2(),
+  paper:    () => renderPaperPage(),
   syllabus: () => renderSyllabus(),
   groups:   () => renderGroups()
 };
@@ -3946,7 +4173,7 @@ const NOTE_PAGES = { notes:'all' };
 
 /* which page feels like what */
 const VIBES = {
-  mind:'calm', health:'strong', healthfile:'strong',
+  mind:'calm', health:'strong', healthfile:'strong', paper:'sharp',
   notes:'study', backlog:'study', syllabus:'study',
   focus:'work', exam:'sharp', tests:'sharp',
   timetable:'plan', progress:'plan',
@@ -4404,7 +4631,7 @@ let recEscape = null;
    note has the screen, the study-timer shortcuts have no
    business firing behind it. */
 function fullScreenMode(){
-  return ['#note-zen','#gym-rest','#med-zen','#hw-desk'].find(sel => {
+  return ['#note-zen','#gym-rest','#med-zen','#hw-desk','#wk-sheet'].find(sel => {
     const el = document.querySelector(sel);
     return el && !el.classList.contains('hidden');
   }) || null;
@@ -5061,21 +5288,30 @@ function weekData(){
   const open = (S.backlog || []).filter(b => !b.done);
   const all  = (S.backlog || []).length;
   const doneN = all - open.length;
-  const leftH = open.reduce((a,b) => a + (typeof remainingMins === 'function' ? remainingMins(b) : 0), 0) / 60;
+  /* a backlog item saved without an estimate makes remainingMins
+     return NaN, and "NaNh of work still to do" printed on a page
+     you hand a parent is worse than saying nothing */
+  const num = v => (Number.isFinite(+v) ? +v : 0);
+  const leftH = open.reduce((a,b) =>
+    a + num(typeof remainingMins === 'function' ? remainingMins(b) : 0), 0) / 60;
 
   const exams = (S.exams || []).filter(e => new Date(e.dt) > Date.now())
     .sort((a,b) => new Date(a.dt) - new Date(b.dt));
   const nextExam = exams[0]
     ? { name: exams[0].name, days: Math.ceil((new Date(exams[0].dt) - Date.now())/86400000) } : null;
 
-  const marks = (S.classTests || []).filter(t => t.score != null).slice(-3)
-    .map(t => `${t.name} ${t.score}${t.outOf ? '/' + t.outOf : ''}`);
+  /* a score that is not a number is not a score */
+  const marks = (S.classTests || []).filter(t => t && Number.isFinite(+t.score)).slice(-3)
+    .map(t => `${t.name || 'Test'} ${+t.score}${+t.outOf ? '/' + (+t.outOf) : ''}`);
 
   let kept = 0, missed = 0, off = 0; const focus = [];
-  Object.values(S.checkin || {}).forEach(day => Object.values(day).forEach(v => {
-    if (v.a === 'yes') kept++; else if (v.a === 'no') missed++; else if (v.a === 'off') off++;
-    if (v.focus) focus.push(v.focus);
-  }));
+  /* a single null day used to take the whole page down here —
+     checkinContext filtered them and this did not */
+  Object.values(S.checkin || {}).filter(Boolean).forEach(day =>
+    Object.values(day).filter(Boolean).forEach(v => {
+      if (v.a === 'yes') kept++; else if (v.a === 'no') missed++; else if (v.a === 'off') off++;
+      if (+v.focus) focus.push(+v.focus);
+    }));
   const conc = focus.length ? (focus.reduce((a,b)=>a+b,0)/focus.length) : null;
 
   /* the honest two lists — computed, so this page works with
@@ -5219,6 +5455,1184 @@ async function wkSend(){
   } catch(e){
     $('#wk-msg').textContent = 'Telegram would not take it: ' + (e.message||'').slice(0,50);
   }
+}
+
+
+
+/* ═══════════════════════════════════════════════════════════
+   🖨 PRINTING, PROPERLY
+   Printing a web page and printing a document are different
+   jobs. Hiding bits of the app with CSS gets you a screenshot
+   of an app with holes in it. So each printable document is
+   BUILT — its own markup, its own typography — and the app is
+   simply hidden while it goes to the printer.
+   ═══════════════════════════════════════════════════════════ */
+const PRINT_FLAGS = ['ex-printing','tt-printing','hd-printing'];
+function printSheet(id, cls, html){
+  const el = $(id); if (!el) return;
+  el.innerHTML = html;
+  /* Clear every other printer's flag first. Each one removes its
+     own after four seconds, so printing a paper and then the
+     timetable inside that window used to leave BOTH flags on the
+     body — and you would get both documents out of the printer. */
+  PRINT_FLAGS.forEach(f => document.body.classList.remove(f));
+  document.body.classList.add(cls);
+  const off = () => { document.body.classList.remove(cls); };
+  try { window.onafterprint = off; window.print(); } catch(e){ off(); return; }
+  setTimeout(off, 4000);        // some browsers never fire onafterprint
+}
+
+/* ── the question paper ─────────────────────────────────── */
+function paperSheetHTML(withLines){
+  const cc = currentCourse();
+  const written = paper.questions.filter(q => !q.options);
+  const mcq     = paper.questions.filter(q => q.options);
+  const q1 = q => `
+    <div class="ex-q">
+      <div class="row">
+        <span class="n">${q.n}.</span>
+        <span class="txt">${esc(q.q)}</span>
+        <span class="m">[${q.marks}]</span>
+      </div>
+      ${q.options ? `<ol class="opts">${q.options.map((o,i) =>
+        `<li>(${'abcd'[i] || i+1}) ${esc(o)}</li>`).join('')}</ol>` : ''}
+      ${withLines && !q.options ? Array(Math.max(2, Math.round(q.marks * 1.2)))
+        .fill('<div class="ex-rule"></div>').join('') : ''}
+    </div>`;
+
+  const srcLine = (paper.sources || []).length
+    ? 'Sources searched: ' + paper.sources.map(s => (s.uri||'').replace(/^https?:\/\//,'').slice(0, 60)).join(' · ')
+    : '';
+  const unver = paper.questions.filter(q => !q.verified).length;
+
+  return `
+    <div class="ex-mast">
+      <div class="body">${esc(cc.authority || 'Practice paper')}</div>
+      <div class="title">${esc(cc.name || '')}${paper.subject ? ' — ' + esc(paper.subject) : ''}</div>
+      <div class="sub">${esc(paper.sitting)}${paper.topic ? ' · ' + esc(paper.topic) : ''}</div>
+    </div>
+    <div class="ex-bar">
+      <span>Time allowed: ${paper.mins} minutes</span>
+      <span>Maximum marks: ${paper.total}</span>
+    </div>
+    <div class="ex-instr">
+      <b>Instructions</b>
+      <ol>
+        <li>Answer all questions. Marks are shown against each question.</li>
+        <li>Write the question number clearly beside every answer.</li>
+        <li>Working must be shown where a computation is required.</li>
+        <li>Do not consult any material once the clock starts.</li>
+      </ol>
+    </div>
+    ${mcq.length && written.length ? '<div class="ex-sec">Section A — Objective</div>' : ''}
+    ${mcq.map(q1).join('')}
+    ${mcq.length && written.length ? '<div class="ex-sec">Section B — Descriptive</div>' : ''}
+    ${written.map(q1).join('')}
+    <div class="ex-foot">
+      ${paper.mode === 'official'
+        ? `Questions taken from material published by ${esc(cc.authority || 'the examining body')}.${
+            unver ? ` <strong>${unver} of ${paper.questions.length} could not be confirmed against a source and may not be genuine past questions.</strong>` : ''}`
+        : `<strong>Practice paper — written in the style of the real exam. These are not past questions.</strong>`}
+      ${srcLine ? '<br>' + esc(srcLine) : ''}
+      <br>Prepared with FocusFlow · ${new Date().toLocaleDateString()} · not an official document of ${esc(cc.authority || 'any examining body')}.
+    </div>`;
+}
+
+/* ── the corrected script ───────────────────────────────── */
+function correctionSheetHTML(){
+  const r = paper.result, cc = currentCourse();
+  const pct = r.of ? Math.round(r.got / r.of * 100) : 0;
+  const q = n => paper.questions.find(x => x.n === n) || {};
+  return `
+    <div class="ex-mast">
+      <div class="body">Marked script</div>
+      <div class="title">${esc(cc.name || '')}${paper.subject ? ' — ' + esc(paper.subject) : ''}</div>
+      <div class="sub">${esc(paper.sitting)}${paper.topic ? ' · ' + esc(paper.topic) : ''} · marked ${new Date(r.at).toLocaleDateString()}</div>
+    </div>
+    <div class="ck-score">
+      <div class="ck-lbl">Total</div>
+      <div class="big">${r.got} / ${r.of}</div>
+      <div>${pct}%${r.mode === 'revision' ? ' · marked for correctness only' : ''}</div>
+    </div>
+    <div class="ck-q">
+      <div class="ck-lbl">The examiner's read</div>
+      <p>${esc(r.overall)}</p>
+      ${r.topFix && r.topFix.length ? `<div class="ck-lbl" style="margin-top:8px">Before the next attempt</div>
+        <ol style="margin:4px 0 0 16px">${r.topFix.map(t => `<li>${esc(t)}</li>`).join('')}</ol>` : ''}
+    </div>
+    ${r.marks.map(x => `
+      <div class="ck-q">
+        <div class="ck-h"><span>Q${x.n}. ${esc((q(x.n).q||'').slice(0,120))}${(q(x.n).q||'').length>120?'…':''}</span>
+          <span>${x.got} / ${x.of}</span></div>
+        ${x.margin ? `<div class="ck-margin">${esc(x.margin)}</div>` : ''}
+        ${x.right   ? `<div><span class="ck-lbl">Earned it for</span><br>${esc(x.right)}</div>` : ''}
+        ${x.missing ? `<div style="margin-top:5px"><span class="ck-lbl">Key wanted</span><br>${esc(x.missing)}</div>` : ''}
+        ${x.mistake ? `<div style="margin-top:5px"><span class="ck-lbl">Went wrong</span><br>${esc(x.mistake)}</div>` : ''}
+        <div style="margin-top:6px"><span class="ck-lbl">Answer key</span><br>${esc(q(x.n).key || '—')}${
+          q(x.n).keySource ? ` <em>(${esc(q(x.n).keySource)})</em>` : ''}</div>
+      </div>`).join('')}
+    <div class="ex-foot">
+      <strong>This is an estimate, not an official mark.</strong> Marked by a model against the answer key above — it can
+      misread handwriting and can be wrong about how generous a real examiner would be. Where you disagree, check the key.
+      <br>FocusFlow · ${new Date().toLocaleString()}
+    </div>`;
+}
+
+/* ── the timetable, as something you would pin up ──────────
+   The app's own five pastels, one per subject, kept all week
+   so the shape of your week is legible from across a room.
+   A serif masthead because a wall chart is a small piece of
+   design, not a report; hours per day so the light weeks are
+   visible; and the days you have nothing planned say "free"
+   rather than sitting there accusingly empty.               */
+const TT_INK = [
+  { bg:'#FFF7E4', bar:'#E8B84B' },   // cream
+  { bg:'#EAF7F0', bar:'#5FB08A' },   // mint
+  { bg:'#F2ECFD', bar:'#8C74CE' },   // lavender
+  { bg:'#FFEFE6', bar:'#E8814F' },   // peach
+  { bg:'#EAF3FD', bar:'#5A94CE' },   // sky
+  { bg:'#FBEDF1', bar:'#C4708C' },   // rose
+  { bg:'#F1F3E9', bar:'#8A9A5B' }    // olive
+];
+function timetableSheetHTML(){
+  const order = [1,2,3,4,5,6,0];
+  const cc = currentCourse();
+  const tt = (S.timetable || []).filter(s => s && s.subject);
+  const subs = [...new Set(tt.map(s => s.subject))];
+  const ink = s => TT_INK[Math.max(0, subs.indexOf(s)) % TT_INK.length];
+  const len = s => Math.max(0, mins(s.end) - mins(s.start));
+  const total = tt.reduce((a,s) => a + len(s), 0);
+  const hrs = m => m >= 60 ? (m/60).toFixed(m % 60 ? 1 : 0) + 'h' : m + 'm';
+
+  const nextExam = (S.exams || [])
+    .filter(e => e && new Date(e.dt) > Date.now())
+    .sort((a,b) => new Date(a.dt) - new Date(b.dt))[0];
+  const days = nextExam ? Math.ceil((new Date(nextExam.dt) - Date.now())/86400000) : 0;
+
+  return `
+    <div class="tt-mast">
+      <div class="kick">${esc(cc.name || 'Study')}${cc.attempt ? ' · ' + esc(cc.attempt) : ''}</div>
+      <h1>${esc(me().name || 'My')}&rsquo;s week</h1>
+      <div class="who">${(total/60).toFixed(total % 60 ? 1 : 0)} hours planned${
+        nextExam ? ` &nbsp;·&nbsp; ${esc(nextExam.name)} in ${days} day${days===1?'':'s'}` : ''}</div>
+    </div>
+    <div class="tt-rule"><span class="ln"></span><span class="dot"></span><span class="ln"></span></div>
+
+    <div class="tt-grid">
+      ${order.map(d => {
+        const slots = tt.filter(s => s.day === d).sort((a,b) => mins(a.start) - mins(b.start));
+        const dayMins = slots.reduce((a,s) => a + len(s), 0);
+        return `<div class="tt-day">
+          <div class="hd">
+            <div class="dy">${DAYS[d].slice(0,3)}</div>
+            <div class="hr">${dayMins ? hrs(dayMins) : '—'}</div>
+          </div>
+          <div class="in">
+            ${slots.length ? slots.map(s => {
+              const c = ink(s.subject);
+              return `<div class="tt-slot" style="background:${c.bg}">
+                <span class="bar" style="background:${c.bar}"></span>
+                <div class="s">${esc(s.subject)}</div>
+                <div class="t">${pretty(s.start)} – ${pretty(s.end)}</div>
+                <div class="d">${hrs(len(s))}</div>
+              </div>`;
+            }).join('') : '<div class="tt-free">free</div>'}
+          </div>
+        </div>`;
+      }).join('')}
+    </div>
+
+    <div class="tt-foot">
+      ${subs.length ? `<div class="tt-legend">${subs.slice(0,8).map(s =>
+        `<span><i style="background:${ink(s).bar}"></i>${esc(s)}</span>`).join('')}</div>` : ''}
+      <div class="tt-sign">
+        <span>FocusFlow</span>
+        <span class="big">${total ? 'Same time tomorrow.' : 'Add a slot and this fills in.'}</span>
+        <span>${new Date().toLocaleDateString()}</span>
+      </div>
+    </div>`;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   🧾 THE EXAM ROOM
+   Practice tests inside an app are typed, multiple-choice and
+   marked by string comparison. Real exams are handwritten,
+   long-form, and marked by a person deciding whether you have
+   actually said the thing. The gap between those two is where
+   marks are lost, and no amount of tapping options closes it.
+
+   So this does the real loop: a paper, written by hand under a
+   clock, photographed, read, and marked question by question
+   against an answer key — with the sentence a teacher would
+   write in the margin.
+
+   Two honesty problems had to be solved, not papered over:
+
+   1. WHERE THE PAPER CAME FROM. A model asked for "the ICAI
+      past paper" will happily produce something that looks
+      exactly like one and isn't. So there are two clearly
+      separated modes, the source links are shown, and every
+      question the search could not stand behind is labelled
+      unverified on the page itself.
+
+   2. WHAT THE MARK IS WORTH. A model marking a law answer is
+      genuinely useful and is not an examiner. Every result says
+      so, in those words, and shows its reasoning per question
+      so a disagreement is arguable rather than final.
+   ═══════════════════════════════════════════════════════════ */
+
+const OFFICIAL_KINDS = {
+  ICAI: [
+    { id:'pyq', label:'Past paper', full:'past examination question paper, with the ICAI Suggested Answers for that sitting' },
+    { id:'mtp', label:'MTP',        full:'Mock Test Paper (MTP) issued by the ICAI Board of Studies, with its answer key' },
+    { id:'rtp', label:'RTP',        full:'Revision Test Paper (RTP) issued by the ICAI Board of Studies, with its answers' },
+    { id:'sm',  label:'Study material', full:'illustrations and end-of-chapter questions from the ICAI BoS study material, with their worked solutions' }
+  ],
+  ICSI: [
+    { id:'pyq', label:'Past paper', full:'past examination question paper with the ICSI suggested answers' },
+    { id:'mtp', label:'MTP',        full:'Mock Test Paper issued by ICSI' },
+    { id:'ptp', label:'Practice paper', full:'ICSI practice test paper or study material questions with answers' }
+  ],
+  ICMAI: [
+    { id:'pyq', label:'Past paper', full:'past examination question paper with the ICMAI suggested answers' },
+    { id:'mtp', label:'MTP',        full:'Mock Test Paper issued by ICMAI' },
+    { id:'rtp', label:'RTP',        full:'Revisionary Test Paper (RTP) issued by ICMAI' }
+  ],
+  NTA: [
+    { id:'pyq', label:'Past paper', full:'previous year question paper released by NTA, with the official answer key' },
+    { id:'sample', label:'Sample paper', full:'sample or practice paper released by NTA for this exam' }
+  ],
+  CBSE: [
+    { id:'pyq', label:'Past paper', full:'previous year board question paper with the CBSE marking scheme' },
+    { id:'sample', label:'Sample paper', full:'CBSE Sample Question Paper for the current session, with its marking scheme' }
+  ],
+  CISCE: [
+    { id:'pyq', label:'Past paper', full:'past council question paper with the examiners’ comments' },
+    { id:'sample', label:'Specimen paper', full:'CISCE specimen question paper for the current session' }
+  ],
+  UPSC: [
+    { id:'pyq', label:'Past paper', full:'previous year question paper published by UPSC' }
+  ],
+  DEFAULT: [
+    { id:'pyq', label:'Past paper', full:'past examination question paper published by the examining body, with its official answers' },
+    { id:'mtp', label:'Mock paper', full:'official mock or model test paper published by the examining body, with answers' },
+    { id:'sample', label:'Sample paper', full:'official sample or specimen paper published by the examining body' }
+  ]
+};
+function paperKinds(){
+  const a = (currentCourse().authority || '').toUpperCase();
+  const hit = Object.keys(OFFICIAL_KINDS).find(k => k !== 'DEFAULT' && a.includes(k));
+  return OFFICIAL_KINDS[hit] || OFFICIAL_KINDS.DEFAULT;
+}
+function ppKindsChips(){
+  const box = $('#pp-kinds'); if (!box) return;
+  const kinds = paperKinds();
+  const chosen = (S.paperKinds && S.paperKinds.length)
+    ? S.paperKinds.filter(id => kinds.some(k => k.id === id)) : kinds.map(k => k.id);
+  S.paperKinds = chosen.length ? chosen : kinds.map(k => k.id);
+  box.innerHTML = kinds.map(k =>
+    `<button data-kind="${k.id}" title="${esc(k.full)}" class="pk px-3 py-1.5 rounded-lg text-[11px] font-extrabold border ${
+      S.paperKinds.includes(k.id) ? 'bg-slate-900 border-slate-900 text-white' : 'bg-white border-slate-200 text-slate-500'}">${esc(k.label)}</button>`).join('');
+  box.querySelectorAll('.pk').forEach(b => b.onclick = () => {
+    const id = b.dataset.kind;
+    const on = S.paperKinds.includes(id);
+    /* never let them turn all of them off — that asks for nothing */
+    if (on && S.paperKinds.length === 1) return;
+    S.paperKinds = on ? S.paperKinds.filter(x => x !== id) : S.paperKinds.concat([id]);
+    save(); ppKindsChips();
+  });
+  const who = currentCourse().authority;
+  $('#pp-kinds-note').textContent = who
+    ? `What ${who} actually publishes. It will search ${currentCourse().domain || who} first and tell you which document each question came from.`
+    : `Set your course under Exams and it will know which body to search and what that body publishes.`;
+}
+
+
+/* ── restored state is untrusted input ──────────────────────
+   Anything that has sat in localStorage since an earlier build
+   may be missing fields this build takes for granted, and a
+   backup restored from a month ago certainly will be. Rather
+   than sprinkle `|| []` across forty read sites and miss two,
+   everything is put through one door on the way in.          */
+function normalisePaper(p){
+  if (!p || typeof p !== 'object') return null;
+  const qs = Array.isArray(p.questions) ? p.questions.filter(q => q && q.q) : [];
+  if (!qs.length) return null;                 // a paper with no questions is not a paper
+  return {
+    id: p.id || uid(),
+    at: +p.at || Date.now(),
+    mode: p.mode === 'official' ? 'official' : 'practice',
+    subject: String(p.subject || 'Unnamed subject'),
+    topic: String(p.topic || ''),
+    mins: +p.mins > 0 ? +p.mins : 60,
+    sitting: String(p.sitting || (p.mode === 'official' ? 'unknown sitting' : 'Practice paper')),
+    note: String(p.note || ''),
+    questions: qs.map((q, i) => ({
+      n: +q.n || i + 1,
+      q: String(q.q || '').trim(),
+      marks: +q.marks > 0 ? +q.marks : 1,
+      options: Array.isArray(q.options) && q.options.length ? q.options.map(String) : null,
+      key: String(q.key || ''),
+      keySource: String(q.keySource || ''),
+      from: String(q.from || ''),
+      verified: q.verified === true
+    })),
+    sources: Array.isArray(p.sources) ? p.sources.filter(s => s && s.uri) : [],
+    total: qs.reduce((a, q) => a + (+q.marks > 0 ? +q.marks : 1), 0),
+    result: normaliseResult(p.result, qs)
+  };
+}
+function normaliseResult(r, qs){
+  if (!r || !Array.isArray(r.marks)) return null;
+  const byN = {};
+  r.marks.forEach(m => { if (m) byN[+m.n] = m; });
+  const marks = qs.map((q, i) => {
+    const n = +q.n || i + 1;
+    const of = +q.marks > 0 ? +q.marks : 1;
+    const m = byN[n] || {};
+    return { n, of, got: Math.max(0, Math.min(of, +m.got || 0)),
+             right: String(m.right||''), missing: String(m.missing||''),
+             mistake: String(m.mistake||''), margin: String(m.margin||'') };
+  });
+  return {
+    at: +r.at || Date.now(),
+    mode: r.mode === 'revision' ? 'revision' : 'full',
+    got: marks.reduce((a, m) => a + m.got, 0),
+    of: marks.reduce((a, m) => a + m.of, 0),
+    marks,
+    overall: String(r.overall || ''),
+    topFix: Array.isArray(r.topFix) ? r.topFix.map(String).filter(Boolean) : [],
+    weakTopics: Array.isArray(r.weakTopics) ? r.weakTopics.map(String).filter(Boolean) : [],
+    from: Array.isArray(r.from) ? r.from : []
+  };
+}
+function normaliseRepeats(r){
+  if (!r || typeof r !== 'object') return null;
+  const items = Array.isArray(r.items) ? r.items.filter(x => x && x.topic) : [];
+  if (!items.length) return null;
+  return {
+    at: +r.at || Date.now(),
+    subject: String(r.subject || 'Unnamed subject'),
+    topic: String(r.topic || ''),
+    note: String(r.note || ''),
+    items: items.map(x => ({
+      topic: String(x.topic || ''), ask: String(x.ask || ''),
+      times: +x.times || 0, seen: String(x.seen || ''),
+      marks: String(x.marks || ''), point: String(x.point || '')
+    })).sort((a, b) => b.times - a.times),
+    sources: Array.isArray(r.sources) ? r.sources.filter(s => s && s.uri) : []
+  };
+}
+
+let paper = null, evSheets = [], evBusy = false;
+
+function ppSubjects(){
+  const dl = $('#pp-subjects'); if (!dl) return;
+  const names = new Set();
+  ((S.syllabus && S.syllabus.subjects) || []).forEach(s => names.add(s.name));
+  (S.coachSubjects || []).forEach(s => names.add(s.name));
+  (S.backlog || []).forEach(b => b.subject && names.add(b.subject));
+  dl.innerHTML = [...names].slice(0, 40).map(n => `<option value="${esc(n)}">`).join('');
+}
+
+function renderPaperPage(){
+  ppSubjects(); ppKindsChips();
+  /* the one door: whatever was on disk is cleaned before use */
+  if (!repeats) repeats = normaliseRepeats(S.repeats);
+  if (!paper)   paper   = normalisePaper(S.paper);
+  if (repeats) renderRepeats(); else $('#rq-out').classList.add('hidden');
+  if (paper) renderPaper();
+  else { $('#pp-paper').classList.add('hidden'); $('#pp-answers-card').classList.add('hidden');
+         $('#pp-print').classList.add('hidden'); $('#pp-print-lines').classList.add('hidden'); }
+  if (paper && paper.result) renderMarks(paper.result); else $('#ev-out').classList.add('hidden');
+}
+
+/* ── fetching a paper ─────────────────────────────────────── */
+async function paperGet(mode){
+  const subject = $('#pp-subject').value.trim();
+  if (!subject){ $('#pp-status').textContent = 'Name the subject first.'; return; }
+  if (!aiOn()){ $('#pp-status').textContent = 'This one needs an AI key — add a free Google one under Coach → Set up.'; return; }
+
+  const topic = $('#pp-topic').value.trim();
+  const total = +$('#pp-total').value || 50;
+  const mins  = +$('#pp-mins').value || 90;
+  const kind  = $('#pp-kind').value;
+  const course = currentCourse().label;
+  const sm = searchModel();
+
+  if (mode === 'official' && !sm){
+    $('#pp-status').innerHTML = `Finding <em>real</em> questions needs the model that can search the web — that is Gemini.
+      Add a free Google key as your main model, or use “Write me a practice paper”, which works with any key.`;
+    return;
+  }
+
+  $('#pp-status').textContent = mode === 'official'
+    ? 'Searching for the official paper and its answer key…' : 'Writing the paper…';
+  $('#pp-paper').classList.add('hidden');
+  $('#pp-answers-card').classList.add('hidden');
+  $('#ev-out').classList.add('hidden');
+
+  const shape = { mixed:'A mix: some short MCQs and some written answers.',
+                  written:'All written answers — no multiple choice.',
+                  mcq:'All multiple choice, four options each.' }[kind];
+
+  const cc = currentCourse();
+  const kinds = paperKinds().filter(k => (S.paperKinds || []).includes(k.id));
+  const wanted = (kinds.length ? kinds : paperKinds());
+
+  const sysOfficial = `Find REAL questions published by the examining body itself, and their official answers.
+
+Exam: ${course}. Subject: ${subject}.${topic ? ' Restrict to: ' + topic + '.' : ''}
+Examining body: ${cc.authority || 'the body that conducts this exam'}${cc.domain ? ' — search ' + cc.domain + ' first' : ''}.
+
+TAKE QUESTIONS ONLY FROM THESE, in this order of preference:
+${wanted.map((k, i) => `${i+1}. The ${k.full}`).join('\n')}
+Then, only if those yield nothing, reputable published collections of the same material.
+
+Prefer recent material — the most recent two or three sittings — unless the topic asks otherwise.
+
+RULES — these matter more than filling the page:
+- Reproduce questions ONLY where your search actually found them. Do not pad the paper to reach the mark total.
+  A short paper of real questions is the point; a full one of invented questions is worthless.
+- For each question set "verified": true ONLY if a source you found contains that question. Otherwise "verified": false.
+- Set "from" to which document it came from and when — e.g. "ICAI RTP, May 2024" or "CBSE Sample Paper 2024-25".
+  If you cannot tell, set "from" to "".
+- "key" must be the official answer, suggested answer or marking scheme where you found one; if you only found
+  the question, write the correct answer yourself and set "keySource": "written by the model, not the official key".
+- Name the overall source in "sitting" (e.g. "ICAI CA Foundation RTP, May 2024, Paper 2") — or "unknown" if you cannot tell.
+- Never invent a section number, case name, or citation.
+- Return ONLY JSON: {"sitting":"...","note":"one honest line about what you did and did not find",
+  "questions":[{"n":1,"q":"...","marks":5,"options":["a","b"],"key":"...","keySource":"...","from":"...","verified":true}]}
+- Omit "options" for written questions.`;
+
+  const sysPractice = `Write a practice paper in the style of a real one. It is NOT a past paper and must not pretend to be.
+
+Exam: ${course}. Subject: ${subject}.${topic ? ' Topic: ' + topic + '.' : ''}
+${shape} Total ${total} marks, meant to take ${mins} minutes.
+
+RULES:
+- Match the wording, mark weighting and command words this exam actually uses.
+- Every question must be answerable from the syllabus, and every "key" must be correct.
+- Name the section, standard or provision in the key where one applies. Never invent a citation.
+- Set "verified": false on every question — this is written practice, not a past paper.
+- Return ONLY JSON: {"sitting":"Practice paper","note":"...","questions":[{"n":1,"q":"...","marks":5,"options":["a"],"key":"...","keySource":"written for practice","verified":false}]}
+- Omit "options" for written questions.`;
+
+  try {
+    let text = '', sources = [];
+    if (mode === 'official'){
+      const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${encodeURIComponent(sm.key)}`, {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ contents:[{ parts:[{ text: sysOfficial + POV_JSON + '\n\nBuild the paper.' }] }],
+                               tools:[{ google_search:{} }],
+                               generationConfig:{ temperature:0.2, maxOutputTokens:4000 } }) });
+      const j = await r.json();
+      if (!r.ok) throw new Error((j.error && j.error.message) || 'the search was refused');
+      const c = (j.candidates||[])[0] || {};
+      text = (c.content||{}).parts?.[0]?.text || '';
+      sources = ((c.groundingMetadata||{}).groundingChunks||[]).map(x => x.web).filter(Boolean).slice(0, 8);
+    } else {
+      const res = await bestAnswer(sysPractice, `Course: ${course}.`, 'Write the paper.',
+                                   { ...conceptModel(), maxTokens: 4000, temperature: 0.4 });
+      text = res.text || '';
+    }
+
+    const m = text.match(/\{[\s\S]*\}/);
+    const data = m ? JSON.parse(m[0]) : null;
+    if (!data || !Array.isArray(data.questions) || !data.questions.length)
+      throw new Error('nothing usable came back');
+
+    paper = {
+      id: uid(), at: Date.now(), mode, subject, topic, mins,
+      sitting: data.sitting || (mode === 'official' ? 'unknown sitting' : 'Practice paper'),
+      note: data.note || '',
+      questions: data.questions.map((q, i) => ({
+        n: q.n || i + 1, q: String(q.q || '').trim(),
+        marks: +q.marks || 1,
+        options: Array.isArray(q.options) ? q.options : null,
+        key: String(q.key || '').trim(),
+        keySource: q.keySource || '',
+        from: String(q.from || '').trim(),
+        verified: mode === 'official' && q.verified === true
+      })),
+      sources, result: null
+    };
+    paper = normalisePaper(paper);
+    if (!paper) throw new Error('nothing usable came back');
+    S.paper = paper; save();
+    renderPaper();
+    $('#pp-status').textContent = '';
+  } catch(e){
+    $('#pp-status').innerHTML = `<span class="text-rose-600">Couldn't build the paper: ${esc((e.message||'').slice(0,90))}</span>`;
+  }
+}
+
+function renderPaper(){
+  const box = $('#pp-paper'); if (!box || !paper) return;
+  const verified = paper.questions.filter(q => q.verified).length;
+  const banner = paper.mode === 'official'
+    ? (verified === paper.questions.length
+        ? `<div class="p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-[11px] font-semibold text-emerald-900 leading-relaxed mb-3">
+             ✅ Every question here was found in a source below. Still worth opening the official paper and checking the wording — that is what you'll sit.</div>`
+        : `<div class="p-3 rounded-xl bg-amber-50 border border-amber-200 text-[11px] font-semibold text-amber-900 leading-relaxed mb-3">
+             ⚠️ <strong>${verified} of ${paper.questions.length} questions were found in a source.</strong> The rest are marked
+             <em>unverified</em> below — the model wrote them and they may not be on any real paper. Check against the official
+             paper before treating any of this as a past question.</div>`)
+    : `<div class="p-3 rounded-xl bg-purple-50 border border-purple-200 text-[11px] font-semibold text-purple-900 leading-relaxed mb-3">
+         ✍️ <strong>This is practice, not a past paper.</strong> Written in the style of the real thing — useful for the writing, not for guessing what will be asked.</div>`;
+
+  box.innerHTML = `
+    <div class="flex items-start justify-between gap-3 flex-wrap mb-1">
+      <div class="min-w-0">
+        <h4 class="text-sm font-extrabold text-slate-800">${esc(paper.subject)}${paper.topic ? ' · ' + esc(paper.topic) : ''}</h4>
+        <p class="text-[11px] font-bold text-slate-500">${esc(paper.sitting)} · ${paper.total} marks · ${paper.mins} minutes</p>
+      </div>
+      <button id="pp-clear" class="text-[10px] font-bold text-slate-400 hover:text-rose-500">start a different paper</button>
+    </div>
+    ${paper.note ? `<p class="text-[11px] text-slate-500 italic mb-3">${esc(paper.note)}</p>` : ''}
+    ${banner}
+    <ol class="space-y-3">
+      ${paper.questions.map(q => `
+        <li class="p-3 rounded-xl bg-white/90 border border-slate-200">
+          <div class="flex items-start justify-between gap-2">
+            <p class="text-xs font-bold text-slate-800 leading-relaxed">${q.n}. ${esc(q.q)}</p>
+            <span class="shrink-0 text-[10px] font-black px-2 py-1 rounded-lg bg-slate-100 text-slate-600">${q.marks}m</span>
+          </div>
+          ${q.options ? `<ol class="mt-1.5 ml-3 text-[11px] text-slate-600 space-y-0.5">${
+            q.options.map((o,i) => `<li>(${'abcd'[i] || i+1}) ${esc(o)}</li>`).join('')}</ol>` : ''}
+          ${q.verified && q.from
+            ? `<p class="text-[10px] font-bold text-emerald-700 mt-1.5">📄 ${esc(q.from)}</p>` : ''}
+          ${paper.mode === 'official' && !q.verified
+            ? `<p class="text-[10px] font-bold text-amber-700 mt-1.5">⚠️ unverified — not found in any source</p>` : ''}
+        </li>`).join('')}
+    </ol>
+    ${(paper.sources || []).length ? `<p class="text-[10px] text-slate-500 mt-3 leading-relaxed">Sources it searched: ${
+      paper.sources.map(s => `<a href="${esc(s.uri)}" target="_blank" rel="noopener noreferrer" class="underline">${esc((s.title||'link').slice(0,44))}</a>`).join(' · ')}</p>` : ''}`;
+
+  box.classList.remove('hidden');
+  $('#pp-print').classList.remove('hidden');
+  $('#pp-print-lines').classList.remove('hidden');
+  $('#pp-answers-card').classList.remove('hidden');
+  evModeChips();
+  $('#pp-clear').onclick = () => {
+    paper = null; S.paper = null; evSheets = []; save();
+    $('#pp-paper').classList.add('hidden'); $('#pp-answers-card').classList.add('hidden');
+    $('#ev-out').classList.add('hidden'); $('#pp-print').classList.add('hidden');
+    $('#pp-print-lines').classList.add('hidden');
+    $('#ev-sheets').innerHTML = ''; $('#ev-status').textContent = '';
+  };
+}
+
+
+/* ── one pair of eyes, reusable ─────────────────────────────
+   The notes page already reads handwriting; the exam room
+   needs the same thing pointed at an answer sheet. Same
+   provider logic, one place, so a fix to one fixes both.   */
+async function visionRead(dataUrl, prompt){
+  if (aiCfg && aiCfg.key2 && (aiCfg.provider2 || 'openai') === 'openai'){
+    const r = await fetch('https://api.openai.com/v1/chat/completions', {
+      method:'POST', headers:{'Content-Type':'application/json','Authorization':'Bearer '+aiCfg.key2},
+      body: JSON.stringify({ model:'gpt-4o-mini', max_tokens:2000, messages:[
+        { role:'user', content:[ { type:'text', text: prompt },
+                                 { type:'image_url', image_url:{ url: dataUrl } } ] }] }) });
+    const j = await r.json();
+    if (!r.ok) throw new Error((j.error && j.error.message) || 'OpenAI refused');
+    return j.choices[0].message.content || '';
+  }
+  if (aiCfg && aiCfg.provider === 'gemini' && aiCfg.key){
+    const [meta, b64] = dataUrl.split(',');
+    const mime = (meta.match(/data:([^;]+)/) || [])[1] || 'image/jpeg';
+    const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${encodeURIComponent(aiCfg.key)}`, {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ contents:[{ parts:[ { text: prompt },
+        { inline_data:{ mime_type: mime, data: b64 } } ] }],
+        generationConfig:{ maxOutputTokens:2000, temperature:0.1 } }) });
+    const j = await r.json();
+    if (!r.ok) throw new Error((j.error && j.error.message) || 'Gemini refused');
+    return (((j.candidates||[])[0]||{}).content||{}).parts?.[0]?.text || '';
+  }
+  if (aiCfg && aiCfg.provider === 'anthropic' && aiCfg.key){
+    const [meta, b64] = dataUrl.split(',');
+    const mime = (meta.match(/data:([^;]+)/) || [])[1] || 'image/jpeg';
+    const r = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST', headers:{'Content-Type':'application/json','x-api-key':aiCfg.key,
+        'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body: JSON.stringify({ model: claudeModel(), max_tokens:2000, messages:[
+        { role:'user', content:[ { type:'image', source:{ type:'base64', media_type:mime, data:b64 } },
+                                 { type:'text', text: prompt } ] }] }) });
+    const j = await r.json();
+    if (!r.ok) throw new Error((j.error && j.error.message) || 'Claude refused');
+    return (j.content && j.content[0] && j.content[0].text) || '';
+  }
+  throw new Error('reading handwriting needs a key from Google, OpenAI or Anthropic');
+}
+
+/* ── the answer sheets ──────────────────────────────────── */
+function evThumbs(){
+  const box = $('#ev-sheets'); if (!box) return;
+  box.innerHTML = evSheets.map((s, i) => `
+    <div class="relative">
+      <img src="${s.url}" class="w-20 h-24 object-cover rounded-lg border border-slate-200">
+      <span class="absolute bottom-0 left-0 right-0 text-[9px] font-black text-center bg-slate-900/70 text-white rounded-b-lg">page ${i+1}</span>
+      <button data-rm="${i}" class="ev-rm absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-white border border-slate-300 text-[10px] font-black text-slate-500 hover:text-rose-600">✕</button>
+    </div>`).join('');
+  box.querySelectorAll('.ev-rm').forEach(b => b.onclick = () => {
+    evSheets.splice(+b.dataset.rm, 1); evThumbs();
+    $('#ev-go').classList.toggle('hidden', !evSheets.length);
+  });
+  $('#ev-go').classList.toggle('hidden', !evSheets.length);
+  $('#ev-status').textContent = evSheets.length
+    ? `${evSheets.length} sheet${evSheets.length===1?'':'s'} ready. Check the question numbers are visible in each photo.` : '';
+}
+
+/* Photos off a phone are 4 MB each and three of them would not
+   fit in one request. Shrunk to something a model can still
+   read handwriting from, and no larger. */
+function shrink(dataUrl, maxW){
+  return new Promise(res => {
+    /* An image that never loads fires neither onload nor
+       onerror on some browsers. Without this deadline, "Mark
+       it" would spin forever having said nothing. Four seconds,
+       then send the photo at full size and let the model cope. */
+    let done = false;
+    const finish = v => { if (done) return; done = true; res(v); };
+    setTimeout(() => finish(dataUrl), 4000);
+    try {
+      const img = new Image();
+      img.onload = () => {
+        try {
+          const scale = Math.min(1, (maxW || 1600) / (img.width || 1));
+          const c = document.createElement('canvas');
+          c.width = Math.round((img.width||1) * scale); c.height = Math.round((img.height||1) * scale);
+          const g = c.getContext && c.getContext('2d');
+          if (!g) return finish(dataUrl);
+          g.drawImage(img, 0, 0, c.width, c.height);
+          finish(c.toDataURL('image/jpeg', 0.82));
+        } catch(e){ finish(dataUrl); }
+      };
+      img.onerror = () => finish(dataUrl);
+      img.src = dataUrl;
+    } catch(e){ finish(dataUrl); }
+  });
+}
+
+
+
+/* ═══════════════════════════════════════════════════════════
+   🔁 WHAT KEEPS COMING BACK
+   Every subject has ten or fifteen things it asks in some form
+   almost every sitting. Everybody who has taught the subject
+   knows them; a student two months in does not, and finds out
+   afterwards. This goes and looks.
+
+   The rule here is the same as everywhere else in this app and
+   it is the whole reason this feature is worth having rather
+   than dangerous: a claim that something is "frequently asked"
+   is only useful if you can go and check it. So every item
+   carries the sittings it appeared in and the document that
+   says so, and anything the search could not stand behind is
+   dropped rather than softened into a maybe.
+   ═══════════════════════════════════════════════════════════ */
+let repeats = null;
+
+async function repeatsFind(){
+  const subject = $('#pp-subject').value.trim();
+  if (!subject){ $('#rq-status').textContent = 'Name the subject at the top first.'; return; }
+  const sm = searchModel();
+  if (!sm){
+    $('#rq-status').innerHTML = `This one has to search the web to be worth anything, and only Gemini can.
+      Add a free Google key as your main model under <strong>Coach → Set up</strong>. I would rather say that than
+      make up a list of "frequently asked" questions from memory.`;
+    return;
+  }
+  const cc = currentCourse();
+  const topic = $('#pp-topic').value.trim();
+  $('#rq-status').textContent = 'Reading through recent sittings…';
+  $('#rq-out').classList.add('hidden');
+
+  const wanted = paperKinds().filter(k => (S.paperKinds || []).includes(k.id));
+  const kinds = (wanted.length ? wanted : paperKinds());
+
+  const prompt = `Find the questions that recur most often in ${cc.name || 'this exam'} — ${subject}${topic ? ', within ' + topic : ''}.
+
+Search ${cc.domain ? cc.domain + ' first, then' : ''} the material published by ${cc.authority || 'the examining body'}:
+${kinds.map((k,i) => `${i+1}. ${k.full}`).join('\n')}
+Look across the last four to six sittings.
+
+RULES — a made-up list here is worse than no list, because a student will revise from it:
+- Include an item ONLY if you actually found it asked more than once. Do not infer from a syllabus weighting.
+- "seen" must name the actual sittings or documents you found it in, e.g. "Jan 2024 paper · May 2024 RTP · Nov 2023 MTP".
+- "times" is how many separate sittings you found it in. Never estimate it upward.
+- "marks" is the usual mark weighting when it appears; "" if it varies or you cannot tell.
+- "ask" is how it is typically worded — the command word matters.
+- "point" is the one thing a student must be able to produce to earn the marks. One sentence.
+- If you can only stand behind three items, return three. A short honest list is the deliverable.
+- Never invent a section number, case name or citation.
+Return ONLY JSON:
+{"note":"one honest line on how far back you looked and what you could not find",
+ "items":[{"topic":"...","ask":"...","times":4,"seen":"...","marks":"5","point":"..."}]}`;
+
+  try {
+    const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${encodeURIComponent(sm.key)}`, {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ contents:[{ parts:[{ text: prompt + POV_JSON }] }],
+                             tools:[{ google_search:{} }],
+                             generationConfig:{ temperature:0.2, maxOutputTokens:3000 } }) });
+    const j = await r.json();
+    if (!r.ok) throw new Error((j.error && j.error.message) || 'the search was refused');
+    const c = (j.candidates||[])[0] || {};
+    const text = (c.content||{}).parts?.[0]?.text || '';
+    const srcs = ((c.groundingMetadata||{}).groundingChunks||[]).map(x => x.web).filter(Boolean).slice(0, 10);
+    const m = text.match(/\{[\s\S]*\}/);
+    const data = m ? JSON.parse(m[0]) : null;
+    if (!data || !Array.isArray(data.items) || !data.items.length)
+      throw new Error('nothing came back that it could stand behind');
+
+    repeats = { at: Date.now(), subject, topic, note: data.note || '',
+                items: data.items.map(x => ({
+                  topic: String(x.topic||'').trim(), ask: String(x.ask||'').trim(),
+                  times: +x.times || 0, seen: String(x.seen||'').trim(),
+                  marks: String(x.marks||'').trim(), point: String(x.point||'').trim()
+                })).filter(x => x.topic).sort((a,b) => b.times - a.times),
+                sources: srcs };
+    repeats = normaliseRepeats(repeats);
+    if (!repeats) throw new Error('nothing came back that it could stand behind');
+    S.repeats = repeats; save();
+    renderRepeats();
+    $('#rq-status').textContent = '';
+  } catch(e){
+    $('#rq-status').innerHTML = `<span class="text-rose-600">Couldn't build the list: ${esc((e.message||'').slice(0,90))}</span>`;
+  }
+}
+
+function renderRepeats(){
+  const box = $('#rq-out'); if (!box || !repeats) return;
+  const thin = repeats.items.filter(x => x.times < 2).length;
+  box.innerHTML = `
+    <div class="flex items-baseline justify-between gap-2 flex-wrap mb-2">
+      <p class="text-xs font-extrabold text-slate-800">${esc(repeats.subject)}${repeats.topic ? ' · ' + esc(repeats.topic) : ''}
+        — ${repeats.items.length} that keep coming back</p>
+      <span class="text-[10px] font-bold text-slate-400">${new Date(repeats.at).toLocaleDateString()}</span>
+    </div>
+    ${repeats.note ? `<p class="text-[11px] text-slate-500 italic mb-3">${esc(repeats.note)}</p>` : ''}
+    ${thin ? `<p class="text-[11px] font-bold text-amber-700 mb-3">${thin} of these were only found once — treat those as "worth knowing", not "repeated".</p>` : ''}
+    <ol class="space-y-2.5">
+      ${repeats.items.map((x, i) => `
+        <li class="p-3 rounded-xl bg-white/90 border border-slate-200">
+          <div class="flex items-start justify-between gap-2">
+            <p class="text-xs font-extrabold text-slate-800">${i+1}. ${esc(x.topic)}</p>
+            <span class="shrink-0 text-[10px] font-black px-2 py-1 rounded-lg ${
+              x.times >= 3 ? 'bg-rose-100 text-rose-800' : x.times === 2 ? 'bg-amber-100 text-amber-800' : 'bg-slate-100 text-slate-600'}">
+              ${x.times ? '×' + x.times : 'once'}${x.marks ? ' · ' + esc(x.marks) + 'm' : ''}</span>
+          </div>
+          ${x.ask   ? `<p class="text-[11px] text-slate-600 leading-relaxed mt-1"><span class="font-bold text-slate-400">Asked as:</span> ${esc(x.ask)}</p>` : ''}
+          ${x.point ? `<p class="text-[11px] text-slate-700 leading-relaxed mt-1"><span class="font-bold text-slate-400">Must produce:</span> ${esc(x.point)}</p>` : ''}
+          ${x.seen  ? `<p class="text-[10px] font-bold text-emerald-700 mt-1.5">📄 ${esc(x.seen)}</p>` : ''}
+        </li>`).join('')}
+    </ol>
+    ${(repeats.sources || []).length ? `
+      <details class="mt-3">
+        <summary class="text-[10px] font-black uppercase tracking-wider text-slate-500 cursor-pointer">Where this came from — check it yourself</summary>
+        <ul class="mt-2 space-y-1">${repeats.sources.map(s =>
+          `<li class="text-[11px]"><a href="${esc(s.uri)}" target="_blank" rel="noopener noreferrer" class="underline text-slate-600">${esc((s.title||s.uri||'link').slice(0,70))}</a></li>`).join('')}</ul>
+      </details>` : `<p class="text-[10px] text-amber-700 font-bold mt-3">No source links came back with this — treat the whole list as unconfirmed.</p>`}
+    <p class="text-[10px] text-slate-500 mt-3 leading-relaxed">A pattern in past papers is not a promise about the next one.
+      This tells you where the marks have historically been, which is worth knowing and is not a spotting guide.</p>`;
+  box.classList.remove('hidden');
+  $('#rq-print').classList.remove('hidden');
+  $('#rq-note').classList.remove('hidden');
+}
+
+/* the printed list — same paper look as everything else here */
+function repeatsSheetHTML(){
+  const cc = currentCourse();
+  return `
+    <div class="ex-mast">
+      <div class="body">${esc(cc.authority || 'Past papers')} · what recurs</div>
+      <div class="title">${esc(cc.name || '')} — ${esc(repeats.subject)}</div>
+      <div class="sub">${repeats.topic ? esc(repeats.topic) + ' · ' : ''}${repeats.items.length} recurring questions · compiled ${new Date(repeats.at).toLocaleDateString()}</div>
+    </div>
+    ${repeats.note ? `<div class="ex-instr"><b>What was looked at</b><br>${esc(repeats.note)}</div>` : ''}
+    ${repeats.items.map((x, i) => `
+      <div class="ex-q">
+        <div class="row">
+          <span class="n">${i+1}.</span>
+          <span class="txt"><strong>${esc(x.topic)}</strong>
+            ${x.ask ? `<br><em>Asked as:</em> ${esc(x.ask)}` : ''}
+            ${x.point ? `<br><em>Must produce:</em> ${esc(x.point)}` : ''}
+            ${x.seen ? `<br><span style="font-size:9pt">Seen in: ${esc(x.seen)}</span>` : ''}
+          </span>
+          <span class="m">${x.times ? '×' + x.times : ''}${x.marks ? ' · ' + esc(x.marks) + 'm' : ''}</span>
+        </div>
+      </div>`).join('')}
+    <div class="ex-foot">
+      <strong>Sources.</strong> ${(repeats.sources || []).length
+        ? repeats.sources.map(s => esc((s.uri||'').replace(/^https?:\/\//,'').slice(0,70))).join(' · ')
+        : 'No source links were returned — treat this list as unconfirmed.'}
+      <br>A pattern in past papers is not a promise about the next one. Compiled with FocusFlow · ${new Date().toLocaleDateString()} ·
+      not an official document of ${esc(cc.authority || 'any examining body')}.
+    </div>`;
+}
+
+function repeatsKeep(){
+  if (!repeats) return;
+  const body = [
+    `${repeats.subject}${repeats.topic ? ' · ' + repeats.topic : ''} — what keeps coming back`,
+    repeats.note, '',
+    ...repeats.items.map((x,i) =>
+      `${i+1}. ${x.topic}${x.times ? ' (×' + x.times + ')' : ''}${x.marks ? ' · ' + x.marks + ' marks' : ''}` +
+      (x.ask ? `\n   asked as: ${x.ask}` : '') +
+      (x.point ? `\n   must produce: ${x.point}` : '') +
+      (x.seen ? `\n   seen in: ${x.seen}` : '')),
+    '',
+    'Sources:',
+    ...((repeats.sources || []).length ? repeats.sources.map(s => '· ' + (s.uri || '')) : ['· none returned — unconfirmed']),
+    '',
+    'A pattern in past papers is not a promise about the next one.'
+  ].filter(Boolean).join('\n');
+  S.notes = S.notes || [];
+  S.notes.push({ id: uid(), at: Date.now(), src: 'exam',
+                 title: `Repeats — ${repeats.subject}`, body, topic: repeats.subject });
+  save();
+  if (typeof renderNotes === 'function') renderNotes();
+  flashMsg('Kept, with its sources.');
+}
+
+/* ═══════════════════════════════════════════════════════════
+   📐 TWO WAYS TO MARK, AND WHY
+   Marking an Accounts sum the way you mark a Business Laws
+   answer is a waste of an evening. When you are revising
+   Accounts, Quant or Economics, the question is simply: is the
+   entry right, is the figure right, is the method right. Format,
+   narration, working notes presentation — all of that matters
+   in the hall and none of it matters at nine on a Tuesday when
+   you are checking whether you can still do the sum.
+
+   Law is the opposite. In Business Laws the section, the
+   wording and the structure ARE the marks, so there is nothing
+   to strip out.
+
+   So: two modes. The app guesses from the subject, says which
+   it picked, and lets you overrule it — and when you choose
+   the loose one it says plainly that the real exam is not
+   this forgiving.
+   ═══════════════════════════════════════════════════════════ */
+const NUMERIC_HINTS = [
+  'account','accountancy','accounting','quant','aptitude','maths','mathematics','math',
+  'economic','statistic','cost','costing','financial management','fm','physics','chemistry',
+  'taxation','tax','book-keeping','bookkeeping','commerce maths','business maths'
+];
+const WRITTEN_HINTS = [
+  'law','legal','audit','ethic','business studies','polity','history','geography','english',
+  'literature','communication','theory','commercial knowledge','corporate','governance'
+];
+/* the guess, and it is only a guess */
+function markStyleFor(subject){
+  const s = (subject || '').toLowerCase();
+  if (WRITTEN_HINTS.some(w => s.includes(w))) return 'full';
+  if (NUMERIC_HINTS.some(w => s.includes(w))) return 'revision';
+  return 'full';
+}
+const MARK_MODES = {
+  full: { id:'full', label:'📝 Exam standard',
+    note:'Marked the way the real paper is: the section or provision, the format, the working shown, the structure. Slower and stricter — this is the one before an exam.' },
+  revision: { id:'revision', label:'⚡ Revision check',
+    note:'Only whether the entry, the figure and the method are right. Format, narration, presentation and wording are ignored. For checking you can still do it — not for judging whether you would pass.' }
+};
+function markMode(){
+  if (S.markMode === 'full' || S.markMode === 'revision') return S.markMode;
+  return markStyleFor(paper && paper.subject);
+}
+function evModeChips(){
+  const box = $('#ev-modes'); if (!box) return;
+  const cur = markMode();
+  box.innerHTML = Object.values(MARK_MODES).map(m =>
+    `<button data-mm="${m.id}" class="mm px-3 py-1.5 rounded-lg text-[11px] font-extrabold border ${
+      m.id === cur ? 'bg-slate-900 border-slate-900 text-white' : 'bg-white border-slate-200 text-slate-500'}">${m.label}</button>`).join('');
+  box.querySelectorAll('.mm').forEach(b => b.onclick = () => { S.markMode = b.dataset.mm; save(); evModeChips(); });
+
+  const guessed = markStyleFor(paper && paper.subject);
+  $('#ev-mode-note').innerHTML = esc(MARK_MODES[cur].note) +
+    (cur === guessed ? ` <span class="text-slate-400">Chosen for you because of the subject.</span>` : '') +
+    (cur === 'revision'
+      ? ` <strong class="text-amber-700">In the real exam, presentation and format do carry marks — this mode is deliberately not checking them.</strong>`
+      : '');
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ✅ MARKING IT
+   Two passes, deliberately separate. First: read what is on
+   the page, and only that — a model asked to read and mark at
+   once will quietly improve the answer it is marking, and then
+   award marks for its own words. Second: mark the transcript
+   against the key, question by question.
+   ═══════════════════════════════════════════════════════════ */
+async function evaluatePaper(){
+  if (!paper || evBusy) return;
+  if (!evSheets.length){ $('#ev-status').textContent = 'Add a photo of your answer sheet first.'; return; }
+  if (!aiOn()){ $('#ev-status').textContent = 'Marking needs an AI key — Coach → Set up.'; return; }
+  evBusy = true;
+  $('#ev-go').disabled = true;
+
+  try {
+    /* PASS 1 — read, do not improve */
+    const pages = [];
+    for (let i = 0; i < evSheets.length; i++){
+      $('#ev-status').textContent = `Reading page ${i+1} of ${evSheets.length}…`;
+      const small = await shrink(evSheets[i].url, 1600);
+      const txt = await visionRead(small,
+`Transcribe this handwritten exam answer sheet EXACTLY as written.
+
+Rules that matter more than tidiness:
+- Copy what is there. Do not correct spelling, grammar, law, figures or reasoning. Do not complete a half-finished sentence.
+- Keep the question numbers exactly as the student wrote them, each on its own line as "Q<number>".
+- If a word or figure is unreadable write [?]. Never guess at a number, a section or a case name.
+- If a page has no answers on it, reply exactly: BLANK PAGE.
+- Output only the transcription.`);
+      pages.push(`--- PAGE ${i+1} ---\n${txt.trim()}`);
+    }
+    const script = pages.join('\n\n');
+
+    /* PASS 2 — mark it */
+    $('#ev-status').textContent = 'Marking it…';
+    const keyText = paper.questions.map(q =>
+      `Q${q.n} (${q.marks} marks)\nQUESTION: ${q.q}${q.options ? '\nOPTIONS: ' + q.options.join(' | ') : ''}\nOFFICIAL ANSWER: ${q.key}`
+    ).join('\n\n');
+
+    const mode = markMode();
+    const HOW = mode === 'revision' ? `
+HOW TO AWARD MARKS — REVISION CHECK
+The student is revising, not sitting the paper. Mark ONLY whether the work is CORRECT.
+- What counts: the right method, the right entry, the right figure, the right final answer.
+- For an accounting entry: correct accounts debited and credited, correct amounts, correct side. Nothing else.
+- For a computation: correct approach and correct arithmetic. Award the marks even if only the final line is written,
+  provided the final answer is right.
+- Follow through an earlier error: if a wrong figure is carried forward correctly, do not charge for it twice.
+- IGNORE ENTIRELY: format, layout, narration, working-note presentation, headings, the wording of an explanation,
+  whether a section number was quoted, neatness, and the order things were written in. None of these lose marks here.
+- If the final answer is right, the marks are earned, whatever it looks like.
+- If a question was not attempted, give 0 and say "not attempted" — not a criticism.` : `
+HOW TO AWARD MARKS — EXAM STANDARD
+- Award marks for the points the key requires. Give partial marks where part of the point is made.
+- Correct substance in the student's own words earns full marks. Do not penalise phrasing.
+- Do penalise: a missing section, provision, case name or formula the key requires; a wrong figure;
+  a conclusion that does not follow; a definition given where an application was asked for; a computation
+  presented without the working the marking scheme expects.
+- If a question was not attempted at all, give 0 and say "not attempted" — not a criticism.`;
+
+    const sys = `You are marking a handwritten answer script for ${currentCourse().label}, ${paper.subject}.
+Mark it the way an examiner for this exam marks: to the answer key, not to your own preferred answer.
+${HOW}
+- Do not penalise spelling or handwriting. If something was transcribed as [?], say you could not read it
+  and mark that part generously rather than assuming it was wrong.
+
+FOR EVERY QUESTION return:
+  "got"      marks awarded (number, may be a half)
+  "right"    what they actually earned the marks for — specific, not "good attempt"
+  "missing"  the exact point the key wanted that they did not make. "" if nothing is missing.
+  "mistake"  the one thing that went wrong and why it costs marks. "" if nothing went wrong.
+  "margin"   the single sentence a teacher would write in the margin. Plain, direct, not unkind.
+${mode === 'revision' ? `
+In this mode "missing" and "mistake" must be about the substance only — a wrong figure, a reversed entry, a
+wrong method, a step skipped that changes the answer. Never write that the format, narration, presentation or
+wording was wrong; you are not marking those today.` : ''}
+
+THEN return:
+  "overall"    three or four sentences: how this script reads as a whole, what pattern the mistakes share,
+               and what would move the mark most. Be straight about a weak script; do not soften it into nothing.
+  "topFix"     up to three concrete things to do before the next attempt
+  "weakTopics" the syllabus topics this script shows are not solid, as short names
+
+Return ONLY JSON:
+{"marks":[{"n":1,"got":3,"right":"...","missing":"...","mistake":"...","margin":"..."}],
+ "overall":"...","topFix":["..."],"weakTopics":["..."]}`;
+
+    const res = await bestAnswer(sys,
+      `THE PAPER AND THE ANSWER KEY:\n${keyText}\n\nWHAT THE STUDENT WROTE (transcribed, uncorrected):\n"""${script.slice(0, 14000)}"""`,
+      'Mark it.', { ...conceptModel(), maxTokens: 3500, temperature: 0.2 });
+
+    const m = (res.text || '').match(/\{[\s\S]*\}/);
+    const data = m ? JSON.parse(m[0]) : null;
+    if (!data || !Array.isArray(data.marks)) throw new Error('the marking came back unreadable');
+
+    const byN = {};
+    data.marks.forEach(x => byN[+x.n] = x);
+    let got = 0;
+    const marks = paper.questions.map(q => {
+      const r = byN[q.n] || {};
+      const g = Math.max(0, Math.min(q.marks, +r.got || 0));
+      got += g;
+      return { n:q.n, of:q.marks, got:g, right:r.right||'', missing:r.missing||'',
+               mistake:r.mistake||'', margin:r.margin||'', attempted: !!(r.right || r.mistake || r.missing) };
+    });
+
+    paper.result = { at: Date.now(), mode, got: Math.round(got*2)/2, of: paper.total, marks,
+                     overall: data.overall || '', topFix: data.topFix || [],
+                     weakTopics: data.weakTopics || [], script, from: res.from || [] };
+    S.paper = paper; save();
+    $('#ev-status').textContent = '';
+    renderMarks(paper.result);
+    $('#ev-out').scrollIntoView({ behavior:'smooth', block:'start' });
+  } catch(e){
+    $('#ev-status').innerHTML = `<span class="text-rose-600">Couldn't mark it: ${esc((e.message||'').slice(0,90))}</span>`;
+  } finally {
+    evBusy = false; $('#ev-go').disabled = false;
+  }
+}
+
+function renderMarks(r){
+  const box = $('#ev-out'); if (!box || !paper) return;
+  const pct = r.of ? Math.round(r.got / r.of * 100) : 0;
+  const band = pct >= 75 ? ['#2E7D52','#EFF7F1'] : pct >= 50 ? ['#B26B2E','#FDF3EC'] : ['#A8434F','#FDF0F1'];
+  const q = n => paper.questions.find(x => x.n === n) || {};
+
+  box.innerHTML = `
+    <div class="pastel-card card-cream p-6 mb-4">
+      <div class="flex items-end justify-between gap-3 flex-wrap">
+        <div>
+          <div class="text-[10px] font-black uppercase tracking-widest text-slate-400">Marked</div>
+          <div class="text-4xl font-black" style="color:${band[0]}">${r.got} <span class="text-xl text-slate-400">/ ${r.of}</span></div>
+          <div class="text-xs font-bold text-slate-500">${pct}%${paper.topic ? ' · ' + esc(paper.topic) : ''}</div>
+          <div class="text-[10px] font-black uppercase tracking-wider mt-1 ${r.mode === 'revision' ? 'text-amber-700' : 'text-slate-400'}">${
+            r.mode === 'revision' ? '⚡ Revision check — correctness only, format ignored' : '📝 Marked to exam standard'}</div>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <button id="ev-note" class="px-3.5 py-2 rounded-xl bg-white border border-slate-200 text-[11px] font-extrabold text-slate-700">📓 Keep the mistakes as a note</button>
+          <button id="ev-backlog" class="px-3.5 py-2 rounded-xl bg-white border border-amber-300 text-amber-800 text-[11px] font-extrabold">📌 Add weak topics to backlog</button>
+          <button id="ev-log" class="px-3.5 py-2 rounded-xl bg-white border border-emerald-300 text-emerald-800 text-[11px] font-extrabold">🗓 Log it as a test</button>
+          <button id="ev-print" class="px-3.5 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 text-[11px] font-extrabold">🖨 Print the corrections</button>
+        </div>
+      </div>
+
+      <div class="p-3 rounded-xl mt-4 leading-relaxed" style="background:${band[1]}">
+        <div class="text-[10px] font-black uppercase tracking-widest mb-1" style="color:${band[0]}">The examiner's read</div>
+        <p class="text-xs text-slate-700">${esc(r.overall)}</p>
+      </div>
+
+      ${r.topFix.length ? `<div class="mt-3">
+        <div class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1.5">Before you try again</div>
+        <ol class="space-y-1">${r.topFix.slice(0,3).map((t,i) =>
+          `<li class="text-xs font-semibold text-slate-700">${i+1}. ${esc(t)}</li>`).join('')}</ol></div>` : ''}
+
+      <p class="text-[10px] text-slate-500 mt-4 leading-relaxed">
+        <strong>This is an estimate, not an official mark.</strong> A model marking a written answer is useful and is not
+        an examiner — it can misread handwriting and it can be wrong about how generous a real marker would be. Read the
+        reasoning under each question; where you think it has marked you unfairly, you are probably right to argue.
+        ${r.from && r.from.length ? ' Marked by ' + esc(r.from.join(' and ')) + '.' : ''}
+      </p>
+    </div>
+
+    <div class="space-y-2.5">
+      ${r.marks.map(x => {
+        const full = x.got >= x.of, zero = x.got === 0;
+        const col = full ? 'emerald' : zero ? 'rose' : 'amber';
+        return `<div class="pastel-card card-sky p-4">
+          <div class="flex items-start justify-between gap-3">
+            <p class="text-xs font-bold text-slate-800 leading-relaxed">Q${x.n}. ${esc((q(x.n).q||'').slice(0,150))}${(q(x.n).q||'').length>150?'…':''}</p>
+            <span class="shrink-0 text-xs font-black px-2.5 py-1 rounded-lg bg-${col}-50 text-${col}-800 border border-${col}-200">${x.got}/${x.of}</span>
+          </div>
+          ${x.margin ? `<p class="text-[11px] font-bold text-slate-700 mt-2 pl-2 border-l-2 border-slate-300 italic">${esc(x.margin)}</p>` : ''}
+          <div class="grid sm:grid-cols-3 gap-2 mt-2.5">
+            ${x.right   ? `<div class="p-2 rounded-lg bg-emerald-50/70"><div class="text-[9px] font-black uppercase tracking-wider text-emerald-700 mb-0.5">Earned it for</div><p class="text-[11px] text-slate-700 leading-relaxed">${esc(x.right)}</p></div>` : ''}
+            ${x.missing ? `<div class="p-2 rounded-lg bg-amber-50/70"><div class="text-[9px] font-black uppercase tracking-wider text-amber-700 mb-0.5">Key wanted</div><p class="text-[11px] text-slate-700 leading-relaxed">${esc(x.missing)}</p></div>` : ''}
+            ${x.mistake ? `<div class="p-2 rounded-lg bg-rose-50/70"><div class="text-[9px] font-black uppercase tracking-wider text-rose-700 mb-0.5">Went wrong</div><p class="text-[11px] text-slate-700 leading-relaxed">${esc(x.mistake)}</p></div>` : ''}
+          </div>
+          <details class="mt-2"><summary class="text-[10px] font-bold text-slate-400 cursor-pointer">the answer key</summary>
+            <p class="text-[11px] text-slate-600 leading-relaxed mt-1">${esc(q(x.n).key || '—')}</p>
+            ${q(x.n).keySource ? `<p class="text-[10px] text-slate-400 mt-1">${esc(q(x.n).keySource)}</p>` : ''}
+          </details>
+        </div>`;
+      }).join('')}
+    </div>`;
+  box.classList.remove('hidden');
+
+  $('#ev-note').onclick    = () => evKeepNote(r);
+  $('#ev-backlog').onclick = () => evToBacklog(r);
+  $('#ev-log').onclick     = () => evLogTest(r);
+  $('#ev-print').onclick   = () => printSheet('#ex-sheet','ex-printing', correctionSheetHTML());
+}
+
+/* ── what to do with the result ─────────────────────────── */
+function evKeepNote(r){
+  const body = [
+    `${paper.subject}${paper.topic ? ' · ' + paper.topic : ''} — ${r.got}/${r.of}`,
+    `${paper.sitting} · marked ${new Date(r.at).toLocaleDateString()}`,
+    '',
+    r.overall, '',
+    ...r.marks.filter(x => x.mistake || x.missing).map(x =>
+      `Q${x.n} (${x.got}/${x.of})\n${x.mistake ? '· went wrong: ' + x.mistake + '\n' : ''}${x.missing ? '· key wanted: ' + x.missing : ''}`),
+    '',
+    r.topFix.length ? 'Before the next attempt:\n' + r.topFix.map((t,i)=>`${i+1}. ${t}`).join('\n') : ''
+  ].filter(Boolean).join('\n');
+  S.notes = S.notes || [];
+  S.notes.push({ id: uid(), at: Date.now(), src: 'exam',
+                 title: `Mistakes — ${paper.subject}${paper.topic ? ': ' + paper.topic : ''}`,
+                 body, topic: paper.subject });
+  save();
+  if (typeof renderNotes === 'function') renderNotes();
+  flashMsg('Kept. It is in your notes, ready to revise from.');
+}
+
+function evToBacklog(r){
+  const topics = (r.weakTopics || []).filter(Boolean).slice(0, 8);
+  if (!topics.length){ flashMsg('Nothing came out weak enough to add — that is a good sign.'); return; }
+  S.backlog = S.backlog || [];
+  let added = 0;
+  topics.forEach(t => {
+    const exists = S.backlog.some(b => (b.topic||'').trim().toLowerCase() === t.trim().toLowerCase());
+    if (exists) return;
+    if (typeof newItem === 'function'){ S.backlog.push(newItem(paper.subject, t, 3, 3, '', 1)); added++; }
+  });
+  save();
+  if (typeof renderBacklog === 'function') renderBacklog();
+  if (typeof renderNow === 'function') renderNow();
+  flashMsg(added ? `${added} topic${added===1?'':'s'} added to the backlog.` : 'They were already on your backlog.');
+}
+
+function evLogTest(r){
+  S.classTests = S.classTests || [];
+  S.classTests.push({
+    id: uid(), name: `${String(paper.sitting || 'Paper').slice(0,40)} — ${paper.subject}`.slice(0,60),
+    subject: paper.subject, dt: new Date().toISOString().slice(0,10),
+    total: r.of, score: r.got,
+    chapters: (r.weakTopics || []).slice(0,8).map(n => ({ name: n, done: false })),
+    hw: [], at: Date.now(), src: 'exam'
+  });
+  save();
+  if (typeof renderTests2 === 'function') renderTests2();
+  if (typeof renderNow === 'function') renderNow();
+  flashMsg('Logged. It now counts towards which chapters are costing you marks.');
+}
+
+/* ── wiring ─────────────────────────────────────────────── */
+if ($('#pp-official')){
+  $('#rq-go').onclick    = repeatsFind;
+  $('#rq-print').onclick = () => { if (repeats) printSheet('#ex-sheet','ex-printing', repeatsSheetHTML()); };
+  $('#rq-note').onclick  = repeatsKeep;
+  $('#pp-official').onclick = () => paperGet('official');
+  $('#pp-practice').onclick = () => paperGet('practice');
+  $('#pp-print').onclick      = () => { if (paper) printSheet('#ex-sheet','ex-printing', paperSheetHTML(false)); };
+  $('#pp-print-lines').onclick = () => { if (paper) printSheet('#ex-sheet','ex-printing', paperSheetHTML(true)); };
+  $('#ev-add').onclick      = () => $('#ev-file').click();
+  $('#ev-file').onchange = e => {
+    [...e.target.files].slice(0, 12).forEach(f => {
+      const fr = new FileReader();
+      fr.onload = () => { evSheets.push({ url: fr.result, name: f.name }); evThumbs(); };
+      fr.readAsDataURL(f);
+    });
+    e.target.value = '';
+  };
+  $('#ev-go').onclick    = evaluatePaper;
+  $('#ev-timer').onclick = () => {
+    if (!paper) return;
+    openTab('focus');
+    try {
+      if (typeof goalText !== 'undefined') goalText = `${paper.subject} paper — ${paper.mins} min`;
+      if (typeof setMode === 'function') setMode('custom', paper.mins);
+      if (typeof start === 'function') start();
+      flashMsg(`${paper.mins} minutes. Write it like the real thing.`);
+    } catch(e){ flashMsg('Start the timer yourself — ' + paper.mins + ' minutes.'); }
+  };
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -13003,7 +14417,7 @@ function notify(title, body){
 }
 $('#btn-print-timetable').onclick = () => {
   openTab('plan'); showPage('timetable');   // make sure the grid is the visible page
-  setTimeout(() => window.print(), 60);
+  setTimeout(() => printSheet('#tt-sheet','tt-printing', timetableSheetHTML()), 60);
 };
 
 /* ═══════════════════════════════════════════════════════════
